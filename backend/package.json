@@ -16,6 +16,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "mysql": "^2.18.1",
     "nodemon": "^2.0.12"
   }
 }
