@@ -11,7 +11,7 @@ var pool = require("./queryBuilder");
 
 // Get all restaurants
 app.get("/restaurants/all", (req, res) => {
-  var sql = "Select * from restaurants where id = " + req.params.id;
+  var sql = "Select * from restaurants";
   db.query(sql, (err, response) => {
     if (err) console.log(err);
     res.send(response);
