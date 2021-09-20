@@ -1,7 +1,7 @@
 CREATE SCHEMA `ubereats` ;
 
 CREATE TABLE `ubereats`.`countries` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `country_name` VARCHAR(45) NOT NULL,
   `active` INT NULL DEFAULT 1,
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -9,7 +9,7 @@ CREATE TABLE `ubereats`.`countries` (
   PRIMARY KEY (`id`));
 
   CREATE TABLE `ubereats`.`users` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
   `middle_name` VARCHAR(45) NULL,
   `last_name` VARCHAR(45) NOT NULL,
@@ -33,8 +33,21 @@ CREATE TABLE `ubereats`.`countries` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
 
+  ALTER TABLE `ubereats`.`users` 
+  DROP FOREIGN KEY `country_id_fk`;
+  ALTER TABLE `ubereats`.`users` 
+  CHANGE COLUMN `phone_no` `phone_no` INT NULL ,
+  CHANGE COLUMN `dob` `dob` VARCHAR(45) NULL ,
+  CHANGE COLUMN `state` `state` VARCHAR(45) NULL ,
+  CHANGE COLUMN `country_id` `country_id` INT NULL ,
+  CHANGE COLUMN `nickname` `nickname` VARCHAR(45) NULL ;
+  ALTER TABLE `ubereats`.`users` 
+  ADD CONSTRAINT `country_id_fk`
+    FOREIGN KEY (`country_id`)
+    REFERENCES `ubereats`.`countries` (`id`);
+
     CREATE TABLE `ubereats`.`restaurants` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `location` VARCHAR(45) NOT NULL,
   `description` VARCHAR(45) NOT NULL,
@@ -49,7 +62,7 @@ CREATE TABLE `ubereats`.`countries` (
   PRIMARY KEY (`id`));
 
   CREATE TABLE `ubereats`.`restaurant_images` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `restaurant_id` INT NOT NULL,
   `restaurant_image` VARCHAR(45) NOT NULL,
   `active` INT NULL DEFAULT 1,
@@ -64,7 +77,7 @@ CREATE TABLE `ubereats`.`countries` (
     ON UPDATE NO ACTION);
 
     CREATE TABLE `ubereats`.`dish_categories` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `category_name` VARCHAR(45) NOT NULL,
   `active` INT NULL DEFAULT 1,
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -72,7 +85,7 @@ CREATE TABLE `ubereats`.`countries` (
   PRIMARY KEY (`id`));
 
 CREATE TABLE `ubereats`.`dishes` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `restaurant_id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `main_ingredients` VARCHAR(45) NOT NULL,
@@ -97,7 +110,7 @@ CREATE TABLE `ubereats`.`dishes` (
     ON UPDATE NO ACTION);
 
 CREATE TABLE `ubereats`.`dish_images` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `dish_id` INT NOT NULL,
   `restaurant_id` INT NOT NULL,
   `dish_image` VARCHAR(45) NOT NULL,
@@ -119,7 +132,7 @@ CREATE TABLE `ubereats`.`dish_images` (
     ON UPDATE NO ACTION);
 
     CREATE TABLE `ubereats`.`orders` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `restaurant_id` INT NOT NULL,
   `order_status` VARCHAR(45) NOT NULL,
@@ -144,7 +157,7 @@ CREATE TABLE `ubereats`.`dish_images` (
     ON UPDATE NO ACTION);
 
     CREATE TABLE `ubereats`.`order_contents` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `restaurant_id` INT NOT NULL,
   `dish_id` INT NOT NULL,
@@ -180,7 +193,7 @@ CREATE TABLE `ubereats`.`dish_images` (
     ON UPDATE NO ACTION);
 
     CREATE TABLE `ubereats`.`user_addresses` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `address_1` VARCHAR(45) NOT NULL,
   `address_2` VARCHAR(45) NULL,
@@ -199,7 +212,7 @@ CREATE TABLE `ubereats`.`dish_images` (
     ON UPDATE NO ACTION);
 
     CREATE TABLE `ubereats`.`user_favourites` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `restaurant_id` INT NOT NULL,
   `active` INT NULL DEFAULT 1,
@@ -220,7 +233,7 @@ CREATE TABLE `ubereats`.`dish_images` (
     ON UPDATE NO ACTION);
 
     CREATE TABLE `ubereats`.`user_cart` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT NOT NULL,
   `restaurant_id` INT NOT NULL,
   `cart_status` VARCHAR(45) NOT NULL,
