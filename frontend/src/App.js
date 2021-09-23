@@ -2,7 +2,11 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import UserLogin from "./views/layouts/UserLogin";
 import UserRegister from "./views/layouts/UserRegister";
-import Home from "./views/layouts/Home";
+import UserHome from "./views/layouts/UserHome";
+import Checkout from "./views/layouts/Checkout";
+import UserProfile from "./views/layouts/UserProfile";
+import RestaurantPage from "./views/layouts/RestaurantPage";
+import UserFavourites from "./views/layouts/UserFavourites";
 
 const App = () => {
   return (
@@ -14,8 +18,20 @@ const App = () => {
         <Route path="/register">
           <UserRegister />
         </Route>
+        <Route path="/checkout">
+          <Checkout />
+        </Route>
+        <Route path="/userprofile">
+          <UserProfile />
+        </Route>
+        <Route path="/restaurantpage">
+          <RestaurantPage />
+        </Route>
+        <Route path="/favourites">
+          <UserFavourites />
+        </Route>
         <Route path="/">
-          <Home />
+          <UserHome />
         </Route>
       </Switch>
     </Router>
