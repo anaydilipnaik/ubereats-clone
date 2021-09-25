@@ -8,6 +8,13 @@ const UserRegister = () => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [location, setLocation] = useState(null);
+  const [passwordMatch, setPasswordMatch] = useState(null);
+
+  const handleChange = (event) => {
+    event.preventDefault();
+    if (event.target.value === password) setPasswordMatch("y");
+    else setPasswordMatch("n");
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,64 +26,20 @@ const UserRegister = () => {
     data.password = password;
     data.city = location;
     registerUser(data)
-      .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        if (data.status === 200) window.location.href = "/userlogin";
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="first name"
-          onChange={(event) => {
-            setFirstName(event.target.value);
-          }}
-        />
-        <input
-          type="text"
-          placeholder="middle name"
-          onChange={(event) => {
-            setMiddleName(event.target.value);
-          }}
-        />
-        <input
-          type="text"
-          placeholder="last name"
-          onChange={(event) => {
-            setLastName(event.target.value);
-          }}
-        />
-        <input
-          type="email"
-          placeholder="email name"
-          onChange={(event) => {
-            setEmail(event.target.value);
-          }}
-        />
-        <input
-          type="password"
-          placeholder="password"
-          onChange={(event) => {
-            setPassword(event.target.value);
-          }}
-        />
-        <input
-          type="text"
-          placeholder="location"
-          onChange={(event) => {
-            setLocation(event.target.value);
-          }}
-        />
-        <button type="submit">Register</button>
-      </form>
       <section
         class="vh-100 bg-image"
         style={{
-          backgroundImage:
-            "https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.jpg",
+          backgroundColor: "#9A616D",
         }}
       >
         <div class="mask d-flex align-items-center h-100 gradient-custom-3">
@@ -88,17 +51,49 @@ const UserRegister = () => {
                     <h2 class="text-uppercase text-center mb-5">
                       Create an account
                     </h2>
-
-                    <form>
-                      <div class="form-outline mb-4">
-                        <input
-                          type="text"
-                          id="form3Example1cg"
-                          class="form-control form-control-lg"
-                        />
-                        <label class="form-label" for="form3Example1cg">
-                          Your Name
-                        </label>
+                    <form onSubmit={handleSubmit}>
+                      <div class="row mb-4">
+                        <div class="col-4">
+                          <input
+                            type="text"
+                            id="form3Example1cg"
+                            onChange={(event) => {
+                              setFirstName(event.target.value);
+                            }}
+                            class="form-control form-control-lg"
+                            required
+                          />
+                          <label class="form-label" for="form3Example1cg">
+                            First Name *
+                          </label>
+                        </div>
+                        <div class="col-4">
+                          <input
+                            type="text"
+                            id="form3Example1cg"
+                            onChange={(event) => {
+                              setMiddleName(event.target.value);
+                            }}
+                            class="form-control form-control-lg"
+                          />
+                          <label class="form-label" for="form3Example1cg">
+                            Middle Name
+                          </label>
+                        </div>
+                        <div class="col-4">
+                          <input
+                            type="text"
+                            id="form3Example1cg"
+                            class="form-control form-control-lg"
+                            onChange={(event) => {
+                              setLastName(event.target.value);
+                            }}
+                            required
+                          />
+                          <label class="form-label" for="form3Example1cg">
+                            Last Name *
+                          </label>
+                        </div>
                       </div>
 
                       <div class="form-outline mb-4">
@@ -106,9 +101,13 @@ const UserRegister = () => {
                           type="email"
                           id="form3Example3cg"
                           class="form-control form-control-lg"
+                          onChange={(event) => {
+                            setEmail(event.target.value);
+                          }}
+                          required
                         />
                         <label class="form-label" for="form3Example3cg">
-                          Your Email
+                          Email *
                         </label>
                       </div>
 
@@ -117,9 +116,13 @@ const UserRegister = () => {
                           type="password"
                           id="form3Example4cg"
                           class="form-control form-control-lg"
+                          onChange={(event) => {
+                            setPassword(event.target.value);
+                          }}
+                          required
                         />
                         <label class="form-label" for="form3Example4cg">
-                          Password
+                          Password *
                         </label>
                       </div>
 
@@ -128,31 +131,39 @@ const UserRegister = () => {
                           type="password"
                           id="form3Example4cdg"
                           class="form-control form-control-lg"
+                          onChange={handleChange}
+                          required
                         />
                         <label class="form-label" for="form3Example4cdg">
-                          Repeat your password
+                          Re-enter your password *
                         </label>
                       </div>
 
-                      <div class="form-check d-flex justify-content-center mb-5">
+                      {passwordMatch === "y" ? (
+                        <p style={{ color: "green" }}>Passwords Match!</p>
+                      ) : passwordMatch === "n" ? (
+                        <p style={{ color: "red" }}>Passwords Mismatch!</p>
+                      ) : null}
+
+                      <div class="form-outline mb-4">
                         <input
-                          class="form-check-input me-2"
-                          type="checkbox"
-                          value=""
-                          id="form2Example3cg"
+                          type="text"
+                          id="form3Example4cdg"
+                          class="form-control form-control-lg"
+                          onChange={(event) => {
+                            setLocation(event.target.value);
+                          }}
                         />
-                        <label class="form-check-label" for="form2Example3g">
-                          I agree all statements in{" "}
-                          <a href="#!" class="text-body">
-                            <u>Terms of service</u>
-                          </a>
+                        <label class="form-label" for="form3Example4cdg">
+                          Location *
                         </label>
                       </div>
 
                       <div class="d-flex justify-content-center">
                         <button
-                          type="button"
+                          type="submit"
                           class="btn btn-success btn-block btn-lg gradient-custom-4 text-body"
+                          disabled={passwordMatch === "y" ? false : true}
                         >
                           Register
                         </button>
@@ -160,7 +171,7 @@ const UserRegister = () => {
 
                       <p class="text-center text-muted mt-5 mb-0">
                         Have already an account?{" "}
-                        <a href="#!" class="fw-bold text-body">
+                        <a href="/userlogin" class="fw-bold text-body">
                           <u>Login here</u>
                         </a>
                       </p>
