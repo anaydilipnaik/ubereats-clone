@@ -255,10 +255,10 @@ apiModel.loginRestaurant = (dataJson) => {
   });
 };
 
-apiModel.updateUserDetails = (userId) => {
+apiModel.updateUserDetails = (userId, dataJson) => {
   return new Promise((resolve, reject) => {
     pool.get_connection((qb) => {
-      qb.update("users", req.body, { id: userId }, (err, results) => {
+      qb.update("users", dataJson, { id: userId }, (err, results) => {
         if (err) return reject(err);
         return resolve(results);
       });
@@ -266,12 +266,12 @@ apiModel.updateUserDetails = (userId) => {
   });
 };
 
-apiModel.updateRestaurantDetails = (restaurantId) => {
+apiModel.updateRestaurantDetails = (restaurantId, dataJson) => {
   return new Promise((resolve, reject) => {
     pool.get_connection((qb) => {
       qb.update(
         "restaurants",
-        req.body,
+        dataJson,
         { id: restaurantId },
         (err, results) => {
           if (err) return reject(err);
@@ -282,10 +282,10 @@ apiModel.updateRestaurantDetails = (restaurantId) => {
   });
 };
 
-apiModel.updateOrderDeliveryStatus = (orderId) => {
+apiModel.updateOrderDeliveryStatus = (orderId, dataJson) => {
   return new Promise((resolve, reject) => {
     pool.get_connection((qb) => {
-      qb.update("orders", req.body, { id: orderId }, (err, results) => {
+      qb.update("orders", dataJson, { id: orderId }, (err, results) => {
         if (err) return reject(err);
         return resolve(results);
       });
@@ -293,10 +293,10 @@ apiModel.updateOrderDeliveryStatus = (orderId) => {
   });
 };
 
-apiModel.updateDish = (dishId) => {
+apiModel.updateDish = (dishId, dataJson) => {
   return new Promise((resolve, reject) => {
     pool.get_connection((qb) => {
-      qb.update("dishes", req.body, { id: dishId }, (err, results) => {
+      qb.update("dishes", dataJson, { id: dishId }, (err, results) => {
         if (err) return reject(err);
         return resolve(results);
       });

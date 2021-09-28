@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "alert": "^5.0.10",
+    "aws-sdk": "^2.996.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
@@ -18,8 +19,11 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "multer": "^1.4.3",
+    "multer-s3": "^2.9.0",
     "mysql": "^2.18.1",
     "node-querybuilder": "^2.1.1",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.12",
+    "uuid": "^8.3.2"
   }
 }

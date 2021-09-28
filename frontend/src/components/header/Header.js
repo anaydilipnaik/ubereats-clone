@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import UberEatsLogo from "../../assets/ubereats_logo.svg";
+import UserLocation from "../modals/UserLocation";
 
 const Header = () => {
   const [delivery, setDelivery] = useState("active");
   const [pickup, setPickup] = useState("");
   const [userAddress, setUserAddress] = useState("San Jose");
+  const [showLocation, setShowLocation] = useState(false);
 
   const deliveryTypeHandler = (event) => {
     event.preventDefault();
@@ -23,11 +25,11 @@ const Header = () => {
 
   return (
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container" style={{ padding: "10px" }}>
-        <a class="navbar-brand" href="/">
+      <div class="container">
+        <a class="navbar-brand" href="/" style={{ margin: "15px" }}>
           <img src={UberEatsLogo} />
         </a>
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs" style={{ margin: "15px" }}>
           <li class="nav-item">
             <a
               class={"nav-link " + delivery}
@@ -49,10 +51,21 @@ const Header = () => {
             </a>
           </li>
         </ul>
-        <button type="button" class="btn btn-outline-primary">
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          style={{ margin: "15px" }}
+          onClick={() => {
+            setShowLocation(true);
+          }}
+        >
           <i class="bi bi-pin-fill"></i> {userAddress}
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div
+          class="collapse navbar-collapse"
+          id="navbarSupportedContent"
+          style={{ margin: "15px" }}
+        >
           <div class="input-group rounded">
             <input
               type="search"
@@ -65,21 +78,26 @@ const Header = () => {
               <i class="bi bi-search"></i>
             </span>
           </div>
-          <button class="btn btn-outline-dark rounded-pill">
-            <i class="bi-cart-fill me-1"></i>
-            Cart
-            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-          </button>
-          <button
-            class="rounded-pill"
-            onClick={() => {
-              window.location.href = "/userlogin";
-            }}
-          >
-            Sign in
-          </button>
         </div>
+        <button
+          class="btn btn-outline-dark rounded-pill"
+          style={{ margin: "15px" }}
+        >
+          <i class="bi-cart-fill me-1"></i>
+          Cart
+          <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+        </button>
+        <button
+          class="btn btn-outline-dark rounded-pill"
+          onClick={() => {
+            window.location.href = "/userlogin";
+          }}
+          style={{ margin: "15px" }}
+        >
+          Sign in
+        </button>
       </div>
+      <UserLocation show={showLocation} onHide={() => {}} />
     </nav>
   );
 };

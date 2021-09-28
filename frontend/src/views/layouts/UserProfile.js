@@ -1,296 +1,231 @@
-import React from "react";
+import React, { useState } from "react";
+import Header from "../../components/header/Header";
+import Footer from "../../components/footer/Footer";
+import { countryList } from "../../utils/countries";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
 
 const UserProfile = () => {
+  const [startDate, setStartDate] = useState(new Date());
+  const [displayPicture, setDisplayPicture] = useState(null);
+
+  const onUpdateProfile = (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("myFile", displayPicture);
+    axios.put("http://localhost:5000/updateUser/3", data).then((res) => {
+      console.log(res);
+    });
+  };
+
   return (
     <>
-      <section style={{ backgroundColor: "#eee" }}>
-        <div class="container py-5">
-          <div class="row">
-            <div class="col">
-              <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
-                <ol class="breadcrumb mb-0">
-                  <li class="breadcrumb-item">
-                    <a href="#">Home</a>
-                  </li>
-                  <li class="breadcrumb-item">
-                    <a href="#">User</a>
-                  </li>
-                  <li class="breadcrumb-item active" aria-current="page">
-                    User Profile
-                  </li>
-                </ol>
-              </nav>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-lg-4">
-              <div class="card mb-4">
-                <div class="card-body text-center">
-                  <img
-                    src="https://mdbootstrap.com/img/Photos/new-templates/bootstrap-chat/ava3.png"
-                    alt="avatar"
-                    class="rounded-circle img-fluid"
-                    style={{ width: "150px" }}
-                  />
-                  <h5 class="my-3">John Smith</h5>
-                  <p class="text-muted mb-1">Full Stack Developer</p>
-                  <p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
-                  <div class="d-flex justify-content-center mb-2">
-                    <button type="button" class="btn btn-primary">
-                      Follow
-                    </button>
-                    <button type="button" class="btn btn-outline-primary ms-1">
-                      Message
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="card mb-4 mb-lg-0">
-                <div class="card-body p-0">
-                  <ul class="list-group list-group-flush rounded-3">
-                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                      <i class="fas fa-globe fa-lg text-warning"></i>
-                      <p class="mb-0">https://mdbootstrap.com</p>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                      <i
-                        class="fab fa-github fa-lg"
-                        style={{ color: "#333333" }}
-                      ></i>
-                      <p class="mb-0">mdbootstrap</p>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                      <i
-                        class="fab fa-twitter fa-lg"
-                        style={{ color: "#55acee" }}
-                      ></i>
-                      <p class="mb-0">@mdbootstrap</p>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                      <i
-                        class="fab fa-instagram fa-lg"
-                        style={{ color: "#ac2bac" }}
-                      ></i>
-                      <p class="mb-0">mdbootstrap</p>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                      <i
-                        class="fab fa-facebook-f fa-lg"
-                        style={{ color: "#3b5998" }}
-                      ></i>
-                      <p class="mb-0">mdbootstrap</p>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-8">
-              <div class="card mb-4">
+      <Header />
+      <form onSubmit={onUpdateProfile}>
+        <div class="container">
+          <div class="row gutters">
+            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+              <div class="card h-100">
                 <div class="card-body">
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">Full Name</p>
+                  <div class="account-settings">
+                    <div class="user-profile">
+                      <div class="user-avatar">
+                        <img
+                          src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                          alt="Maxwell Admin"
+                        />
+                      </div>
+                      <h5 class="user-name">Yuki Hayashi</h5>
+                      <h6 class="user-email">yuki@Maxwell.com</h6>
                     </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0">Johnatan Smith</p>
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">Email</p>
-                    </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0">example@example.com</p>
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">Phone</p>
-                    </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0">(097) 234-5678</p>
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">Mobile</p>
-                    </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0">(098) 765-4321</p>
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <p class="mb-0">Address</p>
-                    </div>
-                    <div class="col-sm-9">
-                      <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                    <div class="about">
+                      <h5>About</h5>
+                      <p>
+                        I'm Yuki. Full Stack Designer I enjoy creating
+                        user-centric, delightful and human experiences.
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="card mb-4 mb-md-0">
-                    <div class="card-body">
-                      <p class="mb-4">
-                        <span class="text-primary font-italic me-1">
-                          assigment
-                        </span>{" "}
-                        Project Status
-                      </p>
-                      <p class="mb-1" style={{ fontSize: "0.77rem" }}>
-                        Web Design
-                      </p>
-                      <div class="progress rounded" style={{ height: "5px" }}>
-                        <div
-                          class="progress-bar"
-                          role="progressbar"
-                          style={{ width: "80%" }}
-                          aria-valuenow="80"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
+            </div>
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="row gutters">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                      <h6 class="mb-2 text-primary">Basic Details</h6>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <div class="row" style={{ marginBottom: "15px" }}>
+                          <div class="col-4">
+                            <label for="fullName">First Name</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="fullName"
+                              placeholder="Enter first name"
+                            />
+                          </div>
+                          <div class="col-4">
+                            <label for="fullName">Middle Name</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="fullName"
+                              placeholder="Enter middle name"
+                            />
+                          </div>
+                          <div class="col-4">
+                            <label for="fullName">Last Name</label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="fullName"
+                              placeholder="Enter last name"
+                            />
+                          </div>
+                        </div>
                       </div>
-                      <p class="mt-4 mb-1" style={{ fontSize: "0.77rem" }}>
-                        Website Markup
-                      </p>
-                      <div class="progress rounded" style={{ height: "5px" }}>
-                        <div
-                          class="progress-bar"
-                          role="progressbar"
-                          style={{ width: "72%" }}
-                          aria-valuenow="72"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
+                    </div>
+                    <div
+                      class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"
+                      style={{ marginBottom: "15px" }}
+                    >
+                      <div class="form-group">
+                        <label for="phone">Date of Birth</label>
+                        <DatePicker
+                          selected={startDate}
+                          class="form-control"
+                          style={{ width: "100%" }}
+                          onChange={(date) => setStartDate(date)}
+                        />
                       </div>
-                      <p class="mt-4 mb-1" style={{ fontSize: "0.77rem" }}>
-                        One Page
-                      </p>
-                      <div class="progress rounded" style={{ height: "5px" }}>
-                        <div
-                          class="progress-bar"
-                          role="progressbar"
-                          style={{ width: "89%" }}
-                          aria-valuenow="89"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
+                    </div>
+                    <div
+                      class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"
+                      style={{ marginBottom: "15px" }}
+                    >
+                      <div class="form-group">
+                        <label for="nickname">Nickname</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="nickname"
+                          placeholder="Enter nickname"
+                        />
                       </div>
-                      <p class="mt-4 mb-1" style={{ fontSize: "0.77rem" }}>
-                        Mobile Template
-                      </p>
-                      <div class="progress rounded" style={{ height: "5px" }}>
-                        <div
-                          class="progress-bar"
-                          role="progressbar"
-                          style={{ width: "55%" }}
-                          aria-valuenow="55"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
+                    </div>
+                    <div
+                      class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"
+                      style={{ marginBottom: "15px" }}
+                    >
+                      <div class="form-group">
+                        <label for="website">City</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="city"
+                          placeholder="Enter City"
+                        />
                       </div>
-                      <p class="mt-4 mb-1" style={{ fontSize: "0.77rem" }}>
-                        Backend API
-                      </p>
-                      <div
-                        class="progress rounded mb-2"
-                        style={{ height: "5px" }}
-                      >
-                        <div
-                          class="progress-bar"
-                          role="progressbar"
-                          style={{ width: "66%" }}
-                          aria-valuenow="66"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
+                    </div>
+                    <div
+                      class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"
+                      style={{ marginBottom: "15px" }}
+                    >
+                      <div class="form-group">
+                        <label for="phone">State</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="state"
+                          placeholder="Enter state"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"
+                      style={{ marginBottom: "15px" }}
+                    >
+                      <div class="form-group">
+                        <label for="country">Country</label>
+                        <select class="form-control">
+                          <option>Select a country</option>
+                          {countryList &&
+                            countryList.map((country) => (
+                              <option value={country.name}>
+                                {country.name}
+                              </option>
+                            ))}
+                        </select>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="card mb-4 mb-md-0">
-                    <div class="card-body">
-                      <p class="mb-4">
-                        <span class="text-primary font-italic me-1">
-                          assigment
-                        </span>{" "}
-                        Project Status
-                      </p>
-                      <p class="mb-1" style={{ fontSize: "0.77rem" }}>
-                        Web Design
-                      </p>
-                      <div class="progress rounded" style={{ height: "5px" }}>
-                        <div
-                          class="progress-bar"
-                          role="progressbar"
-                          style={{ width: "80%" }}
-                          aria-valuenow="80"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
+                  <div class="row gutters">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                      <h6 class="mt-3 mb-2 text-primary">
+                        Contact Information
+                      </h6>
+                    </div>
+                    <div
+                      class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"
+                      style={{ marginBottom: "15px" }}
+                    >
+                      <div class="form-group">
+                        <label for="Email">Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="Email"
+                          placeholder="Enter email"
+                        />
                       </div>
-                      <p class="mt-4 mb-1" style={{ fontSize: "0.77rem" }}>
-                        Website Markup
-                      </p>
-                      <div class="progress rounded" style={{ height: "5px" }}>
-                        <div
-                          class="progress-bar"
-                          role="progressbar"
-                          style={{ width: "72%" }}
-                          aria-valuenow="72"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
+                    </div>
+                    <div
+                      class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"
+                      style={{ marginBottom: "15px" }}
+                    >
+                      <div class="form-group">
+                        <label for="phoneno">Phone no.</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="phoneno"
+                          placeholder="Enter Phone"
+                        />
                       </div>
-                      <p class="mt-4 mb-1" style={{ fontSize: "0.77rem" }}>
-                        One Page
-                      </p>
-                      <div class="progress rounded" style={{ height: "5px" }}>
-                        <div
-                          class="progress-bar"
-                          role="progressbar"
-                          style={{ width: "89%" }}
-                          aria-valuenow="89"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
+                    </div>
+                    <div
+                      class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"
+                      style={{ marginBottom: "15px" }}
+                    >
+                      <div class="form-group">
+                        <label for="dp">Upload profile picture</label>
+                        <input
+                          type="file"
+                          class="form-control"
+                          id="dp"
+                          onChange={(e) => {
+                            setDisplayPicture(e.target.files[0]);
+                          }}
+                        />
                       </div>
-                      <p class="mt-4 mb-1" style={{ fontSize: "0.77rem" }}>
-                        Mobile Template
-                      </p>
-                      <div class="progress rounded" style={{ height: "5px" }}>
-                        <div
-                          class="progress-bar"
-                          role="progressbar"
-                          style={{ width: "55%" }}
-                          aria-valuenow="55"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
-                      </div>
-                      <p class="mt-4 mb-1" style={{ fontSize: "0.77rem" }}>
-                        Backend API
-                      </p>
-                      <div
-                        class="progress rounded mb-2"
-                        style={{ height: "5px" }}
-                      >
-                        <div
-                          class="progress-bar"
-                          role="progressbar"
-                          style={{ width: "66%" }}
-                          aria-valuenow="66"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                        ></div>
+                    </div>
+                  </div>
+                  <div class="row gutters">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div style={{ textAlign: "right" }}>
+                        <button
+                          type="submit"
+                          id="submit"
+                          name="submit"
+                          class="btn btn-primary"
+                        >
+                          Update
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -299,7 +234,8 @@ const UserProfile = () => {
             </div>
           </div>
         </div>
-      </section>
+      </form>
+      <Footer />
     </>
   );
 };

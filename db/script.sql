@@ -46,6 +46,13 @@ CREATE TABLE `ubereats`.`countries` (
     FOREIGN KEY (`country_id`)
     REFERENCES `ubereats`.`countries` (`id`);
 
+  ALTER TABLE `ubereats`.`users` 
+  DROP FOREIGN KEY `country_id_fk`;
+  ALTER TABLE `ubereats`.`users` 
+  CHANGE COLUMN `country_id` `country` VARCHAR(45) NULL DEFAULT NULL ,
+  DROP INDEX `country_id_fk_idx` ;
+  ;
+
     CREATE TABLE `ubereats`.`restaurants` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,

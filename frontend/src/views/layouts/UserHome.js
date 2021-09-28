@@ -11,7 +11,13 @@ const UserHome = () => {
   return (
     <>
       <Header />
-      <RestaurantCard />
+      <div class="container">
+        <div class="row">
+          <div class="col-3 mb-4">
+            <RestaurantCard />
+          </div>
+        </div>
+      </div>
       <Footer />
     </>
   );

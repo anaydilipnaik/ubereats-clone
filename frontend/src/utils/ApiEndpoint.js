@@ -5,7 +5,7 @@ export const semiEndpoint =
   ":" +
   process.env.REACT_APP_BACKEND_PORT;
 
-export function defaultApiOptions(apiMethod, apiDataJson) {
+export function defaultApiOptions(apiMethod, apiDataJson = {}) {
   return {
     method: apiMethod,
     headers: { "Content-Type": "application/json" },

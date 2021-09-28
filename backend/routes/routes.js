@@ -3,6 +3,7 @@ var session = require("express-session");
 const router = express.Router();
 
 const apiModel = require("../models/model");
+let { uploadSingleFile } = require("../fileUploads");
 
 var app = express();
 
@@ -403,11 +404,14 @@ router.post("/loginRestaurant", async (req, res, next) => {
 
 router.put("/updateUser/:userid", async (req, res, next) => {
   try {
-    await apiModel.updateUserDetails(req.params.userid, req.body);
-    res.writeHead(200, {
-      "Content-Type": "text/plain",
+    uploadSingleFile(req, res, async (error) => {
+      if (req.file) req.body.display_picture = req.file.location;
+      await apiModel.updateUserDetails(req.params.userid, req.body);
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Success");
     });
-    res.end("Success");
   } catch (e) {
     console.log(e);
     res.writeHead(500, {
