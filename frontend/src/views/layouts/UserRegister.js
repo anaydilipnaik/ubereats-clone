@@ -1,190 +1,225 @@
-import React, { useState } from "react";
-import { registerUser } from "../../controllers/register";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { registerUserFunc } from "../../redux/actions";
 
-const UserRegister = () => {
-  const [firstName, setFirstName] = useState(null);
-  const [middleName, setMiddleName] = useState(null);
-  const [lastName, setLastName] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [location, setLocation] = useState(null);
-  const [passwordMatch, setPasswordMatch] = useState(null);
+class UserRegister extends Component {
+  constructor() {
+    super();
+    this.state = {
+      firstName: null,
+      middleName: null,
+      lastName: null,
+      email: null,
+      password: null,
+      location: null,
+      passwordMatch: null,
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-  const handleChange = (event) => {
+  handleChange = (event) => {
     event.preventDefault();
-    if (event.target.value === password) setPasswordMatch("y");
-    else setPasswordMatch("n");
+    if (event.target.value === this.state.password)
+      this.setState({ passwordMatch: "y" });
+    else this.setState({ passwordMatch: "n" });
   };
 
-  const handleSubmit = (event) => {
+  handleSubmit = (event) => {
     event.preventDefault();
     let data = {};
-    data.first_name = firstName;
-    if (middleName) data.middle_name = middleName;
-    data.last_name = lastName;
-    data.email = email;
-    data.password = password;
-    data.city = location;
-    registerUser(data)
-      .then((data) => {
-        if (data.status === 200) window.location.href = "/userlogin";
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    data.first_name = this.state.firstName;
+    if (this.state.middleName) data.middle_name = this.state.middleName;
+    data.last_name = this.state.lastName;
+    data.email = this.state.email;
+    data.password = this.state.password;
+    data.city = this.state.location;
+    this.props.registerUserFunc(data);
   };
 
-  return (
-    <div>
-      <section
-        class="vh-100 bg-image"
-        style={{
-          backgroundColor: "#9A616D",
-        }}
-      >
-        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
-          <div class="container h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-              <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-                <div class="card" style={{ borderRadius: "15px" }}>
-                  <div class="card-body p-5">
-                    <h2 class="text-uppercase text-center mb-5">
-                      Create an account
-                    </h2>
-                    <form onSubmit={handleSubmit}>
-                      <div class="row mb-4">
-                        <div class="col-4">
+  render() {
+    return (
+      <div>
+        <section
+          class="vh-100 bg-image"
+          style={{
+            backgroundColor: "#9A616D",
+          }}
+        >
+          <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+            <div class="container h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                  <div class="card" style={{ borderRadius: "15px" }}>
+                    <div class="card-body p-5">
+                      <h2 class="text-uppercase text-center mb-5">
+                        Create an account
+                      </h2>
+                      <form onSubmit={this.handleSubmit}>
+                        <div class="row mb-4">
+                          <div class="col-4">
+                            <input
+                              type="text"
+                              id="form3Example1cg"
+                              onChange={(event) => {
+                                this.setState({
+                                  firstName: event.target.value,
+                                });
+                              }}
+                              class="form-control form-control-lg"
+                              required
+                            />
+                            <label class="form-label" for="form3Example1cg">
+                              First Name *
+                            </label>
+                          </div>
+                          <div class="col-4">
+                            <input
+                              type="text"
+                              id="form3Example1cg"
+                              onChange={(event) => {
+                                this.setState({
+                                  middleName: event.target.value,
+                                });
+                              }}
+                              class="form-control form-control-lg"
+                            />
+                            <label class="form-label" for="form3Example1cg">
+                              Middle Name
+                            </label>
+                          </div>
+                          <div class="col-4">
+                            <input
+                              type="text"
+                              id="form3Example1cg"
+                              class="form-control form-control-lg"
+                              onChange={(event) => {
+                                this.setState({
+                                  lastName: event.target.value,
+                                });
+                              }}
+                              required
+                            />
+                            <label class="form-label" for="form3Example1cg">
+                              Last Name *
+                            </label>
+                          </div>
+                        </div>
+
+                        <div class="form-outline mb-4">
                           <input
-                            type="text"
-                            id="form3Example1cg"
-                            onChange={(event) => {
-                              setFirstName(event.target.value);
-                            }}
+                            type="email"
+                            id="form3Example3cg"
                             class="form-control form-control-lg"
+                            onChange={(event) => {
+                              this.setState({
+                                email: event.target.value,
+                              });
+                            }}
                             required
                           />
-                          <label class="form-label" for="form3Example1cg">
-                            First Name *
+                          <label class="form-label" for="form3Example3cg">
+                            Email *
                           </label>
                         </div>
-                        <div class="col-4">
+
+                        <div class="form-outline mb-4">
                           <input
-                            type="text"
-                            id="form3Example1cg"
-                            onChange={(event) => {
-                              setMiddleName(event.target.value);
-                            }}
-                            class="form-control form-control-lg"
-                          />
-                          <label class="form-label" for="form3Example1cg">
-                            Middle Name
-                          </label>
-                        </div>
-                        <div class="col-4">
-                          <input
-                            type="text"
-                            id="form3Example1cg"
+                            type="password"
+                            id="form3Example4cg"
                             class="form-control form-control-lg"
                             onChange={(event) => {
-                              setLastName(event.target.value);
+                              this.setState({
+                                password: event.target.value,
+                              });
                             }}
                             required
                           />
-                          <label class="form-label" for="form3Example1cg">
-                            Last Name *
+                          <label class="form-label" for="form3Example4cg">
+                            Password *
                           </label>
                         </div>
-                      </div>
 
-                      <div class="form-outline mb-4">
-                        <input
-                          type="email"
-                          id="form3Example3cg"
-                          class="form-control form-control-lg"
-                          onChange={(event) => {
-                            setEmail(event.target.value);
-                          }}
-                          required
-                        />
-                        <label class="form-label" for="form3Example3cg">
-                          Email *
-                        </label>
-                      </div>
+                        <div class="form-outline mb-4">
+                          <input
+                            type="password"
+                            id="form3Example4cdg"
+                            class="form-control form-control-lg"
+                            onChange={this.handleChange}
+                            required
+                          />
+                          <label class="form-label" for="form3Example4cdg">
+                            Re-enter your password *
+                          </label>
+                        </div>
 
-                      <div class="form-outline mb-4">
-                        <input
-                          type="password"
-                          id="form3Example4cg"
-                          class="form-control form-control-lg"
-                          onChange={(event) => {
-                            setPassword(event.target.value);
-                          }}
-                          required
-                        />
-                        <label class="form-label" for="form3Example4cg">
-                          Password *
-                        </label>
-                      </div>
+                        {this.state.passwordMatch === "y" ? (
+                          <p style={{ color: "green" }}>Passwords Match!</p>
+                        ) : this.state.passwordMatch === "n" ? (
+                          <p style={{ color: "red" }}>Passwords Mismatch!</p>
+                        ) : null}
 
-                      <div class="form-outline mb-4">
-                        <input
-                          type="password"
-                          id="form3Example4cdg"
-                          class="form-control form-control-lg"
-                          onChange={handleChange}
-                          required
-                        />
-                        <label class="form-label" for="form3Example4cdg">
-                          Re-enter your password *
-                        </label>
-                      </div>
+                        <div class="form-outline mb-4">
+                          <input
+                            type="text"
+                            id="form3Example4cdg"
+                            class="form-control form-control-lg"
+                            onChange={(event) => {
+                              this.setState({
+                                location: event.target.value,
+                              });
+                            }}
+                            required
+                          />
+                          <label class="form-label" for="form3Example4cdg">
+                            Location *
+                          </label>
+                        </div>
 
-                      {passwordMatch === "y" ? (
-                        <p style={{ color: "green" }}>Passwords Match!</p>
-                      ) : passwordMatch === "n" ? (
-                        <p style={{ color: "red" }}>Passwords Mismatch!</p>
-                      ) : null}
+                        <div class="d-flex justify-content-center">
+                          <button
+                            type="submit"
+                            class="btn btn-success btn-block btn-lg gradient-custom-4 text-body"
+                            disabled={
+                              this.state.passwordMatch === "y" ? false : true
+                            }
+                          >
+                            Register
+                          </button>
+                        </div>
 
-                      <div class="form-outline mb-4">
-                        <input
-                          type="text"
-                          id="form3Example4cdg"
-                          class="form-control form-control-lg"
-                          onChange={(event) => {
-                            setLocation(event.target.value);
-                          }}
-                        />
-                        <label class="form-label" for="form3Example4cdg">
-                          Location *
-                        </label>
-                      </div>
+                        {this.props.success && !this.props.error ? (
+                          <p style={{ color: "green", marginTop: "15px" }}>
+                            Success! Redirecting..
+                          </p>
+                        ) : !this.props.success && this.props.error ? (
+                          <p style={{ color: "red", marginTop: "15px" }}>
+                            Something went wrong. Please try again
+                          </p>
+                        ) : null}
 
-                      <div class="d-flex justify-content-center">
-                        <button
-                          type="submit"
-                          class="btn btn-success btn-block btn-lg gradient-custom-4 text-body"
-                          disabled={passwordMatch === "y" ? false : true}
-                        >
-                          Register
-                        </button>
-                      </div>
-
-                      <p class="text-center text-muted mt-5 mb-0">
-                        Have already an account?{" "}
-                        <a href="/userlogin" class="fw-bold text-body">
-                          <u>Login here</u>
-                        </a>
-                      </p>
-                    </form>
+                        <p class="text-center text-muted mt-5 mb-0">
+                          Have already an account?{" "}
+                          <a href="/userlogin" class="fw-bold text-body">
+                            <u>Login here</u>
+                          </a>
+                        </p>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
-  );
-};
+        </section>
+      </div>
+    );
+  }
+}
 
-export default UserRegister;
+const mapStateToProps = (state) => ({
+  error: state.register.error,
+  success: state.register.success,
+});
+
+export default connect(mapStateToProps, { registerUserFunc })(UserRegister);
