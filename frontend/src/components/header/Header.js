@@ -126,5 +126,6 @@ class Header extends Component {
 
 const mapStateToProps = (state) => ({
   user: state.login.user,
+  restaurant: state.login.restaurant,
 });
 export default connect(mapStateToProps, { logoutUserFunc })(Header);

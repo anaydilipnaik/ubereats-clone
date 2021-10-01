@@ -5,3 +5,9 @@ export function loginUser(dataJson) {
   const apiOptions = defaultApiOptions("POST", dataJson);
   return fetch(apiEndpoint, apiOptions);
 }
+
+export function loginRestaurant(dataJson) {
+  const apiEndpoint = semiEndpoint + "/loginRestaurant";
+  const apiOptions = defaultApiOptions("POST", dataJson);
+  return fetch(apiEndpoint, apiOptions);
+}

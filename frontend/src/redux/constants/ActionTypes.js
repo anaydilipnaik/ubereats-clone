@@ -1,6 +1,17 @@
+// User Login
 export const LOGIN_USER = "LOGIN_USER";
 export const LOGIN_USER_ERROR = "LOGIN_USER_ERROR";
 export const LOGOUT_USER = "LOGOUT_USER";
 
+// User Register
 export const REGISTER_USER = "REGISTER_USER";
 export const REGISTER_USER_ERROR = "REGISTER_USER_ERROR";
+
+// Restaurant Login
+export const LOGIN_RESTAURANT = "LOGIN_RESTAURANT";
+export const LOGIN_RESTAURANT_ERROR = "LOGIN_RESTAURANT_ERROR";
+export const LOGOUT_RESTAURANT = "LOGOUT_RESTAURANT";
+
+// Restaurant Logout
+export const REGISTER_RESTAURANT = "REGISTER_RESTAURANT";
+export const REGISTER_RESTAURANT_ERROR = "REGISTER_RESTAURANT_ERROR";
