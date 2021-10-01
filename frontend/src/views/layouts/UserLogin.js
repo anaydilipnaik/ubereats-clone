@@ -115,7 +115,7 @@ class UserLogin extends Component {
                                   marginTop: "15px",
                                 }}
                               >
-                                <b>Success! Logging in..</b>
+                                <b>Success! Redirecting..</b>
                               </p>
                             ) : null}
                           </div>

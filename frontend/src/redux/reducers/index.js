@@ -7,7 +7,7 @@ import RegisterReducer from "./RegisterReducer";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["login", "register"],
+  whitelist: ["login"],
 };
 
 const rootReducer = combineReducers({
