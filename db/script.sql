@@ -269,3 +269,9 @@ CREATE TABLE `ubereats`.`dish_images` (
     REFERENCES `ubereats`.`dishes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+    ALTER TABLE `ubereats`.`restaurants` 
+ADD COLUMN `restaurant_image` VARCHAR(45) NULL AFTER `description`;
+
+ALTER TABLE `ubereats`.`dishes` 
+ADD COLUMN `dish_image` VARCHAR(45) NULL AFTER `description`;

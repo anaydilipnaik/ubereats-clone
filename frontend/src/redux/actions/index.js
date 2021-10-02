@@ -9,9 +9,12 @@ import {
   LOGOUT_RESTAURANT,
   REGISTER_RESTAURANT,
   REGISTER_RESTAURANT_ERROR,
+  GET_CART_COUNT,
+  CART_COUNT_ERROR,
 } from "../constants/ActionTypes";
 import { loginUser, loginRestaurant } from "../../controllers/login";
 import { registerUser, registerRestaurant } from "../../controllers/register";
+import { getCartCount } from "../../controllers/cart";
 
 export const loginUserFunc = (payload) => (dispatch) => {
   loginUser(payload)
@@ -117,6 +120,24 @@ export const registerRestaurantFunc = (payload) => (dispatch) => {
       console.log(err);
       dispatch({
         type: REGISTER_RESTAURANT_ERROR,
+      });
+    });
+};
+
+export const getUserCartCount = (payload) => (dispatch) => {
+  getCartCount(payload)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      dispatch({
+        type: GET_CART_COUNT,
+        payload: data[0].cart_count,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: CART_COUNT_ERROR,
       });
     });
 };

@@ -56,9 +56,10 @@ apiModel.getDishesByRestaurantId = (restaurantId) => {
 apiModel.getUserCart = (userId) => {
   return new Promise((resolve, reject) => {
     var query =
-      "Select * from user_cart where user_id = " +
-      userId +
-      " and cart_status = 'AC'";
+      "Select uc.*, d.name as dish_name, d.dish_image as dish_image, d.price as dish_price, d.description as dish_description, " +
+      "r.name as restaurant_name from user_cart uc, restaurants r, dishes d " +
+      "where uc.restaurant_id = r.id and uc.dish_id = d.id and cart_status = 'AC' and uc.user_id = " +
+      userId;
     db.query(query, (err, results) => {
       if (err) return reject(err);
       return resolve(results);
@@ -110,27 +111,6 @@ apiModel.getCartCount = (userId) => {
   return new Promise((resolve, reject) => {
     var query =
       "Select count(id) as cart_count from user_cart where user_id = " + userId;
-    db.query(query, (err, results) => {
-      if (err) return reject(err);
-      return resolve(results);
-    });
-  });
-};
-
-apiModel.getRestaurantImages = (restaurantId) => {
-  return new Promise((resolve, reject) => {
-    var query =
-      "Select * from restaurant_images where restaurant_id = " + restaurantId;
-    db.query(query, (err, results) => {
-      if (err) return reject(err);
-      return resolve(results);
-    });
-  });
-};
-
-apiModel.getDishImages = (dishId) => {
-  return new Promise((resolve, reject) => {
-    var query = "Select * from dish_images where dish_id = " + dishId;
     db.query(query, (err, results) => {
       if (err) return reject(err);
       return resolve(results);

@@ -8,7 +8,7 @@ const RestaurantCard = ({ user, restaurant }) => {
         data-mdb-ripple-color="light"
       >
         <img
-          src="https://hips.hearstapps.com/hmg-prod/images/classic-buffalo-wings-horizontal-279-1547506077.jpg"
+          src={restaurant.restaurant_image}
           class="w-100"
           style={{ cursor: "pointer", height: "130px" }}
           onClick={() => {

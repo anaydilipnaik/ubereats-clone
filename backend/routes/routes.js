@@ -198,38 +198,6 @@ router.get("/cart/count/:userid", async (req, res, next) => {
   }
 });
 
-router.get("/restaurant/images/:restaurantid", async (req, res, next) => {
-  try {
-    let results = await apiModel.getRestaurantImages(req.params.restaurantid);
-    res.writeHead(200, {
-      "Content-Type": "text/plain",
-    });
-    res.end(JSON.stringify(results));
-  } catch (e) {
-    console.log(e);
-    res.writeHead(500, {
-      "Content-Type": "text/plain",
-    });
-    res.end("Error");
-  }
-});
-
-router.get("/dish/images/:dishid", async (req, res, next) => {
-  try {
-    let results = await apiModel.getDishImages(req.params.dishid);
-    res.writeHead(200, {
-      "Content-Type": "text/plain",
-    });
-    res.end(JSON.stringify(results));
-  } catch (e) {
-    console.log(e);
-    res.writeHead(500, {
-      "Content-Type": "text/plain",
-    });
-    res.end("Error");
-  }
-});
-
 router.post("/registerUser", async (req, res, next) => {
   try {
     await apiModel.registerUser(req.body);

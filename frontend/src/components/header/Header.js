@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import UberEatsLogo from "../../assets/ubereats_logo.svg";
 import UserLocation from "../modals/UserLocation";
 import { connect } from "react-redux";
-import { logoutUserFunc } from "../../redux/actions";
+import { logoutUserFunc, getUserCartCount } from "../../redux/actions";
 
 class Header extends Component {
   constructor() {
@@ -15,6 +15,10 @@ class Header extends Component {
     };
     this.deliveryTypeHandler = this.deliveryTypeHandler.bind(this);
     this.handleLogOut = this.handleLogOut.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.user.id) this.props.getUserCartCount(this.props.user.id);
   }
 
   deliveryTypeHandler = (event) => {
@@ -81,7 +85,7 @@ class Header extends Component {
               <input
                 type="search"
                 class="form-control rounded"
-                placeholder="Search"
+                placeholder="What are you craving?"
                 aria-label="Search"
                 aria-describedby="search-addon"
               />
@@ -93,10 +97,17 @@ class Header extends Component {
           <button
             class="btn btn-outline-dark rounded-pill"
             style={{ margin: "15px" }}
+            onClick={() => {
+              window.location.href = this.props.user.id
+                ? "/checkout"
+                : "/userlogin";
+            }}
           >
             <i class="bi-cart-fill me-1"></i>
             Cart
-            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+            <span class="badge bg-dark text-white ms-1 rounded-pill">
+              {this.props.user.id ? this.props.cartCount : 0}
+            </span>
           </button>
           {(this.props.user && this.props.user.id) ||
           (this.props.restaurant && this.props.restaurant.id) ? (
@@ -128,5 +139,8 @@ class Header extends Component {
 const mapStateToProps = (state) => ({
   user: state.login.user,
   restaurant: state.login.restaurant,
+  cartCount: state.cart.count,
 });
-export default connect(mapStateToProps, { logoutUserFunc })(Header);
+export default connect(mapStateToProps, { logoutUserFunc, getUserCartCount })(
+  Header
+);
