@@ -120,12 +120,12 @@ class UserLogin extends Component {
                             ) : null}
                           </div>
                           <p class="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
-                            Don't have an account?{" "}
+                            New to Uber?{" "}
                             <a
                               href="/userregister"
                               style={{ color: "#393f81" }}
                             >
-                              Register here
+                              Create an account
                             </a>
                           </p>
                         </form>

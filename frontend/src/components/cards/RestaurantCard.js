@@ -1,28 +1,48 @@
 import React from "react";
 
-const RestaurantCard = () => {
+const RestaurantCard = ({ user, restaurant }) => {
   return (
-    <div class="card">
+    <div class="card" style={{ width: "235px", height: "188px" }}>
       <div
         class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
         data-mdb-ripple-color="light"
       >
         <img
-          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/belt.jpg"
+          src="https://hips.hearstapps.com/hmg-prod/images/classic-buffalo-wings-horizontal-279-1547506077.jpg"
           class="w-100"
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", height: "130px" }}
           onClick={() => {
-            window.location.href = "/restaurantpage";
+            window.location.href = "/restaurantpage?id=" + restaurant.id;
           }}
         />
       </div>
-      <div class="card-body">
-        <a href="/restaurantpage" class="text-reset">
-          <h5 class="card-title mb-3" style={{ textAlign: "left" }}>
-            Product name
+      <div
+        class="card-body"
+        style={{ padding: 0, marginTop: "10px", marginLeft: "5px" }}
+      >
+        <a href={"/restaurantpage?id=" + restaurant.id} class="text-reset">
+          <h5
+            style={{
+              textAlign: "left",
+              fontSize: "16px",
+            }}
+          >
+            {(restaurant.name + " (" + restaurant.location + ")").substr(
+              0,
+              25
+            ) + "..."}
           </h5>
         </a>
-        <h6 class="mb-3">$61.99</h6>
+        <h6
+          class="mb-3"
+          style={{
+            textAlign: "left",
+            fontSize: "14px",
+          }}
+        >
+          {/* hardcoded for now */}
+          $2.50 Delivery Fee • 25–35 min
+        </h6>
       </div>
     </div>
   );

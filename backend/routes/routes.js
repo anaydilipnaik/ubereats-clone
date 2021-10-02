@@ -18,22 +18,6 @@ app.use(
   })
 );
 
-router.get("/countries", async (req, res, next) => {
-  try {
-    let results = await apiModel.getCountries();
-    res.writeHead(200, {
-      "Content-Type": "text/plain",
-    });
-    res.end(JSON.stringify(results));
-  } catch (e) {
-    console.log(e);
-    res.writeHead(500, {
-      "Content-Type": "text/plain",
-    });
-    res.end("Error");
-  }
-});
-
 router.get("/restaurants/all", async (req, res, next) => {
   try {
     let results = await apiModel.getAllRestaurants();

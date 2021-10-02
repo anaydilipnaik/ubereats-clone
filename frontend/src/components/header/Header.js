@@ -98,7 +98,8 @@ class Header extends Component {
             Cart
             <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
           </button>
-          {this.props.user && this.props.user.id ? (
+          {(this.props.user && this.props.user.id) ||
+          (this.props.restaurant && this.props.restaurant.id) ? (
             <button
               class="btn btn-outline-dark rounded-pill"
               onClick={this.handleLogOut}

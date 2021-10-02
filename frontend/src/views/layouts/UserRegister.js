@@ -199,9 +199,9 @@ class UserRegister extends Component {
                         ) : null}
 
                         <p class="text-center text-muted mt-5 mb-0">
-                          Have already an account?{" "}
+                          Already use Uber?{" "}
                           <a href="/userlogin" class="fw-bold text-body">
-                            <u>Login here</u>
+                            <u>Sign in</u>
                           </a>
                         </p>
                       </form>

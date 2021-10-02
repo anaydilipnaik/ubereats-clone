@@ -3,16 +3,6 @@ var pool = require("../queryBuilder");
 
 let apiModel = {};
 
-apiModel.getCountries = () => {
-  return new Promise((resolve, reject) => {
-    var query = "Select * from countries";
-    db.query(query, (err, results) => {
-      if (err) return reject(err);
-      return resolve(results);
-    });
-  });
-};
-
 apiModel.getAllRestaurants = () => {
   return new Promise((resolve, reject) => {
     var query = "Select * from restaurants";
