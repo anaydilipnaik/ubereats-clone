@@ -275,3 +275,66 @@ ADD COLUMN `restaurant_image` VARCHAR(45) NULL AFTER `description`;
 
 ALTER TABLE `ubereats`.`dishes` 
 ADD COLUMN `dish_image` VARCHAR(45) NULL AFTER `description`;
+
+USE `ubereats`;
+DROP procedure IF EXISTS `PlaceOrder`;
+
+USE `ubereats`;
+DROP procedure IF EXISTS `ubereats`.`PlaceOrder`;
+;
+
+DELIMITER $$
+USE `ubereats`$$
+CREATE DEFINER=`admin`@`%` PROCEDURE `PlaceOrder`(
+   IN orderJson varchar(700),
+   IN orderContentsArr varchar(700)
+)
+BEGIN
+DECLARE EXIT HANDLER FOR SQLEXCEPTION, SQLWARNING
+    BEGIN
+	  ROLLBACK;
+      GET STACKED DIAGNOSTICS CONDITION 1
+      @errorMsg = MESSAGE_TEXT;
+      SELECT @errorMsg as error_message;
+    END;
+
+  START TRANSACTION;
+
+  SET @indx = 0;
+  SET @userId = JSON_EXTRACT(invoiceJson, "$.user_id");
+  SET @restaurantId = JSON_EXTRACT(invoiceJson, "$.restaurant_id");
+  SET @orderStatus = JSON_EXTRACT(invoiceJson, "$.order_status");
+  SET @deliveryType = JSON_EXTRACT(invoiceJson, "$.delivery_type");
+  SET @taxes = JSON_EXTRACT(invoiceJson, "$.taxes");
+  SET @total = JSON_EXTRACT(invoiceJson, "$.total");
+
+  INSERT INTO orders(user_id, restaurant_id, order_status, delivery_type, taxes, total)
+  VALUES (@userId, @restaurantId, JSON_UNQUOTE(@orderStatus), @taxes, @total);
+
+  SET @orderId = (SELECT LAST_INSERT_ID());
+  
+  UPDATE user_cart SET cart_status = "CC" WHERE user_id = @userId and cart_status = "AC";
+
+  IF JSON_LENGTH(orderContentsArr) > 0 THEN
+    REPEAT
+
+      SET @orderContentJson = JSON_EXTRACT(orderContentsArr, CONCAT("$[", @indx, "]"));
+      SET @userId = JSON_EXTRACT(@orderContentJson,"$.user_id");
+      SET @restaurantId = JSON_EXTRACT(@orderContentJson,"$.restaurant_id");
+      SET @dishId = JSON_EXTRACT(@orderContentJson,"$.dish_id");
+      SET @qty = JSON_EXTRACT(@orderContentJson,"$.qty");
+
+      INSERT INTO order_contents (user_id, restaurant_id, dish_id, order_id, qty)
+      VALUES(@user_id, @restaurantId, @dishId, @orderId, @qty);
+
+       SET @indx = @indx + 1;
+       UNTIL @indx = JSON_LENGTH(orderContentsArr)
+
+    END
+    REPEAT;
+  END IF;
+
+  COMMIT;
+END$$
+
+DELIMITER ;

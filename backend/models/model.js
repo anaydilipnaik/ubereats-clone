@@ -110,7 +110,8 @@ apiModel.getUserFavourites = (userId) => {
 apiModel.getCartCount = (userId) => {
   return new Promise((resolve, reject) => {
     var query =
-      "Select count(id) as cart_count from user_cart where user_id = " + userId;
+      "Select count(id) as cart_count from user_cart where cart_status = 'AC' and user_id = " +
+      userId;
     db.query(query, (err, results) => {
       if (err) return reject(err);
       return resolve(results);
@@ -140,13 +141,17 @@ apiModel.registerRestaurant = (dataJson) => {
   });
 };
 
-apiModel.placeOrder = (dataJson) => {
+apiModel.placeOrder = (dataJson, dataArr) => {
   return new Promise((resolve, reject) => {
-    pool.get_connection((qb) => {
-      qb.insert("orders", dataJson, (err, results) => {
-        if (err) return reject(err);
-        return resolve(results);
-      });
+    var query =
+      "CALL PlaceOrder('" +
+      JSON.stringify(dataJson) +
+      "', '" +
+      JSON.stringify(dataArr) +
+      "')";
+    db.query(query, (err, results) => {
+      if (err) return reject(err);
+      return resolve(results);
     });
   });
 };

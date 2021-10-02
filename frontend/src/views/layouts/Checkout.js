@@ -1,8 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { getCartItems } from "../../controllers/cart";
+import { connect } from "react-redux";
+import { placeOrder } from "../../controllers/orders";
 
 const Checkout = ({ user }) => {
   const [cartItems, setCartItems] = useState(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let data = {};
+    data.user_id = user.id;
+    data.restaurant_id = cartItems[0].restaurant_id;
+    data.order_status = "OR";
+    data.delivery_type = "DL";
+    data.taxes = 10;
+    data.total = 100;
+    let contentsArr = [];
+    cartItems.map((item) => {
+      let contentsObj = {};
+      contentsObj.user_id = user.id;
+      contentsObj.restaurant_id = item.restaurant_id;
+      contentsObj.dish_id = item.dish_id;
+      contentsObj.qty = item.qty;
+      contentsArr.push(contentsObj);
+    });
+    data.contents = contentsArr;
+    placeOrder(data).then((res) => console.log(res));
+  };
 
   useEffect(() => {
     getCartItems(39)
@@ -12,7 +36,6 @@ const Checkout = ({ user }) => {
 
   return (
     <>
-      {/* test start */}
       <section class="h-100 h-custom" style={{ backgroundColor: "#d2c9ff" }}>
         <div class="container py-5 h-100">
           <div class="row d-flex justify-content-center align-items-center h-100">
@@ -105,29 +128,29 @@ const Checkout = ({ user }) => {
 
                         <div class="d-flex justify-content-between mb-4">
                           <h5 class="text-uppercase">Subtotal</h5>
-                          <h5>€ 132.00</h5>
+                          <h5>$6.99</h5>
                         </div>
                         <div class="d-flex justify-content-between mb-4">
                           <h5 class="text-uppercase">Delivery Fee</h5>
-                          <h5>€ 132.00</h5>
+                          <h5>$0</h5>
                         </div>
                         <div class="d-flex justify-content-between mb-4">
                           <h5 class="text-uppercase">Service Fee</h5>
-                          <h5>€ 132.00</h5>
+                          <h5>$0</h5>
                         </div>
                         <div
                           class="d-flex justify-content-between"
                           style={{ marginBottom: "75px" }}
                         >
                           <h5 class="text-uppercase">Taxes</h5>
-                          <h5>€ 132.00</h5>
+                          <h5>$0</h5>
                         </div>
 
                         <hr class="my-4" />
 
                         <div class="d-flex justify-content-between mb-5">
                           <h5 class="text-uppercase">Total price</h5>
-                          <h5>€ 137.00</h5>
+                          <h5>$6.99</h5>
                         </div>
 
                         <button
@@ -135,6 +158,7 @@ const Checkout = ({ user }) => {
                           class="btn btn-dark btn-block btn-lg"
                           data-mdb-ripple-color="dark"
                           style={{ width: "100%" }}
+                          onClick={handleSubmit}
                         >
                           Place Order
                         </button>
@@ -147,7 +171,6 @@ const Checkout = ({ user }) => {
           </div>
         </div>
       </section>
-      {/* test end */}
       {/* test start */}
       {/* <section class="vh-100" style={{ backgroundColor: "#35558a" }}>
         <div class="container py-5 h-100">
@@ -245,4 +268,7 @@ const Checkout = ({ user }) => {
   );
 };
 
-export default Checkout;
+const mapStateToProps = (state) => ({
+  user: state.login.user,
+});
+export default connect(mapStateToProps)(Checkout);

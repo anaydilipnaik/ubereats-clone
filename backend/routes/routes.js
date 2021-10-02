@@ -232,7 +232,9 @@ router.post("/registerRestaurant", async (req, res, next) => {
 
 router.post("/placeOrder", async (req, res, next) => {
   try {
-    await apiModel.placeOrder(req.body);
+    let orderContentsArr = req.body.contents;
+    delete req.body.contents;
+    await apiModel.placeOrder(req.body, orderContentsArr);
     res.writeHead(200, {
       "Content-Type": "text/plain",
     });
