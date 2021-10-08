@@ -2,12 +2,27 @@ var db = require("../dbConnection");
 var pool = require("../queryBuilder");
 
 let apiModel = {};
+
 apiModel.getAllRestaurants = (dataJson) => {
   return new Promise((resolve, reject) => {
-    var query = "Select r.* from restaurants r";
-    if (dataJson.userLocation) query += "";
-    if (dataJson.userDeliveryType) query += "";
-    if (dataJson.searchKeyword) query += "";
+    var query =
+      "Select r.* from restaurants r, dishes d where r.id = d.restaurant_id";
+    if (dataJson.userDeliveryType === "PU") query += " and r.is_pickup = 1";
+    if (dataJson.searchKeyword)
+      query +=
+        " and " +
+        "r.name like '%" +
+        dataJson.searchKeyword +
+        "%'" +
+        " or d.name like '%" +
+        dataJson.searchKeyword +
+        "%'";
+    if (dataJson.userLocation)
+      query +=
+        " ORDER BY CASE WHEN r.location = '%" +
+        dataJson.userLocation +
+        "%' THEN 1 ELSE 2 END, r.location";
+    console.log(query);
     db.query(query, (err, results) => {
       if (err) return reject(err);
       return resolve(results);

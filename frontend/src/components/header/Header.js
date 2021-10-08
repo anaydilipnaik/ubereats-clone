@@ -8,6 +8,8 @@ import {
   setUserDeliveryType,
   setUserLocation,
 } from "../../redux/actions";
+import { Popover, PopoverHeader, PopoverBody } from "reactstrap";
+import { getCartItems } from "../../controllers/cart";
 
 class Header extends Component {
   constructor() {
@@ -16,6 +18,8 @@ class Header extends Component {
       delivery: null,
       pickup: null,
       showLocation: false,
+      popoverOpen: false,
+      cartItems: null,
     };
     this.deliveryTypeHandler = this.deliveryTypeHandler.bind(this);
     this.onLocationHide = this.onLocationHide.bind(this);
@@ -23,8 +27,16 @@ class Header extends Component {
     this.handleLogOut = this.handleLogOut.bind(this);
   }
 
+  toggle = () => {
+    getCartItems(39)
+      .then((res) => res.json())
+      .then((data) => this.setState({ cartItems: data }));
+    this.setState({ popoverOpen: !this.state.popoverOpen });
+  };
+
   componentDidMount() {
     if (this.props.user.id) this.props.getUserCartCount(this.props.user.id);
+
     if (this.props.userDeliveryType)
       this.setState({
         delivery: this.props.userDeliveryType === "DL" ? "active" : "",
@@ -130,14 +142,12 @@ class Header extends Component {
               </span>
             </div>
           </div>
+          <div></div>
           <button
             class="btn btn-outline-dark rounded-pill"
+            type="button"
+            id="Popover1"
             style={{ margin: "15px" }}
-            onClick={() => {
-              window.location.href = this.props.user.id
-                ? "/checkout"
-                : "/userlogin";
-            }}
           >
             <i class="bi-cart-fill me-1"></i>
             Cart
@@ -145,6 +155,40 @@ class Header extends Component {
               {this.props.user.id ? this.props.cartCount : 0}
             </span>
           </button>
+          <Popover
+            placement="bottom"
+            isOpen={this.state.popoverOpen}
+            target="Popover1"
+            toggle={this.toggle}
+          >
+            <PopoverHeader>My Cart</PopoverHeader>
+            <PopoverBody>
+              {this.state.cartItems &&
+                this.state.cartItems.map((item) => (
+                  <>
+                    <div class="row">
+                      <div class="col-8">
+                        <h6>{item.dish_name}</h6>
+                      </div>
+                      <div class="col-4">
+                        <h6 class="text-muted">${item.dish_price}</h6>
+                      </div>
+                    </div>
+                  </>
+                ))}
+              <hr class="my-4" />
+              <button
+                class="btn btn-secondary btn-sm"
+                onClick={() => {
+                  window.location.href = this.props.user.id
+                    ? "/checkout"
+                    : "/userlogin";
+                }}
+              >
+                Go to Checkout
+              </button>
+            </PopoverBody>
+          </Popover>
           {(this.props.user && this.props.user.id) ||
           (this.props.restaurant && this.props.restaurant.id) ? (
             <button
