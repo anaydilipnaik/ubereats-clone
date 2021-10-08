@@ -1,8 +1,9 @@
 import { semiEndpoint, defaultApiOptions } from "../utils/ApiEndpoint";
 
-export function getAllRestaurants() {
+export function getAllRestaurants(dataJson) {
   const apiEndpoint = semiEndpoint + "/restaurants/all";
-  return fetch(apiEndpoint);
+  const apiOptions = defaultApiOptions("POST", dataJson);
+  return fetch(apiEndpoint, apiOptions);
 }
 
 export function getRestaurantDetailsById(restaurantId) {

@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Row, Col, Form } from "react-bootstrap";
 
-const UserLocation = ({ show, onHide }) => {
+const UserLocation = ({ show, onHide, onLocationChange, userAddress }) => {
+  const [locationString, setLocationString] = useState(userAddress);
+
+  const onLocationChangeHandler = (event) => {
+    event.preventDefault();
+    onLocationChange(locationString);
+  };
+
   return (
     <Modal
       show={show}
@@ -12,11 +19,39 @@ const UserLocation = ({ show, onHide }) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Booking Details
+          User Location
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>test</Modal.Body>
-      <Modal.Footer>test footer</Modal.Footer>
+      <Modal.Body>
+        <div class="row gutters">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-12">
+                <input
+                  type="text"
+                  name="location"
+                  class="form-control"
+                  id="location"
+                  placeholder="Enter your location"
+                  defaultValue={userAddress}
+                  onChange={(e) => {
+                    setLocationString(e.target.value);
+                  }}
+                />
+              </div>
+              <div style={{ marginTop: "15px", textAlign: "right" }}>
+                <button
+                  type="button"
+                  onClick={onLocationChangeHandler}
+                  class="btn btn-sm btn-primary"
+                >
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal.Body>
     </Modal>
   );
 };

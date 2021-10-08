@@ -2,10 +2,12 @@ var db = require("../dbConnection");
 var pool = require("../queryBuilder");
 
 let apiModel = {};
-
-apiModel.getAllRestaurants = () => {
+apiModel.getAllRestaurants = (dataJson) => {
   return new Promise((resolve, reject) => {
-    var query = "Select * from restaurants";
+    var query = "Select r.* from restaurants r";
+    if (dataJson.userLocation) query += "";
+    if (dataJson.userDeliveryType) query += "";
+    if (dataJson.searchKeyword) query += "";
     db.query(query, (err, results) => {
       if (err) return reject(err);
       return resolve(results);

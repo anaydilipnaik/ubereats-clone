@@ -5,18 +5,38 @@ import RestaurantCard from "../../components/cards/RestaurantCard";
 import { connect } from "react-redux";
 import { getAllRestaurants } from "../../controllers/restaurants";
 
-const UserHome = ({ user }) => {
+const UserHome = ({ user, userLocation, userDeliveryType }) => {
   const [restaurants, setRestaurants] = useState(null);
+  const [searchKeyword, setSearchKeyword] = useState(null);
 
-  useEffect(() => {
-    getAllRestaurants()
+  const onSearchClick = (event) => {
+    event.preventDefault();
+    const data = {};
+    if (searchKeyword && searchKeyword !== "") {
+      data.searchKeyword = searchKeyword;
+      getRestaurantsFunc(data);
+    }
+  };
+
+  const getRestaurantsFunc = (data) => {
+    getAllRestaurants(data)
       .then((res) => res.json())
       .then((data) => setRestaurants(data));
-  }, []);
+  };
+
+  useEffect(() => {
+    let data = {};
+    if (userLocation) data.userLocation = userLocation;
+    if (userDeliveryType) data.userDeliveryType = userDeliveryType;
+    getRestaurantsFunc(data);
+  }, [userLocation, userDeliveryType]);
 
   return (
     <>
-      <Header />
+      <Header
+        setSearchKeyword={setSearchKeyword}
+        onSearchClick={onSearchClick}
+      />
       <div class="container">
         <div class="row">
           {restaurants &&
@@ -34,6 +54,8 @@ const UserHome = ({ user }) => {
 
 const mapStateToProps = (state) => ({
   user: state.login.user,
+  userLocation: state.userLocation.userLocation,
+  userDeliveryType: state.userDeliveryType.userDeliveryType,
 });
 
 export default connect(mapStateToProps)(UserHome);

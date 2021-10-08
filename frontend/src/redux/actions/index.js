@@ -11,6 +11,8 @@ import {
   REGISTER_RESTAURANT_ERROR,
   GET_CART_COUNT,
   CART_COUNT_ERROR,
+  SET_USER_DELIVERY_TYPE,
+  SET_USER_LOCATION,
 } from "../constants/ActionTypes";
 import { loginUser, loginRestaurant } from "../../controllers/login";
 import { registerUser, registerRestaurant } from "../../controllers/register";
@@ -128,7 +130,6 @@ export const getUserCartCount = (payload) => (dispatch) => {
   getCartCount(payload)
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
       dispatch({
         type: GET_CART_COUNT,
         payload: data[0].cart_count,
@@ -140,4 +141,18 @@ export const getUserCartCount = (payload) => (dispatch) => {
         type: CART_COUNT_ERROR,
       });
     });
+};
+
+export const setUserDeliveryType = (payload) => (dispatch) => {
+  dispatch({
+    type: SET_USER_DELIVERY_TYPE,
+    payload: payload,
+  });
+};
+
+export const setUserLocation = (payload) => (dispatch) => {
+  dispatch({
+    type: SET_USER_LOCATION,
+    payload: payload,
+  });
 };

@@ -18,9 +18,9 @@ app.use(
   })
 );
 
-router.get("/restaurants/all", async (req, res, next) => {
+router.post("/restaurants/all", async (req, res, next) => {
   try {
-    let results = await apiModel.getAllRestaurants();
+    let results = await apiModel.getAllRestaurants(req.body);
     res.writeHead(200, {
       "Content-Type": "text/plain",
     });
