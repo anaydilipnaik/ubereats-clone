@@ -10,3 +10,8 @@ export function getOrderDetailsById(orderId) {
   const apiEndpoint = semiEndpoint + "/order/details/" + orderId;
   return fetch(apiEndpoint);
 }
+
+export function getOrdersByUserId(userId) {
+  const apiEndpoint = semiEndpoint + "/orders/get/user/" + userId;
+  return fetch(apiEndpoint);
+}

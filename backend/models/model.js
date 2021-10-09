@@ -96,7 +96,12 @@ apiModel.getUserAddresses = (userId) => {
 
 apiModel.getOrdersByUserId = (userId) => {
   return new Promise((resolve, reject) => {
-    var query = "Select * from orders where user_id = " + userId;
+    var query =
+      "select o.id, r.name as restaurant_name, r.location as restaurant_location, o.order_status, " +
+      "o.delivery_type, o.total, o.created, count(oc.id) as order_count from orders o, order_contents oc, restaurants r " +
+      "where o.id = oc.order_id and oc.restaurant_id = o.restaurant_id and o.restaurant_id = r.id and o.user_id = " +
+      userId +
+      " group by oc.order_id order by o.created desc";
     db.query(query, (err, results) => {
       if (err) return reject(err);
       return resolve(results);

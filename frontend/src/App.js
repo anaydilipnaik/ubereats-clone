@@ -9,6 +9,7 @@ import Checkout from "./views/layouts/Checkout";
 import UserProfile from "./views/layouts/UserProfile";
 import RestaurantPage from "./views/layouts/RestaurantPage";
 import UserFavourites from "./views/layouts/UserFavourites";
+import UserOrders from "./views/layouts/UserOrders";
 
 const App = () => {
   return (
@@ -37,6 +38,9 @@ const App = () => {
         </Route>
         <Route path="/favourites">
           <UserFavourites />
+        </Route>
+        <Route path="/userorders">
+          <UserOrders />
         </Route>
         <Route path="/">
           <UserHome />

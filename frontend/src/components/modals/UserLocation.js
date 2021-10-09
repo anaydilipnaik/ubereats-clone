@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Row, Col, Form } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 
 const UserLocation = ({ show, onHide, onLocationChange, userAddress }) => {
   const [locationString, setLocationString] = useState(userAddress);
