@@ -108,7 +108,7 @@ apiModel.getOrderDetailsById = (orderId) => {
   return new Promise((resolve, reject) => {
     var query =
       "select o.id, o.restaurant_id, o.order_status, o.delivery_type, o.taxes, o.total, r.name as restaurant_name, " +
-      "r.location as restaurant_location, d.name as dish_name, d.price as dish_price, o.created " +
+      "r.location as restaurant_location, d.name as dish_name, d.price as dish_price, oc.qty, o.created " +
       "from orders o, order_contents oc, restaurants r, dishes d " +
       "where o.restaurant_id = r.id and d.restaurant_id = r.id and oc.order_id = o.id and o.id = " +
       orderId;

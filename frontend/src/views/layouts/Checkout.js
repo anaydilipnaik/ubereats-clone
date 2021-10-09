@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getCartItems, updateCart } from "../../controllers/cart";
 import { connect } from "react-redux";
 import { getOrderDetailsById, placeOrder } from "../../controllers/orders";
+import Header from "../../components/header/Header";
+import Footer from "../../components/footer/Footer";
 
 const Checkout = ({ user }) => {
   const [cartItems, setCartItems] = useState(null);
@@ -17,7 +19,7 @@ const Checkout = ({ user }) => {
     data.order_status = "OR";
     data.delivery_type = "DL";
     data.taxes = 0;
-    data.total = 0;
+    data.total = cartSubtotal;
     let contentsArr = [];
     cartItems.map((item) => {
       let contentsObj = {};
@@ -72,7 +74,8 @@ const Checkout = ({ user }) => {
   console.log(placedOrderDetails);
   return (
     <>
-      {orderPlacedStatus ? (
+      <Header />
+      {orderPlacedStatus && placedOrderDetails ? (
         <section class="h-100 gradient-custom">
           <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
@@ -81,13 +84,55 @@ const Checkout = ({ user }) => {
                   <div class="card-header px-4 py-5">
                     <h2 class="text-muted mb-0">
                       Thanks for your Order,{" "}
-                      <span style={{ color: "blue" }}>Anay</span>!
+                      <span style={{ color: "blue" }}>{user.first_name}</span>!
                     </h2>
+                    <p
+                      style={{
+                        marginTop: "25px",
+                        fontSize: "25px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {placedOrderDetails[0].restaurant_name} (
+                      {placedOrderDetails[0].restaurant_location})
+                    </p>
+                    {placedOrderDetails.map((item) => (
+                      <>
+                        <div class="row">
+                          <div class="col-6">
+                            <p>
+                              {item.dish_name} (x{item.qty})
+                            </p>
+                          </div>
+                          <div class="col-6">
+                            <p>{item.dish_price}</p>
+                          </div>
+                        </div>
+                      </>
+                    ))}
                   </div>
                   <div class="card-footer border-0 px-4 py-5">
-                    <h5>
-                      Total paid: <span class="h2 mb-0 ms-2">$1040</span>
-                    </h5>
+                    <div class="row">
+                      <div class="col-6">
+                        <h6 class="mb-0">
+                          <a href="/" class="text-body">
+                            <i class="fas fa-long-arrow-alt-left me-2"></i>
+                            Back to Home
+                          </a>
+                        </h6>
+                      </div>
+                      <div class="col-6">
+                        <h5>
+                          Total paid:{" "}
+                          <span
+                            class="h2 mb-0 ms-2"
+                            style={{ textDecoration: "underline" }}
+                          >
+                            ${placedOrderDetails[0].total}
+                          </span>
+                        </h5>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -115,7 +160,7 @@ const Checkout = ({ user }) => {
                           </div>
                           <hr class="my-4" />
 
-                          {cartItems &&
+                          {cartItems && cartItems.length > 0 ? (
                             cartItems.map((item) => (
                               <>
                                 <div class="row mb-4 d-flex justify-content-between align-items-center">
@@ -165,8 +210,19 @@ const Checkout = ({ user }) => {
                                 </div>
                                 <hr class="my-4" />
                               </>
-                            ))}
-
+                            ))
+                          ) : (
+                            <section class="h-100 gradient-custom">
+                              <div class="container py-5 h-100">
+                                <h2
+                                  class="text-muted mb-0"
+                                  style={{ textAlign: "center" }}
+                                >
+                                  Your Cart is Empty!
+                                </h2>
+                              </div>
+                            </section>
+                          )}
                           <div class="pt-5">
                             <h6 class="mb-0">
                               <a href="/" class="text-body">
@@ -215,6 +271,9 @@ const Checkout = ({ user }) => {
                             data-mdb-ripple-color="dark"
                             style={{ width: "100%" }}
                             onClick={handleSubmit}
+                            disabled={
+                              cartItems && cartItems.length > 0 ? false : true
+                            }
                           >
                             Place Order
                           </button>
@@ -228,6 +287,7 @@ const Checkout = ({ user }) => {
           </div>
         </section>
       )}
+      <Footer />
     </>
   );
 };

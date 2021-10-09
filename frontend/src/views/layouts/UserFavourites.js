@@ -18,7 +18,6 @@ const UserFavourites = ({ user }) => {
     getRestaurantsFunc();
   }, []);
 
-  console.log(favourites);
   return (
     <>
       <Header />
