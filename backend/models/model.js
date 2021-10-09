@@ -106,7 +106,12 @@ apiModel.getOrdersByUserId = (userId) => {
 
 apiModel.getOrderDetailsById = (orderId) => {
   return new Promise((resolve, reject) => {
-    var query = "Select * from orders where id = " + orderId;
+    var query =
+      "select o.id, o.restaurant_id, o.order_status, o.delivery_type, o.taxes, o.total, r.name as restaurant_name, " +
+      "r.location as restaurant_location, d.name as dish_name, d.price as dish_price, o.created " +
+      "from orders o, order_contents oc, restaurants r, dishes d " +
+      "where o.restaurant_id = r.id and d.restaurant_id = r.id and oc.order_id = o.id and o.id = " +
+      orderId;
     db.query(query, (err, results) => {
       if (err) return reject(err);
       return resolve(results);
@@ -116,7 +121,9 @@ apiModel.getOrderDetailsById = (orderId) => {
 
 apiModel.getUserFavourites = (userId) => {
   return new Promise((resolve, reject) => {
-    var query = "Select * from user_favourites where user_id = " + userId;
+    var query =
+      "Select r.* from user_favourites uf, restaurants r where uf.restaurant_id = r.id and uf.user_id = " +
+      userId;
     db.query(query, (err, results) => {
       if (err) return reject(err);
       return resolve(results);
@@ -289,6 +296,17 @@ apiModel.updateDish = (dishId, dataJson) => {
   return new Promise((resolve, reject) => {
     pool.get_connection((qb) => {
       qb.update("dishes", dataJson, { id: dishId }, (err, results) => {
+        if (err) return reject(err);
+        return resolve(results);
+      });
+    });
+  });
+};
+
+apiModel.updateCart = (cartId, dataJson) => {
+  return new Promise((resolve, reject) => {
+    pool.get_connection((qb) => {
+      qb.update("user_cart", dataJson, { id: cartId }, (err, results) => {
         if (err) return reject(err);
         return resolve(results);
       });

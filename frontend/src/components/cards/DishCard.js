@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { addToCart } from "../../controllers/cart";
+import { addToCart, getCartItems } from "../../controllers/cart";
 import { getUserCartCount } from "../../redux/actions";
 import { connect } from "react-redux";
 
@@ -12,18 +12,28 @@ class DishCard extends Component {
 
   handleAddToCart = (e) => {
     e.preventDefault();
-    let data = {};
-    data.restaurant_id = this.props.dish.restaurant_id;
-    data.dish_id = this.props.dish.id;
-    data.user_id = 39;
-    data.cart_status = "AC";
-    data.delivery_type = "DL";
-    data.qty = 1;
-    addToCart(data)
-      .then((res) => {
-        if (res.status === 200) return this.props.getUserCartCount(39);
-      })
-      .catch((err) => console.log(err));
+    getCartItems(39)
+      .then((res) => res.json())
+      .then((data) => {
+        let flag = false;
+        data.map((item) => {
+          if (item.restaurant_id !== this.props.dish.restaurant_id) flag = true;
+        });
+        if (!flag) {
+          let data = {};
+          data.restaurant_id = this.props.dish.restaurant_id;
+          data.dish_id = this.props.dish.id;
+          data.user_id = 39;
+          data.cart_status = "AC";
+          data.delivery_type = "DL";
+          data.qty = 1;
+          addToCart(data)
+            .then((res) => {
+              if (res.status === 200) return this.props.getUserCartCount(39);
+            })
+            .catch((err) => console.log(err));
+        } else alert("Already added to cart");
+      });
   };
 
   render() {

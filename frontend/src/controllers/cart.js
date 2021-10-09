@@ -15,3 +15,9 @@ export function getCartItems(userId) {
   const apiEndpoint = semiEndpoint + "/cart/get/" + userId;
   return fetch(apiEndpoint);
 }
+
+export function updateCart(cartId, dataJson) {
+  const apiEndpoint = semiEndpoint + "/updateCart/" + cartId;
+  const apiOptions = defaultApiOptions("PUT", dataJson);
+  return fetch(apiEndpoint, apiOptions);
+}

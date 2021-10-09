@@ -1,6 +1,17 @@
 import React from "react";
+import { addToFavourite } from "../../controllers/user";
 
 const RestaurantCard = ({ user, restaurant }) => {
+  const addToFavouriteButtonClick = (event) => {
+    event.preventDefault();
+    let data = {};
+    data.user_id = user.id;
+    data.restaurant_id = restaurant.id;
+    addToFavourite(data).then((res) => {
+      if (res.status === 200) alert("Added to favourites");
+    });
+  };
+
   return (
     <div class="card" style={{ width: "235px", height: "188px" }}>
       <div
@@ -20,19 +31,31 @@ const RestaurantCard = ({ user, restaurant }) => {
         class="card-body"
         style={{ padding: 0, marginTop: "10px", marginLeft: "5px" }}
       >
-        <a href={"/restaurantpage?id=" + restaurant.id} class="text-reset">
-          <h5
-            style={{
-              textAlign: "left",
-              fontSize: "16px",
-            }}
+        <div class="row">
+          <a
+            href={"/restaurantpage?id=" + restaurant.id}
+            class="text-reset col-10"
           >
-            {(restaurant.name + " (" + restaurant.location + ")").substr(
-              0,
-              25
-            ) + "..."}
-          </h5>
-        </a>
+            <h5
+              style={{
+                textAlign: "left",
+                fontSize: "16px",
+              }}
+            >
+              {(restaurant.name + " (" + restaurant.location + ")").substr(
+                0,
+                25
+              ) + "..."}
+            </h5>
+          </a>
+          <span
+            onClick={addToFavouriteButtonClick}
+            style={{ cursor: "pointer" }}
+            class="col-2"
+          >
+            <i class="bi bi-heart"></i>
+          </span>
+        </div>
         <h6
           class="mb-3"
           style={{
@@ -41,7 +64,7 @@ const RestaurantCard = ({ user, restaurant }) => {
           }}
         >
           {/* hardcoded for now */}
-          $2.50 Delivery Fee • 25–35 min
+          $0 Delivery Fee • 25–35 min
         </h6>
       </div>
     </div>

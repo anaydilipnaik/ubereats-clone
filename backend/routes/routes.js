@@ -234,11 +234,11 @@ router.post("/placeOrder", async (req, res, next) => {
   try {
     let orderContentsArr = req.body.contents;
     delete req.body.contents;
-    await apiModel.placeOrder(req.body, orderContentsArr);
+    let results = await apiModel.placeOrder(req.body, orderContentsArr);
     res.writeHead(200, {
       "Content-Type": "text/plain",
     });
-    res.end("Success");
+    res.end(JSON.stringify(results));
   } catch (e) {
     console.log(e);
     res.writeHead(500, {
@@ -410,6 +410,22 @@ router.put("/updateOrderDeliveryStatus/:orderid", async (req, res, next) => {
 router.put("/updateDish/:dishid", async (req, res, next) => {
   try {
     await apiModel.updateDish(req.params.dishid, req.body);
+    res.writeHead(200, {
+      "Content-Type": "text/plain",
+    });
+    res.end("Success");
+  } catch (e) {
+    console.log(e);
+    res.writeHead(500, {
+      "Content-Type": "text/plain",
+    });
+    res.end("Error");
+  }
+});
+
+router.put("/updateCart/:cartid", async (req, res, next) => {
+  try {
+    await apiModel.updateCart(req.params.cartid, req.body);
     res.writeHead(200, {
       "Content-Type": "text/plain",
     });

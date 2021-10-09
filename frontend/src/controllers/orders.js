@@ -5,3 +5,8 @@ export function placeOrder(dataJson) {
   const apiOptions = defaultApiOptions("POST", dataJson);
   return fetch(apiEndpoint, apiOptions);
 }
+
+export function getOrderDetailsById(orderId) {
+  const apiEndpoint = semiEndpoint + "/order/details/" + orderId;
+  return fetch(apiEndpoint);
+}
