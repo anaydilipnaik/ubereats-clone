@@ -35,18 +35,19 @@ class Header extends Component {
   };
 
   componentDidMount() {
-    if (this.props.user.id) this.props.getUserCartCount(this.props.user.id);
-
-    if (this.props.userDeliveryType)
-      this.setState({
-        delivery: this.props.userDeliveryType === "DL" ? "active" : "",
-        pickup: this.props.userDeliveryType === "PU" ? "active" : "",
-      });
-    else
-      this.setState({
-        delivery: "active",
-        pickup: "",
-      });
+    if (!this.props.restaurantFlag) {
+      if (this.props.user.id) this.props.getUserCartCount(this.props.user.id);
+      if (this.props.userDeliveryType)
+        this.setState({
+          delivery: this.props.userDeliveryType === "DL" ? "active" : "",
+          pickup: this.props.userDeliveryType === "PU" ? "active" : "",
+        });
+      else
+        this.setState({
+          delivery: "active",
+          pickup: "",
+        });
+    }
   }
 
   deliveryTypeHandler = (event) => {
@@ -81,134 +82,137 @@ class Header extends Component {
           <a class="navbar-brand" href="/" style={{ margin: "15px" }}>
             <img src={UberEatsLogo} />
           </a>
-          <ul class="nav nav-tabs" style={{ margin: "15px" }}>
-            <li class="nav-item">
-              <a
-                class={"nav-link " + this.state.delivery}
-                name="delivery"
-                onClick={this.deliveryTypeHandler}
-                style={{ cursor: "pointer" }}
-              >
-                Delivery
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                class={"nav-link " + this.state.pickup}
-                name="pickup"
-                onClick={this.deliveryTypeHandler}
-                style={{ cursor: "pointer" }}
-              >
-                Pickup
-              </a>
-            </li>
-          </ul>
-          <button
-            type="button"
-            class="btn btn-outline-primary"
-            style={{ margin: "15px" }}
-            onClick={() => {
-              this.setState({ showLocation: true });
-            }}
-          >
-            <i class="bi bi-pin-fill"></i>{" "}
-            {this.props.userLocation
-              ? this.props.userLocation
-              : "Enter your location"}
-          </button>
-          <div
-            class="collapse navbar-collapse"
-            id="navbarSupportedContent"
-            style={{ margin: "15px" }}
-          >
-            <div class="input-group rounded">
-              <input
-                type="search"
-                class="form-control rounded"
-                placeholder="What are you craving?"
-                aria-label="Search"
-                aria-describedby="search-addon"
-                onChange={(e) => {
-                  this.props.setSearchKeyword(e.target.value);
-                }}
-              />
-              <span
-                class="input-group-text border-0"
-                id="search-addon"
-                onClick={this.props.onSearchClick}
-                style={{ cursor: "pointer" }}
-              >
-                <i class="bi bi-search"></i>
-              </span>
-            </div>
-          </div>
-          <div></div>
-          <button
-            class="btn btn-outline-dark rounded-pill"
-            type="button"
-            id="Popover1"
-            style={{ margin: "15px" }}
-          >
-            <i class="bi-cart-fill me-1"></i>
-            Cart
-            <span class="badge bg-dark text-white ms-1 rounded-pill">
-              {this.props.user.id ? this.props.cartCount : 0}
-            </span>
-          </button>
-          <Popover
-            placement="bottom"
-            isOpen={this.state.popoverOpen}
-            target="Popover1"
-            toggle={this.toggle}
-          >
-            <PopoverHeader>My Cart</PopoverHeader>
-            <PopoverBody>
-              {this.state.cartItems &&
-                this.state.cartItems.map((item) => (
-                  <>
-                    <div class="row">
-                      <div class="col-8">
-                        <h6>{item.dish_name}</h6>
-                      </div>
-                      <div class="col-4">
-                        <h6 class="text-muted">${item.dish_price}</h6>
-                      </div>
-                    </div>
-                  </>
-                ))}
-              <hr class="my-4" />
+          {!this.props.restaurantFlag ? (
+            <>
+              <ul class="nav nav-tabs" style={{ margin: "15px" }}>
+                <li class="nav-item">
+                  <a
+                    class={"nav-link " + this.state.delivery}
+                    name="delivery"
+                    onClick={this.deliveryTypeHandler}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Delivery
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class={"nav-link " + this.state.pickup}
+                    name="pickup"
+                    onClick={this.deliveryTypeHandler}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Pickup
+                  </a>
+                </li>
+              </ul>
               <button
-                class="btn btn-secondary btn-sm"
+                type="button"
+                class="btn btn-outline-primary"
+                style={{ margin: "15px" }}
                 onClick={() => {
-                  window.location.href = this.props.user.id
-                    ? "/checkout"
-                    : "/userlogin";
+                  this.setState({ showLocation: true });
                 }}
               >
-                Go to Checkout
+                <i class="bi bi-pin-fill"></i>{" "}
+                {this.props.userLocation
+                  ? this.props.userLocation
+                  : "Enter your location"}
               </button>
-            </PopoverBody>
-          </Popover>
-          {(this.props.user && this.props.user.id) ||
-          (this.props.restaurant && this.props.restaurant.id) ? (
-            <button
-              class="btn btn-outline-dark rounded-pill"
-              onClick={this.handleLogOut}
-              style={{ margin: "15px" }}
-            >
-              Sign out
-            </button>
-          ) : (
-            <button
-              class="btn btn-outline-dark rounded-pill"
-              onClick={() => {
-                window.location.href = "/userlogin";
-              }}
-              style={{ margin: "15px" }}
-            >
-              Sign in
-            </button>
-          )}
+              <div
+                class="collapse navbar-collapse"
+                id="navbarSupportedContent"
+                style={{ margin: "15px" }}
+              >
+                <div class="input-group rounded">
+                  <input
+                    type="search"
+                    class="form-control rounded"
+                    placeholder="What are you craving?"
+                    aria-label="Search"
+                    aria-describedby="search-addon"
+                    onChange={(e) => {
+                      this.props.setSearchKeyword(e.target.value);
+                    }}
+                  />
+                  <span
+                    class="input-group-text border-0"
+                    id="search-addon"
+                    onClick={this.props.onSearchClick}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <i class="bi bi-search"></i>
+                  </span>
+                </div>
+              </div>
+              <div></div>
+              <button
+                class="btn btn-outline-dark rounded-pill"
+                type="button"
+                id="Popover1"
+                style={{ margin: "15px" }}
+              >
+                <i class="bi-cart-fill me-1"></i>
+                Cart
+                <span class="badge bg-dark text-white ms-1 rounded-pill">
+                  {this.props.user.id ? this.props.cartCount : 0}
+                </span>
+              </button>
+              <Popover
+                placement="bottom"
+                isOpen={this.state.popoverOpen}
+                target="Popover1"
+                toggle={this.toggle}
+              >
+                <PopoverHeader>My Cart</PopoverHeader>
+                <PopoverBody>
+                  {this.state.cartItems &&
+                    this.state.cartItems.map((item) => (
+                      <>
+                        <div class="row">
+                          <div class="col-8">
+                            <h6>{item.dish_name}</h6>
+                          </div>
+                          <div class="col-4">
+                            <h6 class="text-muted">${item.dish_price}</h6>
+                          </div>
+                        </div>
+                      </>
+                    ))}
+                  <hr class="my-4" />
+                  <button
+                    class="btn btn-secondary btn-sm"
+                    onClick={() => {
+                      window.location.href = this.props.user.id
+                        ? "/checkout"
+                        : "/userlogin";
+                    }}
+                  >
+                    Go to Checkout
+                  </button>
+                </PopoverBody>
+              </Popover>
+              {this.props.user && this.props.user.id ? (
+                <button
+                  class="btn btn-outline-dark rounded-pill"
+                  onClick={this.handleLogOut}
+                  style={{ margin: "15px" }}
+                >
+                  Sign out
+                </button>
+              ) : (
+                <button
+                  class="btn btn-outline-dark rounded-pill"
+                  onClick={() => {
+                    window.location.href = "/userlogin";
+                  }}
+                  style={{ margin: "15px" }}
+                >
+                  Sign in
+                </button>
+              )}
+            </>
+          ) : null}
         </div>
         <UserLocation
           show={this.state.showLocation}

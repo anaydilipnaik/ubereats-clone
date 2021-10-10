@@ -7,7 +7,6 @@ export function getUserDetails(userId) {
 }
 
 export function updateUser(dataJson, userId) {
-  const apiEndpoint = semiEndpoint + "/registerUser";
   return axios.put(semiEndpoint + "/updateUser/" + userId, dataJson);
 }
 

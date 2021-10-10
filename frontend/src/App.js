@@ -10,6 +10,8 @@ import UserProfile from "./views/layouts/UserProfile";
 import RestaurantPage from "./views/layouts/RestaurantPage";
 import UserFavourites from "./views/layouts/UserFavourites";
 import UserOrders from "./views/layouts/UserOrders";
+import RestaurantOrders from "./views/layouts/RestaurantOrders";
+import RestaurantHome from "./views/layouts/RestaurantHome";
 
 const App = () => {
   return (
@@ -38,6 +40,12 @@ const App = () => {
         </Route>
         <Route path="/favourites">
           <UserFavourites />
+        </Route>
+        <Route path="/restaurantorders">
+          <RestaurantOrders />
+        </Route>
+        <Route path="/restauranthome">
+          <RestaurantHome />
         </Route>
         <Route path="/userorders">
           <UserOrders />

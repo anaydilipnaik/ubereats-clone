@@ -102,6 +102,22 @@ router.get("/dishes/get/:restaurantid", async (req, res, next) => {
   }
 });
 
+router.get("/dishes/category", async (req, res, next) => {
+  try {
+    let results = await apiModel.getDishCategories();
+    res.writeHead(200, {
+      "Content-Type": "text/plain",
+    });
+    res.end(JSON.stringify(results));
+  } catch (e) {
+    console.log(e);
+    res.writeHead(500, {
+      "Content-Type": "text/plain",
+    });
+    res.end("Error");
+  }
+});
+
 router.get("/cart/get/:userid", async (req, res, next) => {
   try {
     let results = await apiModel.getUserCart(req.params.userid);
@@ -282,11 +298,14 @@ router.post("/addToFavourites", async (req, res, next) => {
 
 router.post("/addDish", async (req, res, next) => {
   try {
-    await apiModel.addDish(req.body);
-    res.writeHead(200, {
-      "Content-Type": "text/plain",
+    uploadSingleFile(req, res, async (error) => {
+      if (req.file) req.body.dish_image = req.file.location;
+      await apiModel.addDish(req.body);
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Success");
     });
-    res.end("Success");
   } catch (e) {
     console.log(e);
     res.writeHead(500, {
@@ -409,11 +428,14 @@ router.put("/updateOrderDeliveryStatus/:orderid", async (req, res, next) => {
 
 router.put("/updateDish/:dishid", async (req, res, next) => {
   try {
-    await apiModel.updateDish(req.params.dishid, req.body);
-    res.writeHead(200, {
-      "Content-Type": "text/plain",
+    uploadSingleFile(req, res, async (error) => {
+      if (req.file) req.body.dish_image = req.file.location;
+      await apiModel.updateDish(req.params.dishid, req.body);
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Success");
     });
-    res.end("Success");
   } catch (e) {
     console.log(e);
     res.writeHead(500, {

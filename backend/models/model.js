@@ -109,6 +109,16 @@ apiModel.getOrdersByUserId = (userId) => {
   });
 };
 
+apiModel.getDishCategories = (userId) => {
+  return new Promise((resolve, reject) => {
+    var query = "select * from dish_categories";
+    db.query(query, (err, results) => {
+      if (err) return reject(err);
+      return resolve(results);
+    });
+  });
+};
+
 apiModel.getOrderDetailsById = (orderId) => {
   return new Promise((resolve, reject) => {
     var query =

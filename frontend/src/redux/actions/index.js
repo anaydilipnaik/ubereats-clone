@@ -82,7 +82,7 @@ export const loginRestaurantFunc = (payload) => (dispatch) => {
           payload: data[0],
         });
         setTimeout(() => {
-          window.location.href = "/";
+          window.location.href = "/restauranthome";
         }, 3000);
       } else
         dispatch({

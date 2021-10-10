@@ -66,13 +66,23 @@ class DishCard extends Component {
                   }}
                 >
                   ${this.props.dish.price}
-                  <button
-                    class="btn btn-primary btn-sm"
-                    onClick={this.handleAddToCart}
-                    style={{ marginLeft: "25px" }}
-                  >
-                    Add to Cart
-                  </button>
+                  {this.props.restaurantFlag ? (
+                    <button
+                      class="btn btn-secondary btn-sm"
+                      onClick={() => this.props.handleEditDish(this.props.dish)}
+                      style={{ marginLeft: "25px" }}
+                    >
+                      Edit
+                    </button>
+                  ) : (
+                    <button
+                      class="btn btn-primary btn-sm"
+                      onClick={this.handleAddToCart}
+                      style={{ marginLeft: "25px" }}
+                    >
+                      Add to Cart
+                    </button>
+                  )}
                 </p>
               </div>
             </div>
