@@ -90,7 +90,8 @@ const RestaurantHome = ({ restaurant }) => {
   };
 
   useEffect(() => {
-    getRestaurantDetailsFunc();
+    if (restaurant && restaurant.id) getRestaurantDetailsFunc();
+    else window.location.href = "/restaurantlogin";
   }, []);
 
   return (

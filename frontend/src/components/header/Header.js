@@ -4,6 +4,7 @@ import UserLocation from "../modals/UserLocation";
 import { connect } from "react-redux";
 import {
   logoutUserFunc,
+  logoutRestaurantFunc,
   getUserCartCount,
   setUserDeliveryType,
   setUserLocation,
@@ -36,7 +37,8 @@ class Header extends Component {
 
   componentDidMount() {
     if (!this.props.restaurantFlag) {
-      if (this.props.user.id) this.props.getUserCartCount(this.props.user.id);
+      if (this.props.user && this.props.user.id)
+        this.props.getUserCartCount(this.props.user.id);
       if (this.props.userDeliveryType)
         this.setState({
           delivery: this.props.userDeliveryType === "DL" ? "active" : "",
@@ -73,6 +75,11 @@ class Header extends Component {
   handleLogOut = (event) => {
     event.preventDefault();
     this.props.logoutUserFunc();
+  };
+
+  handleRestaurantLogOut = (event) => {
+    event.preventDefault();
+    this.props.logoutRestaurantFunc();
   };
 
   render() {
@@ -159,7 +166,9 @@ class Header extends Component {
                 <i class="bi-cart-fill me-1"></i>
                 Cart
                 <span class="badge bg-dark text-white ms-1 rounded-pill">
-                  {this.props.user.id ? this.props.cartCount : 0}
+                  {this.props.user && this.props.user.id
+                    ? this.props.cartCount
+                    : 0}
                 </span>
               </button>
               <Popover
@@ -254,7 +263,31 @@ class Header extends Component {
                 </button>
               )}
             </>
-          ) : null}
+          ) : (
+            <div style={{ textAlign: "right" }}>
+              <span
+                class="btn btn-outline-dark rounded-pill"
+                onClick={() => {
+                  window.location.href =
+                    this.props.restaurant && this.props.restaurant.id
+                      ? "/restaurantorders"
+                      : "restaurantlogin";
+                }}
+                style={{ margin: "15px" }}
+              >
+                <i class="bi bi-card-checklist"></i>
+              </span>
+              {this.props.restaurant && this.props.restaurant.id ? (
+                <button
+                  class="btn btn-outline-dark rounded-pill"
+                  onClick={this.handleRestaurantLogOut}
+                  style={{ margin: "15px" }}
+                >
+                  Sign out
+                </button>
+              ) : null}
+            </div>
+          )}
         </div>
         <UserLocation
           show={this.state.showLocation}
@@ -276,6 +309,7 @@ const mapStateToProps = (state) => ({
 });
 export default connect(mapStateToProps, {
   logoutUserFunc,
+  logoutRestaurantFunc,
   getUserCartCount,
   setUserDeliveryType,
   setUserLocation,
