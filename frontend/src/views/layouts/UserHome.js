@@ -38,6 +38,18 @@ const UserHome = ({ user, userLocation, userDeliveryType }) => {
         onSearchClick={onSearchClick}
       />
       <div class="container">
+        <p
+          style={{
+            fontSize: "36px",
+            textAlign: "center",
+            marginBottom: "50px",
+          }}
+        >
+          <b>Crave it? Get it.</b>
+          <p style={{ fontSize: "18px" }}>
+            Search for a favourite restaurant, cuisine, or dish.
+          </p>
+        </p>
         <div class="row">
           {restaurants &&
             restaurants.map((restaurant) => (

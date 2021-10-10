@@ -22,6 +22,15 @@ const UserFavourites = ({ user }) => {
     <>
       <Header />
       <div class="container">
+        <p
+          style={{
+            fontSize: "36px",
+            textAlign: "center",
+            marginBottom: "50px",
+          }}
+        >
+          <b>My Favourites</b>
+        </p>
         <div class="row">
           {favourites &&
             favourites.map((restaurant) => (
