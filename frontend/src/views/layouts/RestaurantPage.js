@@ -66,7 +66,7 @@ const RestaurantPage = () => {
                   padding: 0,
                 }}
               >
-                $2.50 Delivery Fee • 25–35 min
+                $0.0 Delivery Fee • 25–35 min
               </p>
             </div>
           </div>

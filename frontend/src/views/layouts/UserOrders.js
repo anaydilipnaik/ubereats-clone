@@ -50,6 +50,32 @@ const UserOrders = ({ user }) => {
               </div>
               <div class="col-12">
                 <p>
+                  Order Status:{" "}
+                  {item.delivery_type === "DL"
+                    ? item.order_status === "OR"
+                      ? "Order Received"
+                      : item.order_status === "PR"
+                      ? "Preparing"
+                      : item.order_status === "OTW"
+                      ? "On the Way"
+                      : item.order_status === "DL"
+                      ? "Delivered"
+                      : null
+                    : item.delivery_type === "PU"
+                    ? item.order_status === "OR"
+                      ? "Order Received"
+                      : item.order_status === "PR"
+                      ? "Preparing"
+                      : item.order_status === "PUR"
+                      ? "Pick Up Received"
+                      : item.order_status === "PU"
+                      ? "Picked Up"
+                      : null
+                    : null}
+                </p>
+              </div>
+              <div class="col-12">
+                <p>
                   {item.order_count} items for ${item.total}. {item.created}{" "}
                   <button onClick={() => onModalClick(item.id)}>
                     View Receipt

@@ -1,0 +1,104 @@
+import React, { useState } from "react";
+import { Modal } from "react-bootstrap";
+import { addAddress } from "../../controllers/orders";
+
+const AddUserAddress = ({ show, onHide, userId }) => {
+  const [address1, setAddress1] = useState(null);
+  const [address2, setAddress2] = useState(null);
+  const [landmark, setLandmark] = useState(null);
+  const [city, setCity] = useState(null);
+  const [state, setState] = useState(null);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const data = {};
+    data.address_1 = address1;
+    data.address_2 = address2;
+    data.user_id = userId;
+    data.landmark = landmark;
+    data.city = city;
+    data.state = state;
+    addAddress(data)
+      .then((res) => {
+        if (res.status === 200) {
+          onHide();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  return (
+    <Modal
+      show={show}
+      onHide={onHide}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Add Address
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <form onSubmit={onSubmit}>
+          <div class="form-group">
+            <label>Address 1</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter address 1"
+              onChange={(e) => setAddress1(e.target.value)}
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Address 2</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter address 2"
+              onChange={(e) => setAddress2(e.target.value)}
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label>Landmark</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter landmark"
+              onChange={(e) => setLandmark(e.target.value)}
+              required
+            />
+          </div>
+          <div class="form-group col-6">
+            <label>City</label>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter city"
+              onChange={(e) => setCity(e.target.value)}
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlFile1">State</label>
+            <input
+              type="text"
+              class="form-control"
+              onChange={(e) => setState(e.target.value)}
+              placeholder="Enter state"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">
+            Add
+          </button>
+        </form>
+      </Modal.Body>
+    </Modal>
+  );
+};
+
+export default AddUserAddress;

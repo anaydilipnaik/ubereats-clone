@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { getCartItems, updateCart } from "../../controllers/cart";
 import { connect } from "react-redux";
-import { getOrderDetailsById, placeOrder } from "../../controllers/orders";
+import {
+  getOrderDetailsById,
+  placeOrder,
+  getUserAddresses,
+} from "../../controllers/orders";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
+import AddUserAddress from "../../components/modals/AddUserAddress";
 
 const Checkout = ({ user }) => {
   const [cartItems, setCartItems] = useState(null);
   const [orderPlacedStatus, setOrderPlacedStatus] = useState(false);
   const [placedOrderDetails, setPlacedOrderDetails] = useState(null);
   const [cartSubtotal, setCartSubtotal] = useState(0);
+  const [userAddresses, setUserAddresses] = useState(null);
+  const [userAddressId, setUserAddressId] = useState(null);
+  const [addAddressModal, setAddAddressModal] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,6 +26,7 @@ const Checkout = ({ user }) => {
     data.restaurant_id = cartItems[0].restaurant_id;
     data.order_status = "OR";
     data.delivery_type = "DL";
+    data.user_address_id = parseInt(userAddressId);
     data.taxes = 0;
     data.total = cartSubtotal;
     let contentsArr = [];
@@ -26,10 +35,12 @@ const Checkout = ({ user }) => {
       contentsObj.user_id = user.id;
       contentsObj.restaurant_id = item.restaurant_id;
       contentsObj.dish_id = item.dish_id;
+      contentsObj.dish_price = item.dish_price;
       contentsObj.qty = item.qty;
       contentsArr.push(contentsObj);
     });
     data.contents = contentsArr;
+    console.log(data);
     placeOrder(data)
       .then((res) => res.json())
       .then((data) => {
@@ -54,7 +65,10 @@ const Checkout = ({ user }) => {
           subtotal += item.dish_price * item.qty;
         });
         setCartSubtotal(subtotal);
-      });
+        return getUserAddresses(user.id);
+      })
+      .then((res) => res.json())
+      .then((data) => setUserAddresses(data));
   };
 
   const onQtyChange = (value, id) => {
@@ -67,11 +81,15 @@ const Checkout = ({ user }) => {
       .catch((err) => console.log(err));
   };
 
+  const onAddAddressModalClose = () => {
+    setAddAddressModal(false);
+    getCartItemsFunc();
+  };
+
   useEffect(() => {
     getCartItemsFunc();
   }, []);
 
-  console.log(placedOrderDetails);
   return (
     <>
       <Header />
@@ -105,7 +123,7 @@ const Checkout = ({ user }) => {
                             </p>
                           </div>
                           <div class="col-6">
-                            <p>{item.dish_price}</p>
+                            <p>{item.dish_price} ea</p>
                           </div>
                         </div>
                       </>
@@ -159,7 +177,6 @@ const Checkout = ({ user }) => {
                             </h6>
                           </div>
                           <hr class="my-4" />
-
                           {cartItems && cartItems.length > 0 ? (
                             cartItems.map((item) => (
                               <>
@@ -200,7 +217,7 @@ const Checkout = ({ user }) => {
                                     </button>
                                   </div>
                                   <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                    <h6 class="mb-0">${item.dish_price}</h6>
+                                    <h6 class="mb-0">${item.dish_price} ea</h6>
                                   </div>
                                   <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                     <a href="#!" class="text-muted">
@@ -223,14 +240,62 @@ const Checkout = ({ user }) => {
                               </div>
                             </section>
                           )}
-                          <div class="pt-5">
-                            <h6 class="mb-0">
-                              <a href="/" class="text-body">
-                                <i class="fas fa-long-arrow-alt-left me-2"></i>
-                                Back to Home
-                              </a>
-                            </h6>
-                          </div>
+                          {cartItems && cartItems.length > 0 ? (
+                            <>
+                              <select
+                                class="form-control"
+                                id="exampleFormControlSelect1"
+                                onChange={(e) =>
+                                  setUserAddressId(e.target.value)
+                                }
+                                required
+                              >
+                                <option>Select Address</option>
+                                {userAddresses &&
+                                  userAddresses.map((addr) =>
+                                    userAddressId === addr.id ? (
+                                      <option value={addr.id} selected>
+                                        {addr.address_1 +
+                                          ", " +
+                                          addr.address_2 +
+                                          ", " +
+                                          addr.landmark +
+                                          ", " +
+                                          addr.city +
+                                          " " +
+                                          addr.state}
+                                      </option>
+                                    ) : (
+                                      <option value={addr.id}>
+                                        {addr.address_1 +
+                                          ", " +
+                                          addr.address_2 +
+                                          ", " +
+                                          addr.landmark +
+                                          ", " +
+                                          addr.city +
+                                          " " +
+                                          addr.state}
+                                      </option>
+                                    )
+                                  )}
+                              </select>
+                              <div class="pt-5">
+                                <button
+                                  class="btn btn-sm btn-secondary"
+                                  onClick={() => setAddAddressModal(true)}
+                                >
+                                  Add new Address
+                                </button>
+                              </div>
+                            </>
+                          ) : null}
+                          <h6 class="mb-0">
+                            <a href="/" class="text-body">
+                              <i class="fas fa-long-arrow-alt-left me-2"></i>
+                              Back to Home
+                            </a>
+                          </h6>
                         </div>
                       </div>
                       <div class="col-lg-4 bg-grey">
@@ -288,6 +353,11 @@ const Checkout = ({ user }) => {
         </section>
       )}
       <Footer />
+      <AddUserAddress
+        show={addAddressModal}
+        onHide={onAddAddressModalClose}
+        userId={user.id}
+      />
     </>
   );
 };

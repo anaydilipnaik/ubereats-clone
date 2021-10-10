@@ -23,7 +23,6 @@ apiModel.getAllRestaurants = (dataJson) => {
         " ORDER BY CASE WHEN r.location = '%" +
         dataJson.userLocation +
         "%' THEN 1 ELSE 2 END, r.location";
-    console.log(query);
     db.query(query, (err, results) => {
       if (err) return reject(err);
       return resolve(results);
@@ -130,10 +129,11 @@ apiModel.getOrderDetailsById = (orderId) => {
   return new Promise((resolve, reject) => {
     var query =
       "select o.id, u.first_name, u.last_name, o.restaurant_id, o.order_status, o.delivery_type, o.taxes, o.total, r.name " +
-      "as restaurant_name, r.location as restaurant_location, d.name as dish_name, d.price as dish_price, oc.qty, o.created " +
+      "as restaurant_name, r.location as restaurant_location, d.name as dish_name, oc.dish_price, oc.qty, o.created " +
       "from orders o, order_contents oc, restaurants r, dishes d, users u where u.id = o.user_id and o.restaurant_id = r.id " +
-      "and d.restaurant_id = r.id and oc.order_id = o.id and o.id = " +
-      orderId;
+      "and oc.dish_id = d.id and d.restaurant_id = r.id and oc.order_id = o.id and o.id = " +
+      orderId +
+      " order by oc.created desc";
     db.query(query, (err, results) => {
       if (err) return reject(err);
       return resolve(results);

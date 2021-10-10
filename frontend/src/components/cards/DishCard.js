@@ -26,6 +26,7 @@ class DishCard extends Component {
           data.user_id = 39;
           data.cart_status = "AC";
           data.delivery_type = "DL";
+          data.dish_price = this.props.dish.price;
           data.qty = 1;
           addToCart(data)
             .then((res) => {

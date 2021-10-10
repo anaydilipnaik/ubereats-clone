@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 
 const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
-  console.log(orderDetails);
   return (
     <Modal
       show={show}
@@ -53,6 +52,30 @@ const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
                 </div>
               </>
             ))}
+            <p>
+              Order Status:{" "}
+              {orderDetails[0].delivery_type === "DL"
+                ? orderDetails[0].order_status === "OR"
+                  ? "Order Received"
+                  : orderDetails[0].order_status === "PR"
+                  ? "Preparing"
+                  : orderDetails[0].order_status === "OTW"
+                  ? "On the Way"
+                  : orderDetails[0].order_status === "DL"
+                  ? "Delivered"
+                  : null
+                : orderDetails[0].delivery_type === "PU"
+                ? orderDetails[0].order_status === "OR"
+                  ? "Order Received"
+                  : orderDetails[0].order_status === "PR"
+                  ? "Preparing"
+                  : orderDetails[0].order_status === "PUR"
+                  ? "Pick Up Received"
+                  : orderDetails[0].order_status === "PU"
+                  ? "Picked Up"
+                  : null
+                : null}
+            </p>
             <div class="col-6" style={{ textAlign: "right" }}>
               <h5>
                 Total paid:{" "}
