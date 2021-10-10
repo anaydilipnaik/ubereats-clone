@@ -15,6 +15,7 @@ const RestaurantOrders = ({ restaurant }) => {
   const [viewReceiptModal, setViewReceiptModal] = useState(false);
   const [changeStatusModal, setChangeStatusModal] = useState(false);
   const [statusModalOrderId, setStatusModalOrderId] = useState(null);
+  const [statusModalDeliveryType, setStatusModalDeliveryType] = useState(null);
 
   const getOrdersFunc = () => {
     getOrdersByRestaurantId(restaurant.id)
@@ -42,9 +43,10 @@ const RestaurantOrders = ({ restaurant }) => {
     getOrdersFunc();
   };
 
-  const onChangeStatus = (orderId) => {
+  const onChangeStatus = (orderId, deliveryType) => {
     setChangeStatusModal(true);
     setStatusModalOrderId(orderId);
+    setStatusModalDeliveryType(deliveryType);
   };
 
   const onFilterClick = (e) => {
@@ -131,7 +133,9 @@ const RestaurantOrders = ({ restaurant }) => {
                     <button
                       style={{ marginLeft: "15px" }}
                       class="btn btn-primary btn-sm"
-                      onClick={() => onChangeStatus(item.id)}
+                      onClick={() =>
+                        onChangeStatus(item.id, item.delivery_type)
+                      }
                     >
                       Change Status
                     </button>
@@ -172,6 +176,7 @@ const RestaurantOrders = ({ restaurant }) => {
         show={changeStatusModal}
         onHide={onStatusModalClose}
         orderId={statusModalOrderId}
+        statusModalDeliveryType={statusModalDeliveryType}
       />
     </>
   );

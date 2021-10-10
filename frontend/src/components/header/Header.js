@@ -79,7 +79,11 @@ class Header extends Component {
     return (
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-          <a class="navbar-brand" href="/" style={{ margin: "15px" }}>
+          <a
+            class="navbar-brand"
+            href={this.props.restaurantFlag ? "/restauranthome" : "/"}
+            style={{ margin: "15px" }}
+          >
             <img src={UberEatsLogo} />
           </a>
           {!this.props.restaurantFlag ? (

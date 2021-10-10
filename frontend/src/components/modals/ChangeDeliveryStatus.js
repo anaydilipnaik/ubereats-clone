@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { updateOrderDeliveryStatus } from "../../controllers/orders";
 
-const ChangeDeliveryStatus = ({ show, onHide, orderId }) => {
+const ChangeDeliveryStatus = ({
+  show,
+  onHide,
+  orderId,
+  statusModalDeliveryType,
+}) => {
   const [status, setStatus] = useState(null);
 
   const onSubmit = (e) => {
@@ -42,8 +47,14 @@ const ChangeDeliveryStatus = ({ show, onHide, orderId }) => {
               <option>Select delivery status</option>
               <option value="OR">Order Received</option>
               <option value="PR">Preparing</option>
-              <option value="OTW">On the Way</option>
-              <option value="DL">Delivered</option>
+              <option value={statusModalDeliveryType === "DL" ? "OTW" : "RPU"}>
+                {statusModalDeliveryType === "DL"
+                  ? "On the Way"
+                  : "Ready for Pickup"}
+              </option>
+              <option value={statusModalDeliveryType === "DL" ? "DL" : "PU"}>
+                {statusModalDeliveryType === "DL" ? "Delivered" : "Picked Up"}
+              </option>
             </select>
             <div style={{ textAlign: "right" }}>
               <button

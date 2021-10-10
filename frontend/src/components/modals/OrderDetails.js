@@ -48,7 +48,7 @@ const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
                     </p>
                   </div>
                   <div class="col-6">
-                    <p>{item.dish_price}</p>
+                    <p>${item.dish_price}</p>
                   </div>
                 </div>
               </>
