@@ -29,7 +29,7 @@ class Header extends Component {
   }
 
   toggle = () => {
-    getCartItems(39)
+    getCartItems(this.props.user.id)
       .then((res) => res.json())
       .then((data) => this.setState({ cartItems: data }));
     this.setState({ popoverOpen: !this.state.popoverOpen });

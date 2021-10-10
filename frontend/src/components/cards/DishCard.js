@@ -12,7 +12,7 @@ class DishCard extends Component {
 
   handleAddToCart = (e) => {
     e.preventDefault();
-    getCartItems(39)
+    getCartItems(user.id)
       .then((res) => res.json())
       .then((data) => {
         let flag = false;
@@ -23,14 +23,15 @@ class DishCard extends Component {
           let data = {};
           data.restaurant_id = this.props.dish.restaurant_id;
           data.dish_id = this.props.dish.id;
-          data.user_id = 39;
+          data.user_id = user.id;
           data.cart_status = "AC";
           data.delivery_type = "DL";
           data.dish_price = this.props.dish.price;
           data.qty = 1;
           addToCart(data)
             .then((res) => {
-              if (res.status === 200) return this.props.getUserCartCount(39);
+              if (res.status === 200)
+                return this.props.getUserCartCount(user.id);
             })
             .catch((err) => console.log(err));
         } else

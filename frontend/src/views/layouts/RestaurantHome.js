@@ -65,7 +65,7 @@ const RestaurantHome = ({ restaurant }) => {
     if (isPickUp) data.append("is_pickup", 1);
     else data.append("is_pickup", 0);
     if (restaurantImage) data.append("myFile", restaurantImage);
-    updateRestaurant(data, 3).then((res) => {
+    updateRestaurant(data, restaurant.id).then((res) => {
       if (res.data === "Success") {
         getRestaurantDetailsFunc();
         alert("SUCCESS");
