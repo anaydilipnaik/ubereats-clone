@@ -130,7 +130,43 @@ const Checkout = ({ user }) => {
                     ))}
                   </div>
                   <div class="card-footer border-0 px-4 py-5">
-                    <div class="row">
+                    <p>
+                      <b>Order Status</b>:{" "}
+                      {placedOrderDetails[0].delivery_type === "DL"
+                        ? placedOrderDetails[0].order_status === "OR"
+                          ? "Order Received"
+                          : placedOrderDetails[0].order_status === "PR"
+                          ? "Preparing"
+                          : placedOrderDetails[0].order_status === "OTW"
+                          ? "On the Way"
+                          : placedOrderDetails[0].order_status === "DL"
+                          ? "Delivered"
+                          : null
+                        : placedOrderDetails[0].delivery_type === "PU"
+                        ? placedOrderDetails[0].order_status === "OR"
+                          ? "Order Received"
+                          : placedOrderDetails[0].order_status === "PR"
+                          ? "Preparing"
+                          : placedOrderDetails[0].order_status === "PUR"
+                          ? "Pick Up Received"
+                          : placedOrderDetails[0].order_status === "PU"
+                          ? "Picked Up"
+                          : null
+                        : null}
+                    </p>
+                    <p>
+                      <b>Address</b>:{" "}
+                      {placedOrderDetails[0].address_1 +
+                        ", " +
+                        placedOrderDetails[0].address_2 +
+                        ", " +
+                        placedOrderDetails[0].landmark +
+                        ", " +
+                        placedOrderDetails[0].city +
+                        " " +
+                        placedOrderDetails[0].state}
+                    </p>
+                    <div class="row" style={{ marginTop: "75px" }}>
                       <div class="col-6">
                         <h6 class="mb-0">
                           <a href="/" class="text-body">
@@ -242,51 +278,55 @@ const Checkout = ({ user }) => {
                           )}
                           {cartItems && cartItems.length > 0 ? (
                             <>
-                              <select
-                                class="form-control"
-                                id="exampleFormControlSelect1"
-                                onChange={(e) =>
-                                  setUserAddressId(e.target.value)
-                                }
-                                required
-                              >
-                                <option>Select Address</option>
-                                {userAddresses &&
-                                  userAddresses.map((addr) =>
-                                    userAddressId === addr.id ? (
-                                      <option value={addr.id} selected>
-                                        {addr.address_1 +
-                                          ", " +
-                                          addr.address_2 +
-                                          ", " +
-                                          addr.landmark +
-                                          ", " +
-                                          addr.city +
-                                          " " +
-                                          addr.state}
-                                      </option>
-                                    ) : (
-                                      <option value={addr.id}>
-                                        {addr.address_1 +
-                                          ", " +
-                                          addr.address_2 +
-                                          ", " +
-                                          addr.landmark +
-                                          ", " +
-                                          addr.city +
-                                          " " +
-                                          addr.state}
-                                      </option>
-                                    )
-                                  )}
-                              </select>
-                              <div class="pt-5">
-                                <button
-                                  class="btn btn-sm btn-secondary"
-                                  onClick={() => setAddAddressModal(true)}
-                                >
-                                  Add new Address
-                                </button>
+                              <div class="row" style={{ marginBottom: "25px" }}>
+                                <div class="col-6">
+                                  <select
+                                    class="form-control"
+                                    id="exampleFormControlSelect1"
+                                    onChange={(e) =>
+                                      setUserAddressId(e.target.value)
+                                    }
+                                    required
+                                  >
+                                    <option>Select Address</option>
+                                    {userAddresses &&
+                                      userAddresses.map((addr) =>
+                                        userAddressId === addr.id ? (
+                                          <option value={addr.id} selected>
+                                            {addr.address_1 +
+                                              ", " +
+                                              addr.address_2 +
+                                              ", " +
+                                              addr.landmark +
+                                              ", " +
+                                              addr.city +
+                                              " " +
+                                              addr.state}
+                                          </option>
+                                        ) : (
+                                          <option value={addr.id}>
+                                            {addr.address_1 +
+                                              ", " +
+                                              addr.address_2 +
+                                              ", " +
+                                              addr.landmark +
+                                              ", " +
+                                              addr.city +
+                                              " " +
+                                              addr.state}
+                                          </option>
+                                        )
+                                      )}
+                                  </select>
+                                </div>
+                                <div class="col-6">
+                                  <button
+                                    class="btn btn-sm btn-primary"
+                                    onClick={() => setAddAddressModal(true)}
+                                  >
+                                    Add new Address
+                                  </button>
+                                </div>
                               </div>
                             </>
                           ) : null}

@@ -42,10 +42,12 @@ const RestaurantCard = ({ user, restaurant }) => {
                 fontSize: "16px",
               }}
             >
-              {(restaurant.name + " (" + restaurant.location + ")").substr(
-                0,
-                25
-              ) + "..."}
+              {(restaurant.name + " (" + restaurant.location + ")").length > 25
+                ? (restaurant.name + " (" + restaurant.location + ")").substr(
+                    0,
+                    25
+                  ) + "..."
+                : restaurant.name + " (" + restaurant.location + ")"}
             </h5>
           </a>
           <span

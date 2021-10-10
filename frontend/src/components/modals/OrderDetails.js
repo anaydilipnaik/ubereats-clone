@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 
 const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
+  console.log(orderDetails);
   return (
     <Modal
       show={show}
@@ -53,7 +54,7 @@ const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
               </>
             ))}
             <p>
-              Order Status:{" "}
+              <b>Order Status</b>:{" "}
               {orderDetails[0].delivery_type === "DL"
                 ? orderDetails[0].order_status === "OR"
                   ? "Order Received"
@@ -75,6 +76,18 @@ const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
                   ? "Picked Up"
                   : null
                 : null}
+            </p>
+            <p>
+              <b>Address</b>:{" "}
+              {orderDetails[0].address_1 +
+                ", " +
+                orderDetails[0].address_2 +
+                ", " +
+                orderDetails[0].landmark +
+                ", " +
+                orderDetails[0].city +
+                " " +
+                orderDetails[0].state}
             </p>
             <div class="col-6" style={{ textAlign: "right" }}>
               <h5>

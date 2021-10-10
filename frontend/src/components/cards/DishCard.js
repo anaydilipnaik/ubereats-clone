@@ -33,7 +33,8 @@ class DishCard extends Component {
               if (res.status === 200) return this.props.getUserCartCount(39);
             })
             .catch((err) => console.log(err));
-        } else alert("Already added to cart");
+        } else
+          alert("You already have items from another restaurant in the cart");
       });
   };
 
@@ -54,7 +55,9 @@ class DishCard extends Component {
                   margin: 0,
                 }}
               >
-                {this.props.dish.description.substr(0, 60) + "..."}
+                {this.props.dish.description.length > 60
+                  ? this.props.dish.description.substr(0, 60) + "..."
+                  : this.props.dish.description}
               </p>
               <div class="col-" style={{ textAlign: "left" }}>
                 <p

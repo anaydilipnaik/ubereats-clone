@@ -32,7 +32,6 @@ const ChangeDeliveryStatus = ({ show, onHide, orderId }) => {
       <Modal.Body>
         <form onSubmit={onSubmit}>
           <div class="form-group">
-            <label for="country">Change Status</label>
             <select
               class="form-control"
               onChange={(e) => {
@@ -46,9 +45,15 @@ const ChangeDeliveryStatus = ({ show, onHide, orderId }) => {
               <option value="OTW">On the Way</option>
               <option value="DL">Delivered</option>
             </select>
-            <button type="submit" class="btn btn-primary btn-sm">
-              Change
-            </button>
+            <div style={{ textAlign: "right" }}>
+              <button
+                type="submit"
+                class="btn btn-primary btn-md"
+                style={{ marginTop: "10px" }}
+              >
+                Change
+              </button>
+            </div>
           </div>
         </form>
       </Modal.Body>

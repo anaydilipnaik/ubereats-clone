@@ -43,7 +43,7 @@ const UserLocation = ({ show, onHide, onLocationChange, userAddress }) => {
                 <button
                   type="button"
                   onClick={onLocationChangeHandler}
-                  class="btn btn-sm btn-primary"
+                  class="btn btn-md btn-primary"
                 >
                   Update
                 </button>

@@ -43,7 +43,9 @@ const AddUserAddress = ({ show, onHide, userId }) => {
       <Modal.Body>
         <form onSubmit={onSubmit}>
           <div class="form-group">
-            <label>Address 1</label>
+            <label>
+              <b>Address 1</b>
+            </label>
             <input
               type="text"
               class="form-control"
@@ -53,7 +55,9 @@ const AddUserAddress = ({ show, onHide, userId }) => {
             />
           </div>
           <div class="form-group">
-            <label>Address 2</label>
+            <label style={{ marginTop: "15px" }}>
+              <b>Address 2</b>
+            </label>
             <input
               type="text"
               class="form-control"
@@ -62,39 +66,49 @@ const AddUserAddress = ({ show, onHide, userId }) => {
               required
             />
           </div>
-          <div class="form-group">
-            <label>Landmark</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Enter landmark"
-              onChange={(e) => setLandmark(e.target.value)}
-              required
-            />
+          <div class="row">
+            <div class="col-4">
+              <label style={{ marginTop: "15px" }}>
+                <b>Landmark</b>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter landmark"
+                onChange={(e) => setLandmark(e.target.value)}
+                required
+              />
+            </div>
+            <div class="col-4">
+              <label style={{ marginTop: "15px" }}>
+                <b>City</b>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Enter city"
+                onChange={(e) => setCity(e.target.value)}
+                required
+              />
+            </div>
+            <div class="col-4">
+              <label style={{ marginTop: "15px" }}>
+                <b>State</b>
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                onChange={(e) => setState(e.target.value)}
+                placeholder="Enter state"
+                required
+              />
+            </div>
           </div>
-          <div class="form-group col-6">
-            <label>City</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Enter city"
-              onChange={(e) => setCity(e.target.value)}
-              required
-            />
+          <div style={{ marginTop: "15px", textAlign: "right" }}>
+            <button type="submit" class="btn btn-primary">
+              Add
+            </button>
           </div>
-          <div class="form-group">
-            <label for="exampleFormControlFile1">State</label>
-            <input
-              type="text"
-              class="form-control"
-              onChange={(e) => setState(e.target.value)}
-              placeholder="Enter state"
-              required
-            />
-          </div>
-          <button type="submit" class="btn btn-primary">
-            Add
-          </button>
         </form>
       </Modal.Body>
     </Modal>

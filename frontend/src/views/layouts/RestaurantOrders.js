@@ -65,7 +65,10 @@ const RestaurantOrders = ({ restaurant }) => {
     <>
       <Header restaurantFlag={true} />
       <div class="container">
-        <div class="row" style={{ marginBottom: "25px" }}>
+        <p style={{ fontSize: "36px", textDecoration: "underline" }}>
+          Orders Page
+        </p>
+        <div class="row" style={{ marginBottom: "40px" }}>
           <div class="col-2">
             <b>Filter by Delivery Status:</b>
             <select class="form-control" onChange={onFilterClick} required>
@@ -82,23 +85,28 @@ const RestaurantOrders = ({ restaurant }) => {
               <div class="row">
                 <div class="col-12">
                   <p>
-                    Customer:{" "}
+                    <b
+                      style={{
+                        color: "black",
+                        fontSize: "24px",
+                      }}
+                    >
+                      {item.first_name + " " + item.last_name}{" "}
+                    </b>
                     <a
                       href={
                         "/userprofile?userid=" +
                         item.user_id +
                         "&restaurant=true"
                       }
+                      style={{ color: "black", fontSize: "24px" }}
                     >
-                      <b style={{ textDecoration: "underline" }}>
-                        {item.first_name + " " + item.last_name}
-                      </b>
+                      (<i>View Profile</i>)
                     </a>
                   </p>
                 </div>
                 <div class="col-12">
                   <p>
-                    Order Status:{" "}
                     {item.delivery_type === "DL"
                       ? item.order_status === "OR"
                         ? "Order Received"
@@ -131,13 +139,22 @@ const RestaurantOrders = ({ restaurant }) => {
                 </div>
                 <div class="col-12">
                   <p>
-                    {item.order_count} items for ${item.total}. {item.created}{" "}
-                    <button onClick={() => onModalClick(item.id)}>
+                    {item.order_count} items for ${item.total} on {item.created}
+                    .{" "}
+                    <a
+                      onClick={() => onModalClick(item.id)}
+                      style={{
+                        fontWeight: "bold",
+                        textDecoration: "underline",
+                        cursor: "pointer",
+                      }}
+                    >
                       View Receipt
-                    </button>
+                    </a>
                   </p>
                 </div>
               </div>
+              <hr />
             </>
           ))
         ) : (

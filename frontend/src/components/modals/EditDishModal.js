@@ -67,7 +67,9 @@ const EditDishModal = ({ show, onHide, dish, dishCategories }) => {
       <Modal.Body>
         <form onSubmit={dish ? onUpdateDish : onAddDish}>
           <div class="form-group">
-            <label>Dish Name</label>
+            <label style={{ marginTop: "15px" }}>
+              <b>Dish Name</b>
+            </label>
             <input
               type="text"
               class="form-control"
@@ -78,7 +80,9 @@ const EditDishModal = ({ show, onHide, dish, dishCategories }) => {
             />
           </div>
           <div class="form-group">
-            <label>Main Ingredients</label>
+            <label style={{ marginTop: "15px" }}>
+              <b>Main Ingredients</b>
+            </label>
             <input
               type="text"
               class="form-control"
@@ -89,7 +93,9 @@ const EditDishModal = ({ show, onHide, dish, dishCategories }) => {
             />
           </div>
           <div class="form-group">
-            <label>Description</label>
+            <label style={{ marginTop: "15px" }}>
+              <b>Description</b>
+            </label>
             <input
               type="text"
               class="form-control"
@@ -101,14 +107,21 @@ const EditDishModal = ({ show, onHide, dish, dishCategories }) => {
           </div>
           <div class="row">
             <div class="form-group col-6">
-              <label for="exampleFormControlSelect1">Category</label>
+              <label
+                style={{ marginTop: "15px" }}
+                for="exampleFormControlSelect1"
+              >
+                <b>Category</b>
+              </label>
               <select
                 class="form-control"
                 id="exampleFormControlSelect1"
                 onChange={(e) => setDishCategory(e.target.value)}
                 required
               >
-                <option>Select category</option>
+                <option>
+                  <b>Select category</b>
+                </option>
                 {dishCategories &&
                   dishCategories.map((item) =>
                     dish && dish.dish_category_id === item.id ? (
@@ -122,7 +135,7 @@ const EditDishModal = ({ show, onHide, dish, dishCategories }) => {
               </select>
             </div>
             <div class="form-group col-6">
-              <label>Price</label>
+              <label style={{ marginTop: "15px" }}>Price</label>
               <input
                 type="text"
                 class="form-control"
@@ -134,24 +147,36 @@ const EditDishModal = ({ show, onHide, dish, dishCategories }) => {
             </div>
           </div>
           <div class="form-group">
-            <label for="exampleFormControlFile1">Upload Dish Image</label>
+            <label style={{ marginTop: "15px" }} for="exampleFormControlFile1">
+              <b>Upload Dish Image</b>
+            </label>
             <input
               type="file"
               class="form-control-file"
               onChange={(e) => setDishImage(e.target.files[0])}
-              id="exampleFormControlFile1"
+              style={{ marginTop: "15px", marginLeft: "15px" }}
               required={dish ? false : true}
             />
           </div>
-          {dish ? (
-            <button type="submit" class="btn btn-primary">
-              Update
-            </button>
-          ) : (
-            <button type="submit" class="btn btn-primary">
-              Add
-            </button>
-          )}
+          <div style={{ textAlign: "right" }}>
+            {dish ? (
+              <button
+                style={{ marginTop: "15px" }}
+                type="submit"
+                class="btn btn-primary"
+              >
+                Update
+              </button>
+            ) : (
+              <button
+                style={{ marginTop: "15px" }}
+                type="submit"
+                class="btn btn-primary"
+              >
+                Add
+              </button>
+            )}
+          </div>
         </form>
       </Modal.Body>
     </Modal>

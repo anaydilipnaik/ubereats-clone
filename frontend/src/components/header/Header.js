@@ -180,18 +180,56 @@ class Header extends Component {
                       </>
                     ))}
                   <hr class="my-4" />
-                  <button
-                    class="btn btn-secondary btn-sm"
-                    onClick={() => {
-                      window.location.href = this.props.user.id
-                        ? "/checkout"
-                        : "/userlogin";
-                    }}
-                  >
-                    Go to Checkout
-                  </button>
+                  <div style={{ textAlign: "right" }}>
+                    <button
+                      class="btn btn-secondary btn-sm"
+                      onClick={() => {
+                        window.location.href = this.props.user.id
+                          ? "/checkout"
+                          : "/userlogin";
+                      }}
+                    >
+                      Go to Checkout
+                    </button>
+                  </div>
                 </PopoverBody>
               </Popover>
+              <span
+                class="btn btn-outline-dark rounded-pill"
+                onClick={() => {
+                  window.location.href =
+                    this.props.user && this.props.user.id
+                      ? "/userprofile"
+                      : "userlogin";
+                }}
+                style={{ marginLeft: "15px", cursor: "pointer" }}
+              >
+                <i class="bi bi-file-person-fill"></i>
+              </span>
+              <span
+                class="btn btn-outline-dark rounded-pill"
+                onClick={() => {
+                  window.location.href =
+                    this.props.user && this.props.user.id
+                      ? "/userorders"
+                      : "userlogin";
+                }}
+                style={{ margin: "15px" }}
+              >
+                <i class="bi bi-card-checklist"></i>
+              </span>
+              <span
+                class="btn btn-outline-dark rounded-pill"
+                onClick={() => {
+                  window.location.href =
+                    this.props.user && this.props.user.id
+                      ? "/favourites"
+                      : "userlogin";
+                }}
+                style={{ marginleft: "15px", cursor: "pointer" }}
+              >
+                <i class="bi bi-heart-fill"></i>
+              </span>
               {this.props.user && this.props.user.id ? (
                 <button
                   class="btn btn-outline-dark rounded-pill"

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import { countryList } from "../../utils/countries";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { getUserDetails, updateUser } from "../../controllers/user";
 import { useLocation } from "react-router-dom";
 import { connect } from "react-redux";
@@ -13,6 +11,7 @@ const UserProfile = ({ user }) => {
   const [firstName, setFirstName] = useState(null);
   const [middleName, setMiddleName] = useState(null);
   const [lastName, setLastName] = useState(null);
+  const [dob, setDob] = useState(null);
   const [nickname, setNickname] = useState(null);
   const [city, setCity] = useState(null);
   const [state, setState] = useState(null);
@@ -31,6 +30,7 @@ const UserProfile = ({ user }) => {
     if (firstName) data.append("first_name", firstName);
     if (middleName) data.append("middle_name", middleName);
     if (lastName) data.append("last_name", lastName);
+    if (dob) data.append("dob", dob);
     if (nickname) data.append("nickname", nickname);
     if (city) data.append("city", city);
     if (state) data.append("state", state);
@@ -42,6 +42,7 @@ const UserProfile = ({ user }) => {
       firstName ||
       middleName ||
       lastName ||
+      dob ||
       nickname ||
       city ||
       state ||
@@ -164,11 +165,16 @@ const UserProfile = ({ user }) => {
                       >
                         <div class="form-group">
                           <label for="phone">Date of Birth</label>
-                          <DatePicker
-                            // selected={startDate}
+                          <input
+                            type="text"
                             class="form-control"
-                            style={{ width: "100%" }}
-                            // onChange={(date) => setStartDate(date)}
+                            id="dob"
+                            placeholder="Enter date of birth"
+                            onChange={(e) => {
+                              setDob(e.target.value);
+                            }}
+                            defaultValue={userDetails.dob}
+                            disabled={isRestaurant === "true" ? true : false}
                           />
                         </div>
                       </div>

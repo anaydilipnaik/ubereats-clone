@@ -35,7 +35,7 @@ const RestaurantPage = () => {
           <div class="col-12" style={{ position: "relative" }}>
             <img
               style={{ width: "100%", height: "240px" }}
-              src="https://thumbs.dreamstime.com/b/healthy-vegetarian-seasonal-fall-food-cooking-background-wide-composition-healthy-vegetarian-seasonal-fall-food-cooking-background-127137522.jpg"
+              src={restaurantDetails.restaurant_image}
             />
             <div
               style={{
