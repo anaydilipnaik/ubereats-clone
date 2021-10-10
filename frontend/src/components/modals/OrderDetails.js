@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 
-const OrderDetails = ({ show, onHide, orderDetails }) => {
+const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
+  console.log(orderDetails);
   return (
     <Modal
       show={show}
@@ -23,8 +24,20 @@ const OrderDetails = ({ show, onHide, orderDetails }) => {
                 fontWeight: "bold",
               }}
             >
-              {orderDetails[0].restaurant_name} (
-              {orderDetails[0].restaurant_location})
+              {restaurantFlag ? (
+                <p>
+                  Customer:{" "}
+                  <b style={{ textDecoration: "underline" }}>
+                    {orderDetails[0].first_name +
+                      " " +
+                      orderDetails[0].last_name}
+                  </b>
+                </p>
+              ) : (
+                orderDetails[0].restaurant_name +
+                " " +
+                orderDetails[0].restaurant_location
+              )}
             </p>
             {orderDetails.map((item) => (
               <>

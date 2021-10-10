@@ -17,6 +17,7 @@ apiModel.getAllRestaurants = (dataJson) => {
         " or d.name like '%" +
         dataJson.searchKeyword +
         "%'";
+    query += " group by r.id";
     if (dataJson.userLocation)
       query +=
         " ORDER BY CASE WHEN r.location = '%" +
@@ -42,7 +43,13 @@ apiModel.getRestaurantDetailsById = (restaurantId) => {
 
 apiModel.getOrdersByRestaurantId = (restaurantId) => {
   return new Promise((resolve, reject) => {
-    var query = "Select * from orders where restaurant_id = " + restaurantId;
+    var query =
+      "select u.id as user_id, u.first_name, u.last_name, o.id, r.name as restaurant_name, r.location as restaurant_location, " +
+      "o.order_status, o.delivery_type, o.total, DATE_FORMAT(o.created, '%M %d %r') as created, count(oc.id) as order_count " +
+      "from orders o, order_contents oc, restaurants r, users u where o.user_id = u.id and o.id = oc.order_id and " +
+      "oc.restaurant_id = o.restaurant_id and o.restaurant_id = r.id and o.restaurant_id = " +
+      restaurantId +
+      " group by oc.order_id order by o.created desc";
     db.query(query, (err, results) => {
       if (err) return reject(err);
       return resolve(results);
@@ -97,8 +104,8 @@ apiModel.getUserAddresses = (userId) => {
 apiModel.getOrdersByUserId = (userId) => {
   return new Promise((resolve, reject) => {
     var query =
-      "select o.id, r.name as restaurant_name, r.location as restaurant_location, o.order_status, " +
-      "o.delivery_type, o.total, o.created, count(oc.id) as order_count from orders o, order_contents oc, restaurants r " +
+      "select o.id, r.name as restaurant_name, r.location as restaurant_location, o.order_status, o.delivery_type, o.total, " +
+      "DATE_FORMAT(o.created, '%M %d %r') as created, count(oc.id) as order_count from orders o, order_contents oc, restaurants r " +
       "where o.id = oc.order_id and oc.restaurant_id = o.restaurant_id and o.restaurant_id = r.id and o.user_id = " +
       userId +
       " group by oc.order_id order by o.created desc";
@@ -122,10 +129,10 @@ apiModel.getDishCategories = (userId) => {
 apiModel.getOrderDetailsById = (orderId) => {
   return new Promise((resolve, reject) => {
     var query =
-      "select o.id, o.restaurant_id, o.order_status, o.delivery_type, o.taxes, o.total, r.name as restaurant_name, " +
-      "r.location as restaurant_location, d.name as dish_name, d.price as dish_price, oc.qty, o.created " +
-      "from orders o, order_contents oc, restaurants r, dishes d " +
-      "where o.restaurant_id = r.id and d.restaurant_id = r.id and oc.order_id = o.id and o.id = " +
+      "select o.id, u.first_name, u.last_name, o.restaurant_id, o.order_status, o.delivery_type, o.taxes, o.total, r.name " +
+      "as restaurant_name, r.location as restaurant_location, d.name as dish_name, d.price as dish_price, oc.qty, o.created " +
+      "from orders o, order_contents oc, restaurants r, dishes d, users u where u.id = o.user_id and o.restaurant_id = r.id " +
+      "and d.restaurant_id = r.id and oc.order_id = o.id and o.id = " +
       orderId;
     db.query(query, (err, results) => {
       if (err) return reject(err);

@@ -396,11 +396,14 @@ router.put("/updateUser/:userid", async (req, res, next) => {
 
 router.put("/updateRestaurant/:restaurantid", async (req, res, next) => {
   try {
-    await apiModel.updateRestaurantDetails(req.params.restaurantid, req.body);
-    res.writeHead(200, {
-      "Content-Type": "text/plain",
+    uploadSingleFile(req, res, async (error) => {
+      if (req.file) req.body.restaurant_image = req.file.location;
+      await apiModel.updateRestaurantDetails(req.params.restaurantid, req.body);
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Success");
     });
-    res.end("Success");
   } catch (e) {
     console.log(e);
     res.writeHead(500, {

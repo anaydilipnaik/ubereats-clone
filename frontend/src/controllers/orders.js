@@ -15,3 +15,8 @@ export function getOrdersByUserId(userId) {
   const apiEndpoint = semiEndpoint + "/orders/get/user/" + userId;
   return fetch(apiEndpoint);
 }
+
+export function getOrdersByRestaurantId(restaurantId) {
+  const apiEndpoint = semiEndpoint + "/orders/get/restaurant/" + restaurantId;
+  return fetch(apiEndpoint);
+}

@@ -5,8 +5,10 @@ import { countryList } from "../../utils/countries";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getUserDetails, updateUser } from "../../controllers/user";
+import { useLocation } from "react-router-dom";
+import { connect } from "react-redux";
 
-const UserProfile = () => {
+const UserProfile = ({ user }) => {
   const [userDetails, setUserDetails] = useState(null);
   const [firstName, setFirstName] = useState(null);
   const [middleName, setMiddleName] = useState(null);
@@ -18,6 +20,10 @@ const UserProfile = () => {
   const [email, setEmail] = useState(null);
   const [phoneNo, setPhoneNo] = useState(null);
   const [displayPicture, setDisplayPicture] = useState(null);
+
+  const search = useLocation().search;
+  const userId = new URLSearchParams(search).get("userid");
+  const isRestaurant = new URLSearchParams(search).get("restaurant");
 
   const onUpdateProfile = (e) => {
     e.preventDefault();
@@ -53,7 +59,7 @@ const UserProfile = () => {
   };
 
   const getUserDetailsFunction = () => {
-    getUserDetails(39)
+    getUserDetails(userId ? userId : user.id)
       .then((res) => res.json())
       .then((data) => {
         setUserDetails(data[0]);
@@ -66,7 +72,7 @@ const UserProfile = () => {
 
   return (
     <>
-      <Header />
+      <Header restaurantFlag={isRestaurant === "true" ? true : false} />
       {userDetails ? (
         <form onSubmit={onUpdateProfile}>
           <div class="container">
@@ -112,6 +118,9 @@ const UserProfile = () => {
                                   setFirstName(e.target.value);
                                 }}
                                 defaultValue={userDetails.first_name}
+                                disabled={
+                                  isRestaurant === "true" ? true : false
+                                }
                               />
                             </div>
                             <div class="col-4">
@@ -125,6 +134,9 @@ const UserProfile = () => {
                                   setMiddleName(e.target.value);
                                 }}
                                 defaultValue={userDetails.middle_name}
+                                disabled={
+                                  isRestaurant === "true" ? true : false
+                                }
                               />
                             </div>
                             <div class="col-4">
@@ -138,6 +150,9 @@ const UserProfile = () => {
                                   setLastName(e.target.value);
                                 }}
                                 defaultValue={userDetails.last_name}
+                                disabled={
+                                  isRestaurant === "true" ? true : false
+                                }
                               />
                             </div>
                           </div>
@@ -172,6 +187,7 @@ const UserProfile = () => {
                               setNickname(e.target.value);
                             }}
                             defaultValue={userDetails.nickname}
+                            disabled={isRestaurant === "true" ? true : false}
                           />
                         </div>
                       </div>
@@ -190,6 +206,7 @@ const UserProfile = () => {
                               setCity(e.target.value);
                             }}
                             defaultValue={userDetails.city}
+                            disabled={isRestaurant === "true" ? true : false}
                           />
                         </div>
                       </div>
@@ -208,6 +225,7 @@ const UserProfile = () => {
                               setState(e.target.value);
                             }}
                             defaultValue={userDetails.state}
+                            disabled={isRestaurant === "true" ? true : false}
                           />
                         </div>
                       </div>
@@ -222,6 +240,7 @@ const UserProfile = () => {
                             onChange={(e) => {
                               setCountry(e.target.value);
                             }}
+                            disabled={isRestaurant === "true" ? true : false}
                           >
                             <option>Select a country</option>
                             {countryList &&
@@ -261,6 +280,7 @@ const UserProfile = () => {
                               setEmail(e.target.value);
                             }}
                             defaultValue={userDetails.email}
+                            disabled={isRestaurant === "true" ? true : false}
                           />
                         </div>
                       </div>
@@ -279,50 +299,55 @@ const UserProfile = () => {
                               setPhoneNo(e.target.value);
                             }}
                             defaultValue={userDetails.phone_no}
+                            disabled={isRestaurant === "true" ? true : false}
                           />
                         </div>
                       </div>
-                      <div
-                        class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"
-                        style={{ marginBottom: "15px" }}
-                      >
-                        <div class="form-group">
-                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <h6 class="mb-2 text-primary">Display Picture</h6>
+                      {isRestaurant === "true" ? null : (
+                        <div
+                          class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"
+                          style={{ marginBottom: "15px" }}
+                        >
+                          <div class="form-group">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                              <h6 class="mb-2 text-primary">Display Picture</h6>
+                            </div>
+                            <input
+                              type="file"
+                              class="form-control"
+                              id="dp"
+                              onChange={(e) => {
+                                setDisplayPicture(e.target.files[0]);
+                              }}
+                            />
+                            {userDetails.display_picture ? (
+                              <p>
+                                {userDetails.display_picture.substr(
+                                  45,
+                                  userDetails.display_picture.length
+                                )}
+                              </p>
+                            ) : null}
                           </div>
-                          <input
-                            type="file"
-                            class="form-control"
-                            id="dp"
-                            onChange={(e) => {
-                              setDisplayPicture(e.target.files[0]);
-                            }}
-                          />
-                          {userDetails.display_picture ? (
-                            <p>
-                              {userDetails.display_picture.substr(
-                                45,
-                                userDetails.display_picture.length
-                              )}
-                            </p>
-                          ) : null}
+                        </div>
+                      )}
+                    </div>
+                    {isRestaurant === "true" ? null : (
+                      <div class="row gutters">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                          <div style={{ textAlign: "right" }}>
+                            <button
+                              type="submit"
+                              id="submit"
+                              name="submit"
+                              class="btn btn-primary"
+                            >
+                              Update
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="row gutters">
-                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div style={{ textAlign: "right" }}>
-                          <button
-                            type="submit"
-                            id="submit"
-                            name="submit"
-                            class="btn btn-primary"
-                          >
-                            Update
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -335,4 +360,8 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+const mapStateToProps = (state) => ({
+  user: state.login.user,
+});
+
+export default connect(mapStateToProps)(UserProfile);

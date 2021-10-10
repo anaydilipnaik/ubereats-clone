@@ -29,3 +29,10 @@ export function addDish(dataJson) {
 export function updateDish(dataJson, dishId) {
   return axios.put(semiEndpoint + "/updateDish/" + dishId, dataJson);
 }
+
+export function updateRestaurant(dataJson, restaurantId) {
+  return axios.put(
+    semiEndpoint + "/updateRestaurant/" + restaurantId,
+    dataJson
+  );
+}

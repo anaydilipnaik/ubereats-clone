@@ -65,7 +65,7 @@ const EditDishModal = ({ show, onHide, dish, dishCategories }) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <form>
+        <form onSubmit={dish ? onUpdateDish : onAddDish}>
           <div class="form-group">
             <label>Dish Name</label>
             <input
@@ -140,19 +140,15 @@ const EditDishModal = ({ show, onHide, dish, dishCategories }) => {
               class="form-control-file"
               onChange={(e) => setDishImage(e.target.files[0])}
               id="exampleFormControlFile1"
-              required
+              required={dish ? false : true}
             />
           </div>
           {dish ? (
-            <button
-              type="submit"
-              class="btn btn-primary"
-              onClick={onUpdateDish}
-            >
+            <button type="submit" class="btn btn-primary">
               Update
             </button>
           ) : (
-            <button type="submit" class="btn btn-primary" onClick={onAddDish}>
+            <button type="submit" class="btn btn-primary">
               Add
             </button>
           )}
