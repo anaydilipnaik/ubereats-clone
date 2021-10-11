@@ -335,6 +335,7 @@ const RestaurantHome = ({ restaurant }) => {
         onHide={onEditDishModalClose}
         dish={dishDetails}
         dishCategories={dishCategories}
+        restaurantId={restaurant.id}
       />
       <Footer />
     </>

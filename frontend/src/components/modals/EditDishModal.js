@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { addDish, updateDish } from "../../controllers/restaurants";
 
-const EditDishModal = ({ show, onHide, dish, dishCategories }) => {
+const EditDishModal = ({
+  show,
+  onHide,
+  dish,
+  dishCategories,
+  restaurantId,
+}) => {
   const [dishName, setDishName] = useState(null);
   const [mainIngredients, setMainIngredients] = useState(null);
   const [description, setDescription] = useState(null);
@@ -14,17 +20,20 @@ const EditDishModal = ({ show, onHide, dish, dishCategories }) => {
     e.preventDefault();
     const data = new FormData();
     data.append("name", dishName);
-    data.append("restaurant_id", 3);
+    data.append("restaurant_id", restaurantId);
     data.append("main_ingredients", mainIngredients);
     data.append("description", description);
     data.append("dish_category_id", dishCategory);
     data.append("price", price);
     data.append("myFile", dishImage);
-    addDish(data).then((res) => {
-      if (res.data === "Success") {
-        onHide();
-      }
-    });
+    addDish(data)
+      .then((res) => {
+        console.log(res);
+        if (res.data === "Success") {
+          onHide();
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   const onUpdateDish = (e) => {
@@ -119,9 +128,7 @@ const EditDishModal = ({ show, onHide, dish, dishCategories }) => {
                 onChange={(e) => setDishCategory(e.target.value)}
                 required
               >
-                <option>
-                  <b>Select category</b>
-                </option>
+                <option>Select category</option>
                 {dishCategories &&
                   dishCategories.map((item) =>
                     dish && dish.dish_category_id === item.id ? (
