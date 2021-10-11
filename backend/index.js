@@ -5,11 +5,11 @@ var app = express();
 app.use(express.json());
 
 const cors = require("cors");
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+const corsConfig = {
+  credentials: true,
+  origin: true,
+};
+app.use(cors(corsConfig));
 
 const apiRouter = require("./routes/routes");
 app.use("/", apiRouter);
