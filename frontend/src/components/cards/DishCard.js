@@ -2,17 +2,20 @@ import React, { Component } from "react";
 import { addToCart, getCartItems } from "../../controllers/cart";
 import { getUserCartCount } from "../../redux/actions";
 import { connect } from "react-redux";
+import AddToCartConfirmation from "../modals/AddToCartConfirmation";
 
 class DishCard extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      cartFlag: false,
+    };
     this.handleAddToCart = this.handleAddToCart.bind(this);
   }
 
   handleAddToCart = (e) => {
     e.preventDefault();
-    getCartItems(user.id)
+    getCartItems(this.props.user.id)
       .then((res) => res.json())
       .then((data) => {
         let flag = false;
@@ -23,20 +26,26 @@ class DishCard extends Component {
           let data = {};
           data.restaurant_id = this.props.dish.restaurant_id;
           data.dish_id = this.props.dish.id;
-          data.user_id = user.id;
+          data.user_id = this.props.user.id;
           data.cart_status = "AC";
           data.delivery_type = "DL";
           data.dish_price = this.props.dish.price;
           data.qty = 1;
           addToCart(data)
             .then((res) => {
-              if (res.status === 200)
-                return this.props.getUserCartCount(user.id);
+              if (res.status === 200) {
+                this.setState({ cartFlag: false });
+                return this.props.getUserCartCount(this.props.user.id);
+              }
             })
             .catch((err) => console.log(err));
         } else
           alert("You already have items from another restaurant in the cart");
       });
+  };
+
+  onCartModalClose = () => {
+    this.setState({ cartFlag: false });
   };
 
   render() {
@@ -82,7 +91,7 @@ class DishCard extends Component {
                   ) : (
                     <button
                       class="btn btn-primary btn-sm"
-                      onClick={this.handleAddToCart}
+                      onClick={() => this.setState({ cartFlag: true })}
                       style={{ marginLeft: "25px" }}
                     >
                       Add to Cart
@@ -99,9 +108,18 @@ class DishCard extends Component {
             </div>
           </div>
         </div>
+        <AddToCartConfirmation
+          show={this.state.cartFlag}
+          onHide={this.onCartModalClose}
+          handleAddToCart={this.handleAddToCart}
+        />
       </div>
     );
   }
 }
 
-export default connect(null, { getUserCartCount })(DishCard);
+const mapStateToProps = (state) => ({
+  user: state.login.user,
+});
+
+export default connect(mapStateToProps, { getUserCartCount })(DishCard);
