@@ -2,7 +2,7 @@ const express = require("express");
 var session = require("express-session");
 const router = express.Router();
 
-const apiModel = require("../models/model");
+// const apiModel = require("../models/sql_model");
 let { uploadSingleFile } = require("../fileUploads");
 
 var app = express();
@@ -17,6 +17,9 @@ app.use(
     activeDuration: 5 * 60 * 1000,
   })
 );
+
+// mongo model instance
+const Users = require("./Models/UsersModel");
 
 router.post("/restaurants/all", async (req, res, next) => {
   try {

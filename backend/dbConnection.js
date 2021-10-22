@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 
+/* WITH CONNECTION POOLING */
 var con = mysql.createPool({
   connectionLimit: 500,
   host: process.env.HOST,
@@ -8,6 +9,7 @@ var con = mysql.createPool({
   database: process.env.DATABASE,
 });
 
+/* WITHOUT CONNECTION POOLING */
 // con.connect((err) => {
 //   if (err) throw err;
 //   console.log("Connected to the database!");
