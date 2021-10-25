@@ -5,10 +5,11 @@ var ordersSchema = new Schema(
   {
     userId: { type: String, required: true },
     restaurantId: { type: String, required: true },
-    dishId: { type: String, required: true },
-    orderId: { type: String, required: true },
-    dishPrice: { type: String, required: true },
-    qty: { type: String, required: true },
+    orderStatus: { type: String, required: true },
+    deliveryType: { type: String, required: true },
+    userAddressId: { type: String, required: true },
+    taxes: { type: String, required: true },
+    total: { type: String, required: true },
     active: { type: String, default: "1" },
   },
   {
