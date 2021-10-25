@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-var dishCategoriesSchema = new Schema(
+var dishTypesSchema = new Schema(
   {
     categoryName: { type: String, required: true },
     active: { type: String, default: "1" },
@@ -11,8 +11,5 @@ var dishCategoriesSchema = new Schema(
   }
 );
 
-const dishCategoriesModel = mongoose.model(
-  "dishCategory",
-  dishCategoriesSchema
-);
-module.exports = dishCategoriesModel;
+const dishTypesModel = mongoose.model("dishType", dishTypesSchema);
+module.exports = dishTypesModel;

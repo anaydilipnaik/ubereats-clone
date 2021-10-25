@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-var userAddressesSchema = new Schema(
+var userLocationsSchema = new Schema(
   {
     userId: { type: String, required: true },
     address1: { type: String, required: true },
@@ -16,5 +16,5 @@ var userAddressesSchema = new Schema(
   }
 );
 
-const userAddressesModel = mongoose.model("userAddress", userAddressesSchema);
-module.exports = userAddressesModel;
+const userLocationsModel = mongoose.model("userLocation", userLocationsSchema);
+module.exports = userLocationsModel;
