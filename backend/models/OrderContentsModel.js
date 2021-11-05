@@ -8,6 +8,7 @@ var orderContentsSchema = new Schema(
     dishId: { type: String, required: true },
     orderId: { type: String, required: true },
     dishPrice: { type: String, required: true },
+    dishName: { type: String, required: true },
     qty: { type: String, required: true },
     active: { type: String, default: "1" },
   },
