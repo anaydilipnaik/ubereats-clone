@@ -29,7 +29,13 @@ const UserFavourites = require("../models/UserFavouritesModel");
 const UserLocations = require("../models/UserLocationsModel");
 const Users = require("../models/UsersModel");
 
-router.get("/dishes/category", async (req, res, next) => {
+const jwt = require("jsonwebtoken");
+const { secret } = require("../config");
+const { checkAuth } = require("../passport");
+const { auth } = require("../passport");
+auth();
+
+router.get("/dishes/category", checkAuth, async (req, res, next) => {
   DishTypes.find({}, (error, result) => {
     if (error) {
       res.writeHead(500, {
@@ -40,6 +46,7 @@ router.get("/dishes/category", async (req, res, next) => {
       res.writeHead(200, {
         "Content-Type": "application/json",
       });
+      console.log(result);
       res.end(JSON.stringify(result));
     }
   });
@@ -256,9 +263,9 @@ router.post("/addUserAddress", async (req, res, next) => {
     address1: req.body.address1,
     address2: address2,
     userId: req.body.userId,
-    landmark = req.body.landmark,
+    landmark: req.body.landmark,
     city: req.body.city,
-    state: req.body.state
+    state: req.body.state,
   });
   newAddress.save((error, doc) => {
     if (error) {
@@ -278,7 +285,7 @@ router.post("/addUserAddress", async (req, res, next) => {
 router.post("/addToFavourites", async (req, res, next) => {
   let newFavourite = new UserFavourites({
     userId: req.body.userId,
-    restaurantId: req.body.restaurantId
+    restaurantId: req.body.restaurantId,
   });
   newFavourite.save((error, doc) => {
     if (error) {
@@ -339,7 +346,7 @@ router.post("/addToCart", async (req, res, next) => {
     cartStatus: req.body.cartStatus,
     deliveryType: req.body.deliveryType,
     dishPrice: req.body.dishPrice,
-    qty: req.body.qty
+    qty: req.body.qty,
   });
   newUserCartItem.save((error, doc) => {
     if (error) {
@@ -367,16 +374,11 @@ router.post("/loginUser", async (req, res, next) => {
         res.end("Error Occured");
       }
       if (user) {
-        res.cookie("cookie", user.username, {
-          maxAge: 900000,
-          httpOnly: false,
-          path: "/",
+        const payload = { _id: user._id, username: user.username };
+        const token = jwt.sign(payload, secret, {
+          expiresIn: 1008000,
         });
-        req.session.user = user;
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end();
+        res.status(200).end("JWT " + token);
       } else {
         res.writeHead(401, {
           "Content-Type": "text/plain",
@@ -398,16 +400,11 @@ router.post("/loginRestaurant", async (req, res, next) => {
         res.end("Error Occured");
       }
       if (user) {
-        res.cookie("cookie", user.username, {
-          maxAge: 900000,
-          httpOnly: false,
-          path: "/",
+        const payload = { _id: user._id, username: user.username };
+        const token = jwt.sign(payload, secret, {
+          expiresIn: 1008000,
         });
-        req.session.user = user;
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end();
+        res.status(200).end("JWT " + token);
       } else {
         res.writeHead(401, {
           "Content-Type": "text/plain",
@@ -424,7 +421,7 @@ router.put("/updateUser/:userid", async (req, res, next) => {
       if (req.file) req.body.displayPicture = req.file.location;
       Users.findOneAndUpdate(
         { _id: req.params.userid },
-        { 
+        {
           firstName: req.body.firstName,
           middleName: req.body.middleName,
           lastName: req.body.lastName,
@@ -436,7 +433,7 @@ router.put("/updateUser/:userid", async (req, res, next) => {
           state: req.body.state,
           country: req.body.country,
           nickname: req.body.nickname,
-          password: req.body.password
+          password: req.body.password,
         },
         { new: true },
         (err, doc) => {
@@ -470,7 +467,7 @@ router.put("/updateRestaurant/:restaurantid", async (req, res, next) => {
       if (req.file) req.body.restaurantImage = req.file.location;
       Restaurants.findOneAndUpdate(
         { _id: req.params.userid },
-        { 
+        {
           name: req.body.name,
           location: req.body.location,
           discription: req.body.discription,
@@ -537,14 +534,14 @@ router.put("/updateDish/:dishid", async (req, res, next) => {
       if (req.file) req.body.dishImage = req.file.location;
       Dishes.findOneAndUpdate(
         { _id: req.params.dishid },
-        { 
+        {
           restaurantId: req.body.restaurantId,
           name: req.body.name,
           mainIngredients: req.body.mainIngredients,
           price: req.body.price,
           description: req.body.description,
           dishImage: req.body.dishImage,
-          dishCategoryId: req.body.dishCategoryId
+          dishCategoryId: req.body.dishCategoryId,
         },
         { new: true },
         (err, doc) => {

@@ -11,5 +11,5 @@ var dishTypesSchema = new Schema(
   }
 );
 
-const dishTypesModel = mongoose.model("dishType", dishTypesSchema);
+const dishTypesModel = mongoose.model("dishtype", dishTypesSchema);
 module.exports = dishTypesModel;

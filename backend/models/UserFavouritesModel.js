@@ -13,7 +13,7 @@ var userFavouritesSchema = new Schema(
 );
 
 const userFavouritesModel = mongoose.model(
-  "userFavourite",
+  "userfavourite",
   userFavouritesSchema
 );
 module.exports = userFavouritesModel;

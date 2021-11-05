@@ -40,7 +40,6 @@ const Checkout = ({ user }) => {
       contentsArr.push(contentsObj);
     });
     data.contents = contentsArr;
-    console.log(data);
     placeOrder(data)
       .then((res) => res.json())
       .then((data) => {

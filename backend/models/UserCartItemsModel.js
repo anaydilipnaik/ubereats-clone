@@ -17,5 +17,5 @@ var userCartItemsSchema = new Schema(
   }
 );
 
-const userCartItemsModel = mongoose.model("userCartItem", userCartItemsSchema);
+const userCartItemsModel = mongoose.model("usercartitem", userCartItemsSchema);
 module.exports = userCartItemsModel;

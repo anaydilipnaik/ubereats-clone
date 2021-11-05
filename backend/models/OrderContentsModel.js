@@ -16,5 +16,5 @@ var orderContentsSchema = new Schema(
   }
 );
 
-const orderContentsModel = mongoose.model("orderContenta", orderContentsSchema);
+const orderContentsModel = mongoose.model("ordercontent", orderContentsSchema);
 module.exports = orderContentsModel;
