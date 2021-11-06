@@ -9,6 +9,11 @@ function handle_request(msg, callback) {
     deliveryType: msg.deliveryType,
     dishPrice: msg.dishPrice,
     qty: msg.qty,
+    dishName: msg.dishName,
+    dishImage: msg.dishImage,
+    dishPrice: msg.dishPrice,
+    dishDescription: msg.dishDescription,
+    restaurantName: msg.restaurantName,
   });
   newUserCartItem.save((error, doc) => {
     if (error) {
