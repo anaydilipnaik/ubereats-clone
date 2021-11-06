@@ -1,10 +1,8 @@
 const express = require("express");
 var session = require("express-session");
 const router = express.Router();
-// introduce kafka
 var kafka = require("../kafka/client");
 
-// const apiModel = require("../models/sql_model");
 let { uploadSingleFile } = require("../fileUploads");
 
 var app = express();
@@ -22,7 +20,6 @@ app.use(
 
 // mongo model instance
 const Dishes = require("../models/DishesModel");
-// const DishTypes = require("../models/DishTypesModel");
 const OrderContents = require("../models/OrderContentsModel");
 const Orders = require("../models/OrdersModel");
 const Restaurants = require("../models/RestaurantsModel");
@@ -37,106 +34,224 @@ const { checkAuth } = require("../passport");
 const { auth } = require("../passport");
 auth();
 
-router.get(
-  "/dishes/category",
-  // checkAuth,
-  async (req, res, next) => {
-    kafka.make_request("get_dish_types", req.body, function (err, results) {
-      console.log("in result");
-      console.log(results);
-      if (err) {
-        console.log("Inside err");
-        res.json({
-          status: "error",
-          msg: "System Error, Try Again.",
-        });
-      } else {
-        console.log("Inside else");
-        res.json({
-          updatedList: results,
-        });
-        res.end();
-      }
-    });
-    // DishTypes.find({}, (error, result) => {
-    //   if (error) {
-    //     res.writeHead(500, {
-    //       "Content-Type": "text/plain",
-    //     });
-    //     res.end();
-    //   } else {
-    //     res.writeHead(200, {
-    //       "Content-Type": "application/json",
-    //     });
-    //     console.log(result);
-    //     res.end(JSON.stringify(result));
-    //   }
-    // });
-  }
-);
-
-router.get("/restaurant/details/:id", checkAuth, async (req, res, next) => {
-  Restaurants.findOne({ _id: req.params.id }, (error, doc) => {
-    if (error) {
+router.get("/dishes/category", checkAuth, async (req, res, next) => {
+  kafka.make_request("get_dish_types", req.body, function (err, results) {
+    if (err) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
       });
       res.end("Error Occured");
     } else {
       res.writeHead(200, {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       });
-      res.end(JSON.stringify(doc));
+      res.end(JSON.stringify(results));
     }
   });
+});
+
+router.get("/restaurant/details/:id", checkAuth, async (req, res, next) => {
+  kafka.make_request(
+    "get_restaurant_details_by_id",
+    req.params.id,
+    function (err, results) {
+      if (err) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.end("Error Occured");
+      } else {
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify(results));
+      }
+    }
+  );
 });
 
 router.get("/user/details/:id", checkAuth, async (req, res, next) => {
-  Users.findOne({ _id: req.params.id }, (error, doc) => {
-    if (error) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end("Error Occured");
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(doc));
+  kafka.make_request(
+    "get_user_details_by_id",
+    req.params.id,
+    function (err, results) {
+      if (err) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.end("Error Occured");
+      } else {
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify(results));
+      }
     }
-  });
+  );
 });
 
 router.get("/dishes/get/:restaurantid", checkAuth, async (req, res, next) => {
-  Dishes.find({ restaurantId: req.params.restaurantid }, (error, doc) => {
-    if (error) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end("Error Occured");
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(doc));
+  kafka.make_request(
+    "get_dishes_by_restaurant_id",
+    req.params.restaurantid,
+    function (err, results) {
+      if (err) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.end("Error Occured");
+      } else {
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify(results));
+      }
     }
-  });
+  );
 });
 
 router.get("/addresses/get/:userid", checkAuth, async (req, res, next) => {
-  UserLocations.find({ userId: req.params.userid }, (error, doc) => {
-    if (error) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end("Error Occured");
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(doc));
+  kafka.make_request(
+    "get_addresses_by_user_id",
+    req.params.userid,
+    function (err, results) {
+      if (err) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.end("Error Occured");
+      } else {
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify(results));
+      }
     }
-  });
+  );
+});
+
+router.get("/cart/count/:userid", checkAuth, async (req, res, next) => {
+  kafka.make_request(
+    "get_cart_count",
+    req.params.userid,
+    function (err, results) {
+      if (err) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.end("Error Occured");
+      } else {
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
+        res.end({ cart_count: results.length });
+      }
+    }
+  );
+});
+
+router.get("/cart/get/:userid", checkAuth, async (req, res, next) => {
+  kafka.make_request(
+    "get_cart_items_by_user_id",
+    req.params.userid,
+    function (err, results) {
+      if (err) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.end("Error Occured");
+      } else {
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify(results));
+      }
+    }
+  );
+});
+
+router.get("/favourites/:userid", checkAuth, async (req, res, next) => {
+  kafka.make_request(
+    "get_favourites_by_user_id",
+    req.params.userid,
+    function (err, results) {
+      if (err) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.end("Error Occured");
+      } else {
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify(results));
+      }
+    }
+  );
+});
+
+router.get(
+  "/orders/get/restaurant/:restaurantid",
+  checkAuth,
+  async (req, res, next) => {
+    kafka.make_request(
+      "get_orders_by_restaurant_id",
+      req.params.restaurantid,
+      function (err, results) {
+        if (err) {
+          res.writeHead(500, {
+            "Content-Type": "text/plain",
+          });
+          res.end("Error Occured");
+        } else {
+          res.writeHead(200, {
+            "Content-Type": "application/json",
+          });
+          res.end(JSON.stringify(results));
+        }
+      }
+    );
+  }
+);
+
+router.get("/orders/get/user/:userid", checkAuth, async (req, res, next) => {
+  kafka.make_request(
+    "get_orders_by_user_id",
+    req.params.userid,
+    function (err, results) {
+      if (err) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.end("Error Occured");
+      } else {
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify(results));
+      }
+    }
+  );
+});
+
+router.get("/order/details/:id", checkAuth, async (req, res, next) => {
+  kafka.make_request(
+    "get_order_details_by_id",
+    req.params.id,
+    function (err, results) {
+      if (err) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.end("Error Occured");
+      } else {
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify(results));
+      }
+    }
+  );
 });
 
 router.post("/registerUser", async (req, res, next) => {
@@ -524,106 +639,6 @@ router.put("/updateCart/:cartid", checkAuth, async (req, res, next) => {
       }
     }
   );
-});
-
-router.get("/cart/count/:userid", checkAuth, async (req, res, next) => {
-  UserCartItems.find({ userId: req.params.userid }, (error, doc) => {
-    if (error) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end("Error Occured");
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end({ cart_count: doc.length });
-    }
-  });
-});
-
-router.get("/cart/get/:userid", checkAuth, async (req, res, next) => {
-  UserCartItems.find({ userId: req.params.userid }, (error, doc) => {
-    if (error) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end("Error Occured");
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(doc));
-    }
-  });
-});
-
-router.get("/favourites/:userid", checkAuth, async (req, res, next) => {
-  UserFavourites.find({ userId: req.params.userid }, (error, doc) => {
-    if (error) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end("Error Occured");
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(doc));
-    }
-  });
-});
-
-router.get(
-  "/orders/get/restaurant/:restaurantid",
-  checkAuth,
-  async (req, res, next) => {
-    Orders.find({ restaurantId: req.params.restaurantid }, (error, doc) => {
-      if (error) {
-        res.writeHead(500, {
-          "Content-Type": "text/plain",
-        });
-        res.end("Error Occured");
-      } else {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(JSON.stringify(doc));
-      }
-    });
-  }
-);
-
-router.get("/orders/get/user/:userid", checkAuth, async (req, res, next) => {
-  Orders.find({ userId: req.params.userid }, (error, doc) => {
-    if (error) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end("Error Occured");
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(doc));
-    }
-  });
-});
-
-router.get("/order/details/:id", checkAuth, async (req, res, next) => {
-  OrderContents.find({ _id: req.params.id }, (error, doc) => {
-    if (error) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end("Error Occured");
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(doc));
-    }
-  });
 });
 
 // not complete

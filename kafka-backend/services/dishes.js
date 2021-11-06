@@ -1,11 +1,11 @@
-const DishTypes = require("../models/DishTypesModel");
+const Dishes = require("../models/DishesModel");
 
 function handle_request(msg, callback) {
-  DishTypes.find({}, (error, result) => {
+  Dishes.find({ restaurantId: msg }, (error, doc) => {
     if (error) {
       callback(error, "Error");
     } else {
-      callback(null, result);
+      callback(null, doc);
     }
   });
 }

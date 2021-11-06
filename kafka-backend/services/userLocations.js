@@ -1,11 +1,11 @@
-const DishTypes = require("../models/DishTypesModel");
+const UserLocations = require("../models/UserLocationsModel");
 
 function handle_request(msg, callback) {
-  DishTypes.find({}, (error, result) => {
+  UserLocations.find({ userId: msg }, (error, doc) => {
     if (error) {
       callback(error, "Error");
     } else {
-      callback(null, result);
+      callback(null, doc);
     }
   });
 }

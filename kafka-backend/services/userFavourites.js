@@ -1,11 +1,11 @@
-const DishTypes = require("../models/DishTypesModel");
+const UserFavourites = require("../models/UserFavouritesModel");
 
 function handle_request(msg, callback) {
-  DishTypes.find({}, (error, result) => {
+  UserFavourites.find({ userId: msg }, (error, doc) => {
     if (error) {
       callback(error, "Error");
     } else {
-      callback(null, result);
+      callback(null, doc);
     }
   });
 }

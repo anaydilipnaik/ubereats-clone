@@ -2,6 +2,14 @@ var connection = new require("./kafka/Connection");
 //topics files
 //var signin = require('./services/signin.js');
 var DishTypes = require("./services/dishTypes.js");
+var Dishes = require("./services/dishes.js");
+var Restaurants = require("./services/restuarants.js");
+var Users = require("./services/users.js");
+var UserLocations = require("./services/userLocations.js");
+var UserCartItems = require("./services/userCartItems.js");
+var UserFavourites = require("./services/userFavourites.js");
+var Orders = require("./services/orders.js");
+var OrderContents = require("./services/orderContents.js");
 
 const { mongoDB } = require("./config");
 const mongoose = require("mongoose");
@@ -56,3 +64,13 @@ function handleTopicRequest(topic_name, fname) {
 //first argument is topic name
 //second argument is a function that will handle this topic request
 handleTopicRequest("get_dish_types", DishTypes);
+handleTopicRequest("get_restaurant_details_by_id", Restaurants);
+handleTopicRequest("get_user_details_by_id", Users);
+handleTopicRequest("get_dishes_by_restaurant_id", Dishes);
+handleTopicRequest("get_addresses_by_user_id", UserLocations);
+handleTopicRequest("get_cart_count", UserCartItems);
+handleTopicRequest("get_cart_items_by_user_id", UserCartItems);
+handleTopicRequest("get_favourites_by_user_id", UserFavourites);
+handleTopicRequest("get_orders_by_restaurant_id", Orders, true);
+handleTopicRequest("get_orders_by_user_id", Orders, false);
+handleTopicRequest("get_order_details_by_id", OrderContents);

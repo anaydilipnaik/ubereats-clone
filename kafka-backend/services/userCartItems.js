@@ -1,11 +1,11 @@
-const DishTypes = require("../models/DishTypesModel");
+const UserCartItems = require("../models/UserCartItemsModel");
 
 function handle_request(msg, callback) {
-  DishTypes.find({}, (error, result) => {
+  UserCartItems.find({ userId: msg }, (error, doc) => {
     if (error) {
       callback(error, "Error");
     } else {
-      callback(null, result);
+      callback(null, doc);
     }
   });
 }
