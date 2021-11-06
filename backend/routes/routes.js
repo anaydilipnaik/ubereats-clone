@@ -18,16 +18,6 @@ app.use(
   })
 );
 
-// mongo model instance
-const Dishes = require("../models/DishesModel");
-const OrderContents = require("../models/OrderContentsModel");
-const Orders = require("../models/OrdersModel");
-const Restaurants = require("../models/RestaurantsModel");
-const UserCartItems = require("../models/UserCartItemsModel");
-const UserFavourites = require("../models/UserFavouritesModel");
-const UserLocations = require("../models/UserLocationsModel");
-const Users = require("../models/UsersModel");
-
 const jwt = require("jsonwebtoken");
 const { secret } = require("../config");
 const { checkAuth } = require("../passport");
@@ -407,223 +397,223 @@ router.post("/loginRestaurant", async (req, res, next) => {
   });
 });
 
-router.put("/updateUser/:userid", checkAuth, async (req, res, next) => {
-  try {
-    uploadSingleFile(req, res, async (error) => {
-      if (req.file) req.body.displayPicture = req.file.location;
-      Users.findOneAndUpdate(
-        { _id: req.params.userid },
-        {
-          firstName: req.body.firstName,
-          middleName: req.body.middleName,
-          lastName: req.body.lastName,
-          email: req.body.email,
-          phoneNo: req.body.phoneNo,
-          displayPicture: req.body.displayPicture,
-          dob: req.body.dob,
-          city: req.body.city,
-          state: req.body.state,
-          country: req.body.country,
-          nickname: req.body.nickname,
-          password: req.body.password,
-        },
-        { new: true },
-        (err, doc) => {
-          if (!err) {
-            res.writeHead(200, {
-              "Content-Type": "text/plain",
-            });
-            res.end(JSON.stringify(doc));
-          } else {
-            console.log(err);
-            res.writeHead(500, {
-              "Content-Type": "text/plain",
-            });
-            res.end("Error");
-          }
-        }
-      );
-    });
-  } catch (e) {
-    console.log(e);
-    res.writeHead(500, {
-      "Content-Type": "text/plain",
-    });
-    res.end("Error");
-  }
-});
+// router.put("/updateUser/:userid", checkAuth, async (req, res, next) => {
+//   try {
+//     uploadSingleFile(req, res, async (error) => {
+//       if (req.file) req.body.displayPicture = req.file.location;
+//       Users.findOneAndUpdate(
+//         { _id: req.params.userid },
+//         {
+//           firstName: req.body.firstName,
+//           middleName: req.body.middleName,
+//           lastName: req.body.lastName,
+//           email: req.body.email,
+//           phoneNo: req.body.phoneNo,
+//           displayPicture: req.body.displayPicture,
+//           dob: req.body.dob,
+//           city: req.body.city,
+//           state: req.body.state,
+//           country: req.body.country,
+//           nickname: req.body.nickname,
+//           password: req.body.password,
+//         },
+//         { new: true },
+//         (err, doc) => {
+//           if (!err) {
+//             res.writeHead(200, {
+//               "Content-Type": "text/plain",
+//             });
+//             res.end(JSON.stringify(doc));
+//           } else {
+//             console.log(err);
+//             res.writeHead(500, {
+//               "Content-Type": "text/plain",
+//             });
+//             res.end("Error");
+//           }
+//         }
+//       );
+//     });
+//   } catch (e) {
+//     console.log(e);
+//     res.writeHead(500, {
+//       "Content-Type": "text/plain",
+//     });
+//     res.end("Error");
+//   }
+// });
 
-router.put(
-  "/updateRestaurant/:restaurantid",
-  checkAuth,
-  async (req, res, next) => {
-    try {
-      uploadSingleFile(req, res, async (error) => {
-        if (req.file) req.body.restaurantImage = req.file.location;
-        Restaurants.findOneAndUpdate(
-          { _id: req.params.userid },
-          {
-            name: req.body.name,
-            location: req.body.location,
-            discription: req.body.discription,
-            restaurantImage: req.body.restaurantImage,
-            address: req.body.address,
-            email: req.body.email,
-            phoneNo: req.body.phoneNo,
-            timings: req.body.timings,
-            isDelivery: req.body.isDelivery,
-            isPickup: req.body.isPickup,
-            password: req.body.password,
-          },
-          { new: true },
-          (err, doc) => {
-            if (!err) {
-              res.writeHead(200, {
-                "Content-Type": "text/plain",
-              });
-              res.end(JSON.stringify(doc));
-            } else {
-              console.log(err);
-              res.writeHead(500, {
-                "Content-Type": "text/plain",
-              });
-              res.end("Error");
-            }
-          }
-        );
-      });
-    } catch (e) {
-      console.log(e);
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end("Error");
-    }
-  }
-);
+// router.put(
+//   "/updateRestaurant/:restaurantid",
+//   checkAuth,
+//   async (req, res, next) => {
+//     try {
+//       uploadSingleFile(req, res, async (error) => {
+//         if (req.file) req.body.restaurantImage = req.file.location;
+//         Restaurants.findOneAndUpdate(
+//           { _id: req.params.userid },
+//           {
+//             name: req.body.name,
+//             location: req.body.location,
+//             discription: req.body.discription,
+//             restaurantImage: req.body.restaurantImage,
+//             address: req.body.address,
+//             email: req.body.email,
+//             phoneNo: req.body.phoneNo,
+//             timings: req.body.timings,
+//             isDelivery: req.body.isDelivery,
+//             isPickup: req.body.isPickup,
+//             password: req.body.password,
+//           },
+//           { new: true },
+//           (err, doc) => {
+//             if (!err) {
+//               res.writeHead(200, {
+//                 "Content-Type": "text/plain",
+//               });
+//               res.end(JSON.stringify(doc));
+//             } else {
+//               console.log(err);
+//               res.writeHead(500, {
+//                 "Content-Type": "text/plain",
+//               });
+//               res.end("Error");
+//             }
+//           }
+//         );
+//       });
+//     } catch (e) {
+//       console.log(e);
+//       res.writeHead(500, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end("Error");
+//     }
+//   }
+// );
 
-router.put(
-  "/updateOrderDeliveryStatus/:orderid",
-  checkAuth,
-  async (req, res, next) => {
-    Orders.findOneAndUpdate(
-      { _id: req.params.orderid },
-      { orderStatus: req.body.orderStatus },
-      { new: true },
-      (err, doc) => {
-        if (!err) {
-          res.writeHead(200, {
-            "Content-Type": "text/plain",
-          });
-          res.end(JSON.stringify(doc));
-        } else {
-          console.log(err);
-          res.writeHead(500, {
-            "Content-Type": "text/plain",
-          });
-          res.end("Error");
-        }
-      }
-    );
-  }
-);
+// router.put(
+//   "/updateOrderDeliveryStatus/:orderid",
+//   checkAuth,
+//   async (req, res, next) => {
+//     Orders.findOneAndUpdate(
+//       { _id: req.params.orderid },
+//       { orderStatus: req.body.orderStatus },
+//       { new: true },
+//       (err, doc) => {
+//         if (!err) {
+//           res.writeHead(200, {
+//             "Content-Type": "text/plain",
+//           });
+//           res.end(JSON.stringify(doc));
+//         } else {
+//           console.log(err);
+//           res.writeHead(500, {
+//             "Content-Type": "text/plain",
+//           });
+//           res.end("Error");
+//         }
+//       }
+//     );
+//   }
+// );
 
-router.put("/updateDish/:dishid", checkAuth, async (req, res, next) => {
-  try {
-    uploadSingleFile(req, res, async (error) => {
-      if (req.file) req.body.dishImage = req.file.location;
-      Dishes.findOneAndUpdate(
-        { _id: req.params.dishid },
-        {
-          restaurantId: req.body.restaurantId,
-          name: req.body.name,
-          mainIngredients: req.body.mainIngredients,
-          price: req.body.price,
-          description: req.body.description,
-          dishImage: req.body.dishImage,
-          dishCategoryId: req.body.dishCategoryId,
-        },
-        { new: true },
-        (err, doc) => {
-          if (!err) {
-            res.writeHead(200, {
-              "Content-Type": "text/plain",
-            });
-            res.end(JSON.stringify(doc));
-          } else {
-            console.log(err);
-            res.writeHead(500, {
-              "Content-Type": "text/plain",
-            });
-            res.end("Error");
-          }
-        }
-      );
-    });
-  } catch (e) {
-    console.log(e);
-    res.writeHead(500, {
-      "Content-Type": "text/plain",
-    });
-    res.end("Error");
-  }
-});
+// router.put("/updateDish/:dishid", checkAuth, async (req, res, next) => {
+//   try {
+//     uploadSingleFile(req, res, async (error) => {
+//       if (req.file) req.body.dishImage = req.file.location;
+//       Dishes.findOneAndUpdate(
+//         { _id: req.params.dishid },
+//         {
+//           restaurantId: req.body.restaurantId,
+//           name: req.body.name,
+//           mainIngredients: req.body.mainIngredients,
+//           price: req.body.price,
+//           description: req.body.description,
+//           dishImage: req.body.dishImage,
+//           dishCategoryId: req.body.dishCategoryId,
+//         },
+//         { new: true },
+//         (err, doc) => {
+//           if (!err) {
+//             res.writeHead(200, {
+//               "Content-Type": "text/plain",
+//             });
+//             res.end(JSON.stringify(doc));
+//           } else {
+//             console.log(err);
+//             res.writeHead(500, {
+//               "Content-Type": "text/plain",
+//             });
+//             res.end("Error");
+//           }
+//         }
+//       );
+//     });
+//   } catch (e) {
+//     console.log(e);
+//     res.writeHead(500, {
+//       "Content-Type": "text/plain",
+//     });
+//     res.end("Error");
+//   }
+// });
 
-router.put("/updateCart/:cartid", checkAuth, async (req, res, next) => {
-  UserCartItems.findOneAndUpdate(
-    { id: req.params.cartid },
-    { qty: req.body.qty },
-    { new: true },
-    (err, doc) => {
-      if (!err) {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(JSON.stringify(doc));
-      } else {
-        console.log(err);
-        res.writeHead(500, {
-          "Content-Type": "text/plain",
-        });
-        res.end("Error");
-      }
-    }
-  );
-});
+// router.put("/updateCart/:cartid", checkAuth, async (req, res, next) => {
+//   UserCartItems.findOneAndUpdate(
+//     { id: req.params.cartid },
+//     { qty: req.body.qty },
+//     { new: true },
+//     (err, doc) => {
+//       if (!err) {
+//         res.writeHead(200, {
+//           "Content-Type": "text/plain",
+//         });
+//         res.end(JSON.stringify(doc));
+//       } else {
+//         console.log(err);
+//         res.writeHead(500, {
+//           "Content-Type": "text/plain",
+//         });
+//         res.end("Error");
+//       }
+//     }
+//   );
+// });
 
-// not complete
-router.post("/placeOrder", checkAuth, async (req, res, next) => {
-  try {
-    let orderContentsArr = req.body.contents;
-    delete req.body.contents;
-    let results = await apiModel.placeOrder(req.body, orderContentsArr);
-    res.writeHead(200, {
-      "Content-Type": "text/plain",
-    });
-    res.end(JSON.stringify(results));
-  } catch (e) {
-    console.log(e);
-    res.writeHead(500, {
-      "Content-Type": "text/plain",
-    });
-    res.end("Error");
-  }
-});
+// // not complete
+// router.post("/placeOrder", checkAuth, async (req, res, next) => {
+//   try {
+//     let orderContentsArr = req.body.contents;
+//     delete req.body.contents;
+//     let results = await apiModel.placeOrder(req.body, orderContentsArr);
+//     res.writeHead(200, {
+//       "Content-Type": "text/plain",
+//     });
+//     res.end(JSON.stringify(results));
+//   } catch (e) {
+//     console.log(e);
+//     res.writeHead(500, {
+//       "Content-Type": "text/plain",
+//     });
+//     res.end("Error");
+//   }
+// });
 
-router.post("/restaurants/all", checkAuth, async (req, res, next) => {
-  Restaurants.find({}, (error, result) => {
-    if (error) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end();
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "application/json",
-      });
-      res.end(JSON.stringify(result));
-    }
-  });
-});
+// router.post("/restaurants/all", checkAuth, async (req, res, next) => {
+//   Restaurants.find({}, (error, result) => {
+//     if (error) {
+//       res.writeHead(500, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end();
+//     } else {
+//       res.writeHead(200, {
+//         "Content-Type": "application/json",
+//       });
+//       res.end(JSON.stringify(result));
+//     }
+//   });
+// });
 
 module.exports = router;
