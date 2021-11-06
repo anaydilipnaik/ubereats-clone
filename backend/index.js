@@ -14,25 +14,25 @@ app.use(cors(corsConfig));
 const apiRouter = require("./routes/routes");
 app.use("/", apiRouter);
 
-const { mongoDB } = require("./config");
-const mongoose = require("mongoose");
+// const { mongoDB } = require("./config");
+// const mongoose = require("mongoose");
 
-mongoose.connect(
-  mongoDB,
-  {
-    maxPoolSize: 50,
-    wtimeoutMS: 2500,
-    useNewUrlParser: true,
-  },
-  (err, res) => {
-    if (err) {
-      console.log(err);
-      console.log(`MongoDB Connection Failed`);
-    } else {
-      console.log(`MongoDB Connected`);
-    }
-  }
-);
+// mongoose.connect(
+//   mongoDB,
+//   {
+//     maxPoolSize: 50,
+//     wtimeoutMS: 2500,
+//     useNewUrlParser: true,
+//   },
+//   (err, res) => {
+//     if (err) {
+//       console.log(err);
+//       console.log(`MongoDB Connection Failed`);
+//     } else {
+//       console.log(`MongoDB Connected`);
+//     }
+//   }
+// );
 
 app.listen(process.env.PORT, () => {
   console.log(`Server listening on port ${process.env.PORT}`);

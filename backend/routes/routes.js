@@ -1,6 +1,8 @@
 const express = require("express");
 var session = require("express-session");
 const router = express.Router();
+// introduce kafka
+var kafka = require("../kafka/client");
 
 // const apiModel = require("../models/sql_model");
 let { uploadSingleFile } = require("../fileUploads");
@@ -20,7 +22,7 @@ app.use(
 
 // mongo model instance
 const Dishes = require("../models/DishesModel");
-const DishTypes = require("../models/DishTypesModel");
+// const DishTypes = require("../models/DishTypesModel");
 const OrderContents = require("../models/OrderContentsModel");
 const Orders = require("../models/OrdersModel");
 const Restaurants = require("../models/RestaurantsModel");
@@ -35,22 +37,43 @@ const { checkAuth } = require("../passport");
 const { auth } = require("../passport");
 auth();
 
-router.get("/dishes/category", checkAuth, async (req, res, next) => {
-  DishTypes.find({}, (error, result) => {
-    if (error) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end();
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "application/json",
-      });
-      console.log(result);
-      res.end(JSON.stringify(result));
-    }
-  });
-});
+router.get(
+  "/dishes/category",
+  // checkAuth,
+  async (req, res, next) => {
+    kafka.make_request("get_dish_types", req.body, function (err, results) {
+      console.log("in result");
+      console.log(results);
+      if (err) {
+        console.log("Inside err");
+        res.json({
+          status: "error",
+          msg: "System Error, Try Again.",
+        });
+      } else {
+        console.log("Inside else");
+        res.json({
+          updatedList: results,
+        });
+        res.end();
+      }
+    });
+    // DishTypes.find({}, (error, result) => {
+    //   if (error) {
+    //     res.writeHead(500, {
+    //       "Content-Type": "text/plain",
+    //     });
+    //     res.end();
+    //   } else {
+    //     res.writeHead(200, {
+    //       "Content-Type": "application/json",
+    //     });
+    //     console.log(result);
+    //     res.end(JSON.stringify(result));
+    //   }
+    // });
+  }
+);
 
 router.get("/restaurant/details/:id", checkAuth, async (req, res, next) => {
   Restaurants.findOne({ _id: req.params.id }, (error, doc) => {
