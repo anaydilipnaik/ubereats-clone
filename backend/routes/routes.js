@@ -35,7 +35,7 @@ const { auth } = require("../passport");
 auth();
 
 router.get("/dishes/category", checkAuth, async (req, res, next) => {
-  kafka.make_request("get_dish_types", req.body, function (err, results) {
+  kafka.make_request("get_dish_types", null, function (err, results) {
     if (err) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
@@ -255,91 +255,65 @@ router.get("/order/details/:id", checkAuth, async (req, res, next) => {
 });
 
 router.post("/registerUser", async (req, res, next) => {
-  let newUser = new Users({
-    firstName: req.body.firstName,
-    middleName: req.body.middleName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    city: req.body.city,
-    password: req.body.password,
-  });
-  newUser.save((error, doc) => {
-    if (error) {
+  kafka.make_request("register_user", req.body, function (err, results) {
+    if (err) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
       });
-      res.end();
+      res.end("Error Occured");
     } else {
       res.writeHead(200, {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       });
-      res.end(JSON.stringify(doc));
+      res.end(JSON.stringify(results));
     }
   });
 });
 
 router.post("/registerRestaurant", async (req, res, next) => {
-  let newRestaurant = new Restaurants({
-    name: req.body.name,
-    location: req.body.location,
-    email: req.body.email,
-    password: req.body.password,
-  });
-  newRestaurant.save((error, doc) => {
-    if (error) {
+  kafka.make_request("register_restaurant", req.body, function (err, results) {
+    if (err) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
       });
-      res.end();
+      res.end("Error Occured");
     } else {
       res.writeHead(200, {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       });
-      res.end(JSON.stringify(doc));
+      res.end(JSON.stringify(results));
     }
   });
 });
 
 router.post("/addUserAddress", checkAuth, async (req, res, next) => {
-  let newAddress = new UserLocations({
-    address1: req.body.address1,
-    address2: address2,
-    userId: req.body.userId,
-    landmark: req.body.landmark,
-    city: req.body.city,
-    state: req.body.state,
-  });
-  newAddress.save((error, doc) => {
-    if (error) {
+  kafka.make_request("add_user_address", req.body, function (err, results) {
+    if (err) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
       });
-      res.end();
+      res.end("Error Occured");
     } else {
       res.writeHead(200, {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       });
-      res.end(JSON.stringify(doc));
+      res.end(JSON.stringify(results));
     }
   });
 });
 
 router.post("/addToFavourites", checkAuth, async (req, res, next) => {
-  let newFavourite = new UserFavourites({
-    userId: req.body.userId,
-    restaurantId: req.body.restaurantId,
-  });
-  newFavourite.save((error, doc) => {
-    if (error) {
+  kafka.make_request("add_to_favourites", req.body, function (err, results) {
+    if (err) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
       });
-      res.end();
+      res.end("Error Occured");
     } else {
       res.writeHead(200, {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       });
-      res.end(JSON.stringify(doc));
+      res.end(JSON.stringify(results));
     }
   });
 });
@@ -348,26 +322,17 @@ router.post("/addDish", checkAuth, async (req, res, next) => {
   try {
     uploadSingleFile(req, res, async (error) => {
       if (req.file) req.body.dish_image = req.file.location;
-      let newDish = new Dishes({
-        restaurantId: req.body.restaurantId,
-        name: req.body.name,
-        mainIngredients: req.body.mainIngredients,
-        price: req.body.price,
-        description: req.body.description,
-        dishImage: req.body.dishImage,
-        dishCategoryId: req.body.dishCategoryId,
-      });
-      newDish.save((error, doc) => {
-        if (error) {
+      kafka.make_request("add_dish", req.body, function (err, results) {
+        if (err) {
           res.writeHead(500, {
             "Content-Type": "text/plain",
           });
-          res.end();
+          res.end("Error Occured");
         } else {
           res.writeHead(200, {
-            "Content-Type": "text/plain",
+            "Content-Type": "application/json",
           });
-          res.end(JSON.stringify(doc));
+          res.end(JSON.stringify(results));
         }
       });
     });
@@ -381,80 +346,65 @@ router.post("/addDish", checkAuth, async (req, res, next) => {
 });
 
 router.post("/addToCart", checkAuth, async (req, res, next) => {
-  let newUserCartItem = new UserCartItems({
-    restaurantId: req.body.restaurantId,
-    dishId: req.body.dishId,
-    userId: req.body.userId,
-    cartStatus: req.body.cartStatus,
-    deliveryType: req.body.deliveryType,
-    dishPrice: req.body.dishPrice,
-    qty: req.body.qty,
-  });
-  newUserCartItem.save((error, doc) => {
-    if (error) {
+  kafka.make_request("add_to_cart", req.body, function (err, results) {
+    if (err) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
       });
-      res.end();
+      res.end("Error Occured");
     } else {
       res.writeHead(200, {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
       });
-      res.end(JSON.stringify(doc));
+      res.end(JSON.stringify(results));
     }
   });
 });
 
 router.post("/loginUser", async (req, res, next) => {
-  Users.findOne(
-    { email: req.body.email, password: req.body.password },
-    (error, user) => {
-      if (error) {
-        res.writeHead(500, {
-          "Content-Type": "text/plain",
-        });
-        res.end("Error Occured");
-      }
-      if (user) {
-        const payload = { _id: user._id, username: user.username };
-        const token = jwt.sign(payload, secret, {
-          expiresIn: 1008000,
-        });
-        res.status(200).end("JWT " + token);
-      } else {
-        res.writeHead(401, {
-          "Content-Type": "text/plain",
-        });
-        res.end("Invalid Credentials");
-      }
+  kafka.make_request("login_user", req.body, function (err, results) {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Error Occured");
     }
-  );
+    if (results) {
+      const payload = { _id: results._id, username: results.username };
+      const token = jwt.sign(payload, secret, {
+        expiresIn: 1008000,
+      });
+      res.status(200).end("JWT " + token);
+    } else {
+      res.writeHead(401, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Invalid Credentials");
+    }
+  });
 });
 
 router.post("/loginRestaurant", async (req, res, next) => {
-  Restaurants.findOne(
-    { email: req.body.email, password: req.body.password },
-    (error, user) => {
-      if (error) {
-        res.writeHead(500, {
-          "Content-Type": "text/plain",
-        });
-        res.end("Error Occured");
-      }
-      if (user) {
-        const payload = { _id: user._id, username: user.username };
-        const token = jwt.sign(payload, secret, {
-          expiresIn: 1008000,
-        });
-        res.status(200).end("JWT " + token);
-      } else {
-        res.writeHead(401, {
-          "Content-Type": "text/plain",
-        });
-        res.end("Invalid Credentials");
-      }
+  kafka.make_request("login_restaurant", req.body, function (err, results) {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Error Occured");
     }
-  );
+    if (results) {
+      const payload = { _id: results._id, username: results.username };
+      const token = jwt.sign(payload, secret, {
+        expiresIn: 1008000,
+      });
+      res.status(200).end("JWT " + token);
+    } else {
+      res.writeHead(401, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Invalid Credentials");
+    }
+  });
 });
 
 router.put("/updateUser/:userid", checkAuth, async (req, res, next) => {
