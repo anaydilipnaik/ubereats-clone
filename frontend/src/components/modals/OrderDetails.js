@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 
 const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
-  console.log(orderDetails);
   return (
     <Modal
       show={show}
