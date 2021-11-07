@@ -3,13 +3,12 @@ require("dotenv").config();
 var express = require("express");
 var app = express();
 app.use(express.json());
+const passport = require("passport");
+app.use(passport.initialize());
 
+//use cors to allow cross origin resource sharing
 const cors = require("cors");
-const corsConfig = {
-  credentials: true,
-  origin: true,
-};
-app.use(cors(corsConfig));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 const apiRouter = require("./routes/routes");
 app.use("/", apiRouter);

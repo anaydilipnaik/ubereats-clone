@@ -20,21 +20,16 @@ import { getCartCount } from "../../controllers/cart";
 
 export const loginUserFunc = (payload) => (dispatch) => {
   loginUser(payload)
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.length > 0) {
+    .then((res) => {
+      if (res.data) {
         dispatch({
           type: LOGIN_USER,
-          payload: data[0],
+          payload: res.data,
         });
         setTimeout(() => {
           window.location.href = "/";
         }, 3000);
-      } else
-        dispatch({
-          type: LOGIN_USER_ERROR,
-          payload: {},
-        });
+      }
     })
     .catch((err) => {
       console.log(err);

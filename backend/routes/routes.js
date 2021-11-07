@@ -364,7 +364,11 @@ router.post("/loginUser", async (req, res, next) => {
       const token = jwt.sign(payload, secret, {
         expiresIn: 1008000,
       });
-      res.status(200).end("JWT " + token);
+      results.token = "JWT " + token;
+      res.writeHead(200, {
+        "Content-Type": "application/json",
+      });
+      res.end(JSON.stringify(results));
     } else {
       res.writeHead(401, {
         "Content-Type": "text/plain",
@@ -387,7 +391,11 @@ router.post("/loginRestaurant", async (req, res, next) => {
       const token = jwt.sign(payload, secret, {
         expiresIn: 1008000,
       });
-      res.status(200).end("JWT " + token);
+      results.token = "JWT " + token;
+      res.writeHead(200, {
+        "Content-Type": "application/json",
+      });
+      res.end(JSON.stringify(results));
     } else {
       res.writeHead(401, {
         "Content-Type": "text/plain",

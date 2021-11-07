@@ -14,9 +14,11 @@ const UserOrders = ({ user }) => {
   const [viewReceiptModal, setViewReceiptModal] = useState(false);
 
   const getOrdersFunc = () => {
-    getOrdersByUserId(user.id)
-      .then((res) => res.json())
-      .then((data) => setOrders(data));
+    getOrdersByUserId(user._id, user.token)
+      .then((res) => {
+        setOrders(res.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   const onModalClick = (orderId) => {

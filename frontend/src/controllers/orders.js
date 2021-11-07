@@ -1,4 +1,5 @@
 import { semiEndpoint, defaultApiOptions } from "../utils/ApiEndpoint";
+import axios from "axios";
 
 export function placeOrder(dataJson) {
   const apiEndpoint = semiEndpoint + "/placeOrder";
@@ -17,9 +18,9 @@ export function getOrderDetailsById(orderId) {
   return fetch(apiEndpoint);
 }
 
-export function getOrdersByUserId(userId) {
-  const apiEndpoint = semiEndpoint + "/orders/get/user/" + userId;
-  return fetch(apiEndpoint);
+export function getOrdersByUserId(userId, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.get(semiEndpoint + "/orders/get/user/" + userId);
 }
 
 export function getOrdersByRestaurantId(restaurantId) {

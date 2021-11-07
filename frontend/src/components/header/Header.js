@@ -29,7 +29,7 @@ class Header extends Component {
   }
 
   toggle = () => {
-    getCartItems(this.props.user.id)
+    getCartItems(this.props.user._id)
       .then((res) => res.json())
       .then((data) => this.setState({ cartItems: data }));
     this.setState({ popoverOpen: !this.state.popoverOpen });
@@ -37,8 +37,8 @@ class Header extends Component {
 
   componentDidMount() {
     if (!this.props.restaurantFlag) {
-      if (this.props.user && this.props.user.id)
-        this.props.getUserCartCount(this.props.user.id);
+      if (this.props.user && this.props.user._id)
+        this.props.getUserCartCount(this.props.user._id);
       if (this.props.userDeliveryType)
         this.setState({
           delivery: this.props.userDeliveryType === "DL" ? "active" : "",
@@ -166,7 +166,7 @@ class Header extends Component {
                 <i class="bi-cart-fill me-1"></i>
                 Cart
                 <span class="badge bg-dark text-white ms-1 rounded-pill">
-                  {this.props.user && this.props.user.id
+                  {this.props.user && this.props.user._id
                     ? this.props.cartCount
                     : 0}
                 </span>
@@ -197,7 +197,7 @@ class Header extends Component {
                     <button
                       class="btn btn-secondary btn-sm"
                       onClick={() => {
-                        window.location.href = this.props.user.id
+                        window.location.href = this.props.user._id
                           ? "/checkout"
                           : "/userlogin";
                       }}
@@ -211,7 +211,7 @@ class Header extends Component {
                 class="btn btn-outline-dark rounded-pill"
                 onClick={() => {
                   window.location.href =
-                    this.props.user && this.props.user.id
+                    this.props.user && this.props.user._id
                       ? "/userprofile"
                       : "userlogin";
                 }}
@@ -223,7 +223,7 @@ class Header extends Component {
                 class="btn btn-outline-dark rounded-pill"
                 onClick={() => {
                   window.location.href =
-                    this.props.user && this.props.user.id
+                    this.props.user && this.props.user._id
                       ? "/userorders"
                       : "userlogin";
                 }}
@@ -235,7 +235,7 @@ class Header extends Component {
                 class="btn btn-outline-dark rounded-pill"
                 onClick={() => {
                   window.location.href =
-                    this.props.user && this.props.user.id
+                    this.props.user && this.props.user._id
                       ? "/favourites"
                       : "userlogin";
                 }}
@@ -243,7 +243,7 @@ class Header extends Component {
               >
                 <i class="bi bi-heart-fill"></i>
               </span>
-              {this.props.user && this.props.user.id ? (
+              {this.props.user && this.props.user._id ? (
                 <button
                   class="btn btn-outline-dark rounded-pill"
                   onClick={this.handleLogOut}
