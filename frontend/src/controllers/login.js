@@ -1,4 +1,4 @@
-import { semiEndpoint, defaultApiOptions } from "../utils/ApiEndpoint";
+import { semiEndpoint } from "../utils/ApiEndpoint";
 import axios from "axios";
 
 export function loginUser(dataJson) {
@@ -6,7 +6,5 @@ export function loginUser(dataJson) {
 }
 
 export function loginRestaurant(dataJson) {
-  const apiEndpoint = semiEndpoint + "/loginRestaurant";
-  const apiOptions = defaultApiOptions("POST", dataJson);
-  return fetch(apiEndpoint, apiOptions);
+  return axios.post(semiEndpoint + "/loginRestaurant/", dataJson);
 }

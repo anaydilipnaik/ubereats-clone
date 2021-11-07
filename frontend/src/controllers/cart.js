@@ -1,23 +1,22 @@
-import { semiEndpoint, defaultApiOptions } from "../utils/ApiEndpoint";
+import { semiEndpoint } from "../utils/ApiEndpoint";
+import axios from "axios";
 
-export function addToCart(dataJson) {
-  const apiEndpoint = semiEndpoint + "/addToCart";
-  const apiOptions = defaultApiOptions("POST", dataJson);
-  return fetch(apiEndpoint, apiOptions);
+export function addToCart(dataJson, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.post(semiEndpoint + "/addToCart", dataJson);
 }
 
-export function getCartCount(userId) {
-  const apiEndpoint = semiEndpoint + "/cart/count/" + userId;
-  return fetch(apiEndpoint);
+export function getCartCount(userId, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.get(semiEndpoint + "/cart/count/" + userId);
 }
 
-export function getCartItems(userId) {
-  const apiEndpoint = semiEndpoint + "/cart/get/" + userId;
-  return fetch(apiEndpoint);
+export function getCartItems(userId, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.get(semiEndpoint + "/cart/get/" + userId);
 }
 
-export function updateCart(cartId, dataJson) {
-  const apiEndpoint = semiEndpoint + "/updateCart/" + cartId;
-  const apiOptions = defaultApiOptions("PUT", dataJson);
-  return fetch(apiEndpoint, apiOptions);
+export function updateCart(cartId, dataJson, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.put(semiEndpoint + "/updateCart/" + cartId, dataJson);
 }

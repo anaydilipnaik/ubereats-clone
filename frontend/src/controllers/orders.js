@@ -1,21 +1,22 @@
-import { semiEndpoint, defaultApiOptions } from "../utils/ApiEndpoint";
+import { semiEndpoint } from "../utils/ApiEndpoint";
 import axios from "axios";
 
-export function placeOrder(dataJson) {
-  const apiEndpoint = semiEndpoint + "/placeOrder";
-  const apiOptions = defaultApiOptions("POST", dataJson);
-  return fetch(apiEndpoint, apiOptions);
+export function placeOrder(dataJson, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.post(semiEndpoint + "/placeOrder", dataJson);
 }
 
-export function updateOrderDeliveryStatus(dataJson, orderId) {
-  const apiEndpoint = semiEndpoint + "/updateOrderDeliveryStatus/" + orderId;
-  const apiOptions = defaultApiOptions("PUT", dataJson);
-  return fetch(apiEndpoint, apiOptions);
+export function updateOrderDeliveryStatus(dataJson, orderId, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.put(
+    semiEndpoint + "/updateOrderDeliveryStatus/" + orderId,
+    dataJson
+  );
 }
 
-export function getOrderDetailsById(orderId) {
-  const apiEndpoint = semiEndpoint + "/order/details/" + orderId;
-  return fetch(apiEndpoint);
+export function getOrderDetailsById(orderId, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.get(semiEndpoint + "/order/details/" + orderId);
 }
 
 export function getOrdersByUserId(userId, token) {
@@ -23,18 +24,17 @@ export function getOrdersByUserId(userId, token) {
   return axios.get(semiEndpoint + "/orders/get/user/" + userId);
 }
 
-export function getOrdersByRestaurantId(restaurantId) {
-  const apiEndpoint = semiEndpoint + "/orders/get/restaurant/" + restaurantId;
-  return fetch(apiEndpoint);
+export function getOrdersByRestaurantId(restaurantId, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.get(semiEndpoint + "/orders/get/restaurant/" + restaurantId);
 }
 
-export function getUserAddresses(userId) {
-  const apiEndpoint = semiEndpoint + "/addresses/get/" + userId;
-  return fetch(apiEndpoint);
+export function getUserAddresses(userId, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.get(semiEndpoint + "/addresses/get/" + userId);
 }
 
-export function addAddress(dataJson) {
-  const apiEndpoint = semiEndpoint + "/addUserAddress";
-  const apiOptions = defaultApiOptions("POST", dataJson);
-  return fetch(apiEndpoint, apiOptions);
+export function addAddress(dataJson, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.post(semiEndpoint + "/addUserAddress", dataJson);
 }

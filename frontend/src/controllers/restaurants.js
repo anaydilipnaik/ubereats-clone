@@ -1,36 +1,38 @@
-import { semiEndpoint, defaultApiOptions } from "../utils/ApiEndpoint";
+import { semiEndpoint } from "../utils/ApiEndpoint";
 import axios from "axios";
 
-export function getAllRestaurants(dataJson) {
-  const apiEndpoint = semiEndpoint + "/restaurants/all";
-  const apiOptions = defaultApiOptions("POST", dataJson);
-  return fetch(apiEndpoint, apiOptions);
+export function getAllRestaurants(dataJson, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.post(semiEndpoint + "/restaurants/all", dataJson);
 }
 
-export function getRestaurantDetailsById(restaurantId) {
-  const apiEndpoint = semiEndpoint + "/restaurant/details/" + restaurantId;
-  return fetch(apiEndpoint);
+export function getRestaurantDetailsById(restaurantId, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.get(semiEndpoint + "/restaurant/details/" + restaurantId);
 }
 
-export function getDishesByRestaurantId(restaurantId) {
-  const apiEndpoint = semiEndpoint + "/dishes/get/" + restaurantId;
-  return fetch(apiEndpoint);
+export function getDishesByRestaurantId(restaurantId, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.get(semiEndpoint + "/dishes/get/" + restaurantId);
 }
 
-export function getDishCategories() {
-  const apiEndpoint = semiEndpoint + "/dishes/category/";
-  return fetch(apiEndpoint);
+export function getDishCategories(token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.get(semiEndpoint + "/dishes/category");
 }
 
-export function addDish(dataJson) {
+export function addDish(dataJson, token) {
+  axios.defaults.headers.common["authorization"] = token;
   return axios.post(semiEndpoint + "/addDish/", dataJson);
 }
 
-export function updateDish(dataJson, dishId) {
+export function updateDish(dataJson, dishId, token) {
+  axios.defaults.headers.common["authorization"] = token;
   return axios.put(semiEndpoint + "/updateDish/" + dishId, dataJson);
 }
 
-export function updateRestaurant(dataJson, restaurantId) {
+export function updateRestaurant(dataJson, restaurantId, token) {
+  axios.defaults.headers.common["authorization"] = token;
   return axios.put(
     semiEndpoint + "/updateRestaurant/" + restaurantId,
     dataJson
