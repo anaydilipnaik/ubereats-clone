@@ -9,7 +9,7 @@ import {
 import { useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 
-const RestaurantPage = () => {
+const RestaurantPage = ({ user }) => {
   const [restaurantDetails, setRestaurantDetails] = useState(null);
   const [dishes, setDishes] = useState(null);
 

@@ -27,16 +27,16 @@ const UserProfile = ({ user }) => {
   const onUpdateProfile = (e) => {
     e.preventDefault();
     const data = new FormData();
-    if (firstName) data.append("first_name", firstName);
-    if (middleName) data.append("middle_name", middleName);
-    if (lastName) data.append("last_name", lastName);
+    if (firstName) data.append("firstName", firstName);
+    if (middleName) data.append("middleName", middleName);
+    if (lastName) data.append("lastName", lastName);
     if (dob) data.append("dob", dob);
     if (nickname) data.append("nickname", nickname);
     if (city) data.append("city", city);
     if (state) data.append("state", state);
     if (country) data.append("country", country);
     if (email) data.append("email", email);
-    if (phoneNo) data.append("phone_no", phoneNo);
+    if (phoneNo) data.append("phoneNo", phoneNo);
     if (displayPicture) data.append("myFile", displayPicture);
     if (
       firstName ||
@@ -52,19 +52,15 @@ const UserProfile = ({ user }) => {
       displayPicture
     )
       updateUser(data, user._id, user.token).then((res) => {
-        if (res.data === "Success") {
-          getUserDetailsFunction();
-          alert("SUCCESS");
-        }
+        setUserDetails(res.data);
+        alert("SUCCESS");
       });
   };
 
   const getUserDetailsFunction = () => {
-    getUserDetails(userId ? userId : user._id, user.token)
-      .then((res) => res.json())
-      .then((data) => {
-        setUserDetails(data[0]);
-      });
+    getUserDetails(userId ? userId : user._id, user.token).then((res) => {
+      setUserDetails(res.data);
+    });
   };
 
   useEffect(() => {
@@ -84,13 +80,10 @@ const UserProfile = ({ user }) => {
                     <div class="account-settings">
                       <div class="user-profile">
                         <div class="user-avatar">
-                          <img
-                            src={userDetails.display_picture}
-                            alt="Maxwell Admin"
-                          />
+                          <img src={userDetails.displayPicture} alt="user dp" />
                         </div>
                         <h5 class="user-name">
-                          {userDetails.first_name + " " + userDetails.last_name}
+                          {userDetails.firstName + " " + userDetails.lastName}
                         </h5>
                         <h6 class="user-email">{userDetails.email}</h6>
                       </div>
@@ -118,7 +111,7 @@ const UserProfile = ({ user }) => {
                                 onChange={(e) => {
                                   setFirstName(e.target.value);
                                 }}
-                                defaultValue={userDetails.first_name}
+                                defaultValue={userDetails.firstName}
                                 disabled={
                                   isRestaurant === "true" ? true : false
                                 }
@@ -134,7 +127,7 @@ const UserProfile = ({ user }) => {
                                 onChange={(e) => {
                                   setMiddleName(e.target.value);
                                 }}
-                                defaultValue={userDetails.middle_name}
+                                defaultValue={userDetails.middleName}
                                 disabled={
                                   isRestaurant === "true" ? true : false
                                 }
@@ -150,7 +143,7 @@ const UserProfile = ({ user }) => {
                                 onChange={(e) => {
                                   setLastName(e.target.value);
                                 }}
-                                defaultValue={userDetails.last_name}
+                                defaultValue={userDetails.lastName}
                                 disabled={
                                   isRestaurant === "true" ? true : false
                                 }
@@ -304,7 +297,7 @@ const UserProfile = ({ user }) => {
                             onChange={(e) => {
                               setPhoneNo(e.target.value);
                             }}
-                            defaultValue={userDetails.phone_no}
+                            defaultValue={userDetails.phoneNo}
                             disabled={isRestaurant === "true" ? true : false}
                           />
                         </div>
@@ -326,11 +319,11 @@ const UserProfile = ({ user }) => {
                                 setDisplayPicture(e.target.files[0]);
                               }}
                             />
-                            {userDetails.display_picture ? (
+                            {userDetails.displayPicture ? (
                               <p>
-                                {userDetails.display_picture.substr(
+                                {userDetails.displayPicture.substr(
                                   45,
-                                  userDetails.display_picture.length
+                                  userDetails.displayPicture.length
                                 )}
                               </p>
                             ) : null}

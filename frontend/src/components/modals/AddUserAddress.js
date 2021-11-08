@@ -13,9 +13,9 @@ const AddUserAddress = ({ show, onHide, user }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     const data = {};
-    data.address_1 = address1;
-    data.address_2 = address2;
-    data.user_id = user._id;
+    data.address1 = address1;
+    data.address2 = address2;
+    data.userId = user._id;
     data.landmark = landmark;
     data.city = city;
     data.state = state;

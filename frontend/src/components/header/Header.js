@@ -29,9 +29,9 @@ class Header extends Component {
   }
 
   toggle = () => {
-    getCartItems(this.props.user._id, this.props.user.token)
-      .then((res) => res.json())
-      .then((data) => this.setState({ cartItems: data }));
+    getCartItems(this.props.user._id, this.props.user.token).then((res) =>
+      this.setState({ cartItems: res.data })
+    );
     this.setState({ popoverOpen: !this.state.popoverOpen });
   };
 
@@ -184,10 +184,10 @@ class Header extends Component {
                       <>
                         <div class="row">
                           <div class="col-8">
-                            <h6>{item.dish_name}</h6>
+                            <h6>{item.dishName}</h6>
                           </div>
                           <div class="col-4">
-                            <h6 class="text-muted">${item.dish_price}</h6>
+                            <h6 class="text-muted">${item.dishPrice}</h6>
                           </div>
                         </div>
                       </>
@@ -269,7 +269,7 @@ class Header extends Component {
                 class="btn btn-outline-dark rounded-pill"
                 onClick={() => {
                   window.location.href =
-                    this.props.restaurant && this.props.restaurant.id
+                    this.props.restaurant && this.props.restaurant._id
                       ? "/restaurantorders"
                       : "restaurantlogin";
                 }}
@@ -277,7 +277,7 @@ class Header extends Component {
               >
                 <i class="bi bi-card-checklist"></i>
               </span>
-              {this.props.restaurant && this.props.restaurant.id ? (
+              {this.props.restaurant && this.props.restaurant._id ? (
                 <button
                   class="btn btn-outline-dark rounded-pill"
                   onClick={this.handleRestaurantLogOut}

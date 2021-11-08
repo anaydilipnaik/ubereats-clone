@@ -56,18 +56,16 @@ const Checkout = ({ user }) => {
 
   const getCartItemsFunc = () => {
     getCartItems(user._id, user.token)
-      .then((res) => res.json())
-      .then((data) => {
+      .then((res) => {
         let subtotal = 0;
-        setCartItems(data);
-        data.map((item) => {
-          subtotal += item.dish_price * item.qty;
+        setCartItems(res.data);
+        res.data.map((item) => {
+          subtotal += item.dishPrice * item.qty;
         });
         setCartSubtotal(subtotal);
         return getUserAddresses(user._id), user.token;
       })
-      .then((res) => res.json())
-      .then((data) => setUserAddresses(data));
+      .then((res) => setUserAddresses(res.data));
   };
 
   const onQtyChange = (value, id) => {
@@ -101,7 +99,7 @@ const Checkout = ({ user }) => {
                   <div class="card-header px-4 py-5">
                     <h2 class="text-muted mb-0">
                       Thanks for your Order,{" "}
-                      <span style={{ color: "blue" }}>{user.first_name}</span>!
+                      <span style={{ color: "blue" }}>{user.firstName}</span>!
                     </h2>
                     <p
                       style={{
@@ -110,19 +108,19 @@ const Checkout = ({ user }) => {
                         fontWeight: "bold",
                       }}
                     >
-                      {placedOrderDetails[0].restaurant_name} (
-                      {placedOrderDetails[0].restaurant_location})
+                      {placedOrderDetails[0].restaurantName} (
+                      {placedOrderDetails[0].restaurantLocation})
                     </p>
                     {placedOrderDetails.map((item) => (
                       <>
                         <div class="row">
                           <div class="col-6">
                             <p>
-                              {item.dish_name} (x{item.qty})
+                              {item.dishName} (x{item.qty})
                             </p>
                           </div>
                           <div class="col-6">
-                            <p>{item.dish_price} ea</p>
+                            <p>{item.dishPrice} ea</p>
                           </div>
                         </div>
                       </>
@@ -131,33 +129,33 @@ const Checkout = ({ user }) => {
                   <div class="card-footer border-0 px-4 py-5">
                     <p>
                       <b>Order Status</b>:{" "}
-                      {placedOrderDetails[0].delivery_type === "DL"
-                        ? placedOrderDetails[0].order_status === "OR"
+                      {placedOrderDetails[0].deliveryType === "DL"
+                        ? placedOrderDetails[0].orderStatus === "OR"
                           ? "Order Received"
-                          : placedOrderDetails[0].order_status === "PR"
+                          : placedOrderDetails[0].orderStatus === "PR"
                           ? "Preparing"
-                          : placedOrderDetails[0].order_status === "OTW"
+                          : placedOrderDetails[0].orderStatus === "OTW"
                           ? "On the Way"
-                          : placedOrderDetails[0].order_status === "DL"
+                          : placedOrderDetails[0].orderStatus === "DL"
                           ? "Delivered"
                           : null
-                        : placedOrderDetails[0].delivery_type === "PU"
-                        ? placedOrderDetails[0].order_status === "OR"
+                        : placedOrderDetails[0].deliveryType === "PU"
+                        ? placedOrderDetails[0].orderStatus === "OR"
                           ? "Order Received"
-                          : placedOrderDetails[0].order_status === "PR"
+                          : placedOrderDetails[0].orderStatus === "PR"
                           ? "Preparing"
-                          : placedOrderDetails[0].order_status === "PUR"
+                          : placedOrderDetails[0].orderStatus === "PUR"
                           ? "Pick Up Received"
-                          : placedOrderDetails[0].order_status === "PU"
+                          : placedOrderDetails[0].orderStatus === "PU"
                           ? "Picked Up"
                           : null
                         : null}
                     </p>
                     <p>
                       <b>Address</b>:{" "}
-                      {placedOrderDetails[0].address_1 +
+                      {placedOrderDetails[0].address1 +
                         ", " +
-                        placedOrderDetails[0].address_2 +
+                        placedOrderDetails[0].address2 +
                         ", " +
                         placedOrderDetails[0].landmark +
                         ", " +
@@ -220,11 +218,11 @@ const Checkout = ({ user }) => {
                                     <img
                                       src={item.dish_image}
                                       class="img-fluid rounded-3"
-                                      alt={item.dish_name}
+                                      alt={item.dishName}
                                     />
                                   </div>
                                   <div class="col-md-3 col-lg-3 col-xl-3">
-                                    <h6 class="text-muted">{item.dish_name}</h6>
+                                    <h6 class="text-muted">{item.dishName}</h6>
                                     <h6 class="text-black mb-0">
                                       {item.dish_description.substr(0, 80) +
                                         "..."}
@@ -292,9 +290,9 @@ const Checkout = ({ user }) => {
                                       userAddresses.map((addr) =>
                                         userAddressId === addr.id ? (
                                           <option value={addr.id} selected>
-                                            {addr.address_1 +
+                                            {addr.address1 +
                                               ", " +
-                                              addr.address_2 +
+                                              addr.address2 +
                                               ", " +
                                               addr.landmark +
                                               ", " +
@@ -304,9 +302,9 @@ const Checkout = ({ user }) => {
                                           </option>
                                         ) : (
                                           <option value={addr.id}>
-                                            {addr.address_1 +
+                                            {addr.address1 +
                                               ", " +
-                                              addr.address_2 +
+                                              addr.address2 +
                                               ", " +
                                               addr.landmark +
                                               ", " +

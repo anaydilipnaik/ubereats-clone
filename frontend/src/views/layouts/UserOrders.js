@@ -22,12 +22,10 @@ const UserOrders = ({ user }) => {
   };
 
   const onModalClick = (orderId) => {
-    getOrderDetailsById(orderId, user.token)
-      .then((res) => res.json())
-      .then((data) => {
-        setOrderDetails(data);
-        setViewReceiptModal(true);
-      });
+    getOrderDetailsById(orderId, user.token).then((res) => {
+      setOrderDetails(res.data);
+      setViewReceiptModal(true);
+    });
   };
 
   const onModalClose = () => {
@@ -81,9 +79,9 @@ const UserOrders = ({ user }) => {
                         fontSize: "24px",
                       }}
                     >
-                      {item.restaurant_name +
+                      {item.restaurantName +
                         " (" +
-                        item.restaurant_location +
+                        item.restaurantLocation +
                         ")"}
                     </b>
                   </p>
@@ -91,23 +89,23 @@ const UserOrders = ({ user }) => {
                 <div class="col-12">
                   <p>
                     {item.delivery_type === "DL"
-                      ? item.order_status === "OR"
+                      ? item.orderStatus === "OR"
                         ? "Order Received"
-                        : item.order_status === "PR"
+                        : item.orderStatus === "PR"
                         ? "Preparing"
-                        : item.order_status === "OTW"
+                        : item.orderStatus === "OTW"
                         ? "On the Way"
-                        : item.order_status === "DL"
+                        : item.orderStatus === "DL"
                         ? "Delivered"
                         : null
-                      : item.delivery_type === "PU"
-                      ? item.order_status === "OR"
+                      : item.deliveryType === "PU"
+                      ? item.orderStatus === "OR"
                         ? "Order Received"
-                        : item.order_status === "PR"
+                        : item.orderStatus === "PR"
                         ? "Preparing"
-                        : item.order_status === "PUR"
+                        : item.orderStatus === "PUR"
                         ? "Pick Up Received"
-                        : item.order_status === "PU"
+                        : item.orderStatus === "PU"
                         ? "Picked Up"
                         : null
                       : null}
@@ -115,8 +113,7 @@ const UserOrders = ({ user }) => {
                 </div>
                 <div class="col-12">
                   <p>
-                    {item.order_count} items for ${item.total} on {item.created}
-                    .{" "}
+                    {item.orderCount} items for ${item.total} on {item.created}.{" "}
                     <a
                       onClick={() => onModalClick(item.id)}
                       style={{

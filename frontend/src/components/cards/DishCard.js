@@ -31,7 +31,7 @@ class DishCard extends Component {
           data.delivery_type = "DL";
           data.dish_price = this.props.dish.price;
           data.qty = 1;
-          addToCart(data, user.token)
+          addToCart(data, this.props.user.token)
             .then((res) => {
               if (res.status === 200) {
                 this.setState({ cartFlag: false });
