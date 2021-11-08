@@ -360,7 +360,7 @@ router.post("/loginUser", async (req, res, next) => {
       res.end("Error Occured");
     }
     if (results) {
-      const payload = { _id: results._id, username: results.username };
+      const payload = { _id: results._id, email: results.email };
       const token = jwt.sign(payload, secret, {
         expiresIn: 1008000,
       });
@@ -387,7 +387,7 @@ router.post("/loginRestaurant", async (req, res, next) => {
       res.end("Error Occured");
     }
     if (results) {
-      const payload = { _id: results._id, username: results.username };
+      const payload = { _id: results._id, email: results.email };
       const token = jwt.sign(payload, secret, {
         expiresIn: 1008000,
       });
