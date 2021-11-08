@@ -5,9 +5,9 @@ const RestaurantCard = ({ user, restaurant }) => {
   const addToFavouriteButtonClick = (event) => {
     event.preventDefault();
     let data = {};
-    data.user_id = user.id;
-    data.restaurant_id = restaurant.id;
-    addToFavourite(data).then((res) => {
+    data.user_id = user._id;
+    data.restaurant_id = restaurant._id;
+    addToFavourite(data, user.token).then((res) => {
       if (res.status === 200) alert("Added to favourites");
     });
   };

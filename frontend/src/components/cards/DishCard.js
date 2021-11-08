@@ -15,7 +15,7 @@ class DishCard extends Component {
 
   handleAddToCart = (e) => {
     e.preventDefault();
-    getCartItems(this.props.user.id)
+    getCartItems(this.props.user._id, this.props.user.token)
       .then((res) => res.json())
       .then((data) => {
         let flag = false;
@@ -31,7 +31,7 @@ class DishCard extends Component {
           data.delivery_type = "DL";
           data.dish_price = this.props.dish.price;
           data.qty = 1;
-          addToCart(data)
+          addToCart(data, user.token)
             .then((res) => {
               if (res.status === 200) {
                 this.setState({ cartFlag: false });

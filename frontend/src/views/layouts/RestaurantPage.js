@@ -7,6 +7,7 @@ import {
   getDishesByRestaurantId,
 } from "../../controllers/restaurants";
 import { useLocation } from "react-router-dom";
+import { connect } from "react-redux";
 
 const RestaurantPage = () => {
   const [restaurantDetails, setRestaurantDetails] = useState(null);
@@ -16,11 +17,11 @@ const RestaurantPage = () => {
   const restaurantId = new URLSearchParams(search).get("id");
 
   useEffect(() => {
-    getRestaurantDetailsById(restaurantId)
+    getRestaurantDetailsById(restaurantId, user.token)
       .then((res) => res.json())
       .then((data) => {
         setRestaurantDetails(data[0]);
-        return getDishesByRestaurantId(restaurantId);
+        return getDishesByRestaurantId(restaurantId, user.token);
       })
       .then((res) => res.json())
       .then((data) => setDishes(data))
@@ -94,4 +95,8 @@ const RestaurantPage = () => {
   );
 };
 
-export default RestaurantPage;
+const mapStateToProps = (state) => ({
+  user: state.login.user,
+});
+
+export default connect(mapStateToProps)(RestaurantPage);

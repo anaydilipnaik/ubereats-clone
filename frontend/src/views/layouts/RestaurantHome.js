@@ -30,13 +30,13 @@ const RestaurantHome = ({ restaurant }) => {
   const [restaurantImage, setRestaurantImage] = useState(null);
 
   const getRestaurantDetailsFunc = () => {
-    getRestaurantDetailsById(restaurant.id)
+    getRestaurantDetailsById(restaurant._id, restaurant.token)
       .then((res) => res.json())
       .then((data) => {
         setRestaurantDetails(data[0]);
         if (data[0].is_delivery === 1) setIsDelivery(true);
         if (data[0].is_pickup === 1) setIsPickup(true);
-        return getDishesByRestaurantId(restaurant.id);
+        return getDishesByRestaurantId(restaurant._id, restaurant.token);
       })
       .then((res) => res.json())
       .then((data) => {
@@ -65,7 +65,7 @@ const RestaurantHome = ({ restaurant }) => {
     if (isPickUp) data.append("is_pickup", 1);
     else data.append("is_pickup", 0);
     if (restaurantImage) data.append("myFile", restaurantImage);
-    updateRestaurant(data, restaurant.id).then((res) => {
+    updateRestaurant(data, restaurant._id, restaurant.token).then((res) => {
       if (res.data === "Success") {
         getRestaurantDetailsFunc();
         alert("SUCCESS");
@@ -90,7 +90,7 @@ const RestaurantHome = ({ restaurant }) => {
   };
 
   useEffect(() => {
-    if (restaurant && restaurant.id) getRestaurantDetailsFunc();
+    if (restaurant && restaurant._id) getRestaurantDetailsFunc();
     else window.location.href = "/restaurantlogin";
   }, []);
 

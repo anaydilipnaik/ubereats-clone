@@ -29,7 +29,7 @@ class Header extends Component {
   }
 
   toggle = () => {
-    getCartItems(this.props.user._id)
+    getCartItems(this.props.user._id, this.props.user.token)
       .then((res) => res.json())
       .then((data) => this.setState({ cartItems: data }));
     this.setState({ popoverOpen: !this.state.popoverOpen });
@@ -38,7 +38,7 @@ class Header extends Component {
   componentDidMount() {
     if (!this.props.restaurantFlag) {
       if (this.props.user && this.props.user._id)
-        this.props.getUserCartCount(this.props.user._id);
+        this.props.getUserCartCount(this.props.user._id, this.props.user.token);
       if (this.props.userDeliveryType)
         this.setState({
           delivery: this.props.userDeliveryType === "DL" ? "active" : "",

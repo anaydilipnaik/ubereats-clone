@@ -22,29 +22,29 @@ const Checkout = ({ user }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let data = {};
-    data.user_id = user.id;
-    data.restaurant_id = cartItems[0].restaurant_id;
-    data.order_status = "OR";
-    data.delivery_type = "DL";
-    data.user_address_id = parseInt(userAddressId);
+    data.userId = user._id;
+    data.restaurantId = cartItems[0].restaurantId;
+    data.orderStatus = "OR";
+    data.deliveryType = "DL";
+    data.userAddressId = parseInt(userAddressId);
     data.taxes = 0;
     data.total = cartSubtotal;
     let contentsArr = [];
     cartItems.map((item) => {
       let contentsObj = {};
-      contentsObj.user_id = user.id;
-      contentsObj.restaurant_id = item.restaurant_id;
-      contentsObj.dish_id = item.dish_id;
-      contentsObj.dish_price = item.dish_price;
+      contentsObj.userId = user._id;
+      contentsObj.restaurantId = item.restaurantId;
+      contentsObj.dishId = item.dishId;
+      contentsObj.dishPrice = item.dishPrice;
       contentsObj.qty = item.qty;
       contentsArr.push(contentsObj);
     });
     data.contents = contentsArr;
-    placeOrder(data)
+    placeOrder(data, user.token)
       .then((res) => res.json())
       .then((data) => {
-        if (data[0][0].order_id) {
-          getOrderDetailsById(data[0][0].order_id)
+        if (data[0][0].orderId) {
+          getOrderDetailsById(data[0][0].orderId, user.token)
             .then((res) => res.json())
             .then((data) => {
               setOrderPlacedStatus(true);
@@ -55,7 +55,7 @@ const Checkout = ({ user }) => {
   };
 
   const getCartItemsFunc = () => {
-    getCartItems(user.id)
+    getCartItems(user._id, user.token)
       .then((res) => res.json())
       .then((data) => {
         let subtotal = 0;
@@ -64,7 +64,7 @@ const Checkout = ({ user }) => {
           subtotal += item.dish_price * item.qty;
         });
         setCartSubtotal(subtotal);
-        return getUserAddresses(user.id);
+        return getUserAddresses(user._id), user.token;
       })
       .then((res) => res.json())
       .then((data) => setUserAddresses(data));
@@ -73,7 +73,7 @@ const Checkout = ({ user }) => {
   const onQtyChange = (value, id) => {
     let data = {};
     data.qty = value;
-    updateCart(id, data)
+    updateCart(id, data, user.token)
       .then((res) => {
         if (res.status === 200) getCartItemsFunc();
       })
@@ -395,7 +395,7 @@ const Checkout = ({ user }) => {
       <AddUserAddress
         show={addAddressModal}
         onHide={onAddAddressModalClose}
-        userId={user.id}
+        userId={user._id}
       />
     </>
   );

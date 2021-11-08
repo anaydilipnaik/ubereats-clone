@@ -19,7 +19,7 @@ const UserHome = ({ user, userLocation, userDeliveryType }) => {
   };
 
   const getRestaurantsFunc = (data) => {
-    getAllRestaurants(data)
+    getAllRestaurants(data, user.token)
       .then((res) => res.json())
       .then((data) => setRestaurants(data));
   };

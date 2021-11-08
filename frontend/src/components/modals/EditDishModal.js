@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { addDish, updateDish } from "../../controllers/restaurants";
+import { connect } from "react-redux";
 
-const EditDishModal = ({
-  show,
-  onHide,
-  dish,
-  dishCategories,
-  restaurantId,
-}) => {
+const EditDishModal = ({ show, onHide, dish, dishCategories, restaurant }) => {
   const [dishName, setDishName] = useState(null);
   const [mainIngredients, setMainIngredients] = useState(null);
   const [description, setDescription] = useState(null);
@@ -20,13 +15,13 @@ const EditDishModal = ({
     e.preventDefault();
     const data = new FormData();
     data.append("name", dishName);
-    data.append("restaurant_id", restaurantId);
+    data.append("restaurant_id", restaurant._id);
     data.append("main_ingredients", mainIngredients);
     data.append("description", description);
     data.append("dish_category_id", dishCategory);
     data.append("price", price);
     data.append("myFile", dishImage);
-    addDish(data)
+    addDish(data, restaurant.token)
       .then((res) => {
         console.log(res);
         if (res.data === "Success") {
@@ -53,7 +48,7 @@ const EditDishModal = ({
       price ||
       dishImage
     )
-      updateDish(data, dish.id).then((res) => {
+      updateDish(data, dish.id, restaurant.token).then((res) => {
         if (res.data === "Success") {
           onHide();
         }
@@ -190,4 +185,8 @@ const EditDishModal = ({
   );
 };
 
-export default EditDishModal;
+const mapStateToProps = (state) => ({
+  restaurant: state.login.restaurant,
+});
+
+export default connect(mapStateToProps)(EditDishModal);

@@ -51,7 +51,7 @@ const UserProfile = ({ user }) => {
       phoneNo ||
       displayPicture
     )
-      updateUser(data, 39).then((res) => {
+      updateUser(data, user._id, user.token).then((res) => {
         if (res.data === "Success") {
           getUserDetailsFunction();
           alert("SUCCESS");
@@ -60,7 +60,7 @@ const UserProfile = ({ user }) => {
   };
 
   const getUserDetailsFunction = () => {
-    getUserDetails(userId ? userId : user.id)
+    getUserDetails(userId ? userId : user._id, user.token)
       .then((res) => res.json())
       .then((data) => {
         setUserDetails(data[0]);

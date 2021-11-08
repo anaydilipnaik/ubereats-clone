@@ -22,7 +22,7 @@ const UserOrders = ({ user }) => {
   };
 
   const onModalClick = (orderId) => {
-    getOrderDetailsById(orderId)
+    getOrderDetailsById(orderId, user.token)
       .then((res) => res.json())
       .then((data) => {
         setOrderDetails(data);

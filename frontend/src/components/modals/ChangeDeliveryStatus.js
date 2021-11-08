@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { updateOrderDeliveryStatus } from "../../controllers/orders";
+import { connect } from "react-redux";
 
 const ChangeDeliveryStatus = ({
   show,
   onHide,
   orderId,
   statusModalDeliveryType,
+  restaurant,
 }) => {
   const [status, setStatus] = useState(null);
 
@@ -14,7 +16,7 @@ const ChangeDeliveryStatus = ({
     e.preventDefault();
     let data = {};
     data.order_status = status;
-    updateOrderDeliveryStatus(data, orderId).then((res) => {
+    updateOrderDeliveryStatus(data, orderId, restaurant.token).then((res) => {
       if (res.status === 200) {
         onHide();
       }
@@ -72,4 +74,8 @@ const ChangeDeliveryStatus = ({
   );
 };
 
-export default ChangeDeliveryStatus;
+const mapStateToProps = (state) => ({
+  restaurant: state.login.restaurant,
+});
+
+export default connect(mapStateToProps)(ChangeDeliveryStatus);

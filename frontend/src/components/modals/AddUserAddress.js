@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { addAddress } from "../../controllers/orders";
+import { connect } from "react-redux";
 
-const AddUserAddress = ({ show, onHide, userId }) => {
+const AddUserAddress = ({ show, onHide, user }) => {
   const [address1, setAddress1] = useState(null);
   const [address2, setAddress2] = useState(null);
   const [landmark, setLandmark] = useState(null);
@@ -14,11 +15,11 @@ const AddUserAddress = ({ show, onHide, userId }) => {
     const data = {};
     data.address_1 = address1;
     data.address_2 = address2;
-    data.user_id = userId;
+    data.user_id = user._id;
     data.landmark = landmark;
     data.city = city;
     data.state = state;
-    addAddress(data)
+    addAddress(data, user.token)
       .then((res) => {
         if (res.status === 200) {
           onHide();
@@ -115,4 +116,8 @@ const AddUserAddress = ({ show, onHide, userId }) => {
   );
 };
 
-export default AddUserAddress;
+const mapStateToProps = (state) => ({
+  user: state.login.user,
+});
+
+export default connect(mapStateToProps)(AddUserAddress);

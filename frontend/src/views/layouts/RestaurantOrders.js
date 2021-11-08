@@ -18,13 +18,13 @@ const RestaurantOrders = ({ restaurant }) => {
   const [statusModalDeliveryType, setStatusModalDeliveryType] = useState(null);
 
   const getOrdersFunc = () => {
-    getOrdersByRestaurantId(restaurant.id)
+    getOrdersByRestaurantId(restaurant._id, restaurant.token)
       .then((res) => res.json())
       .then((data) => setOrders(data));
   };
 
   const onModalClick = (orderId) => {
-    getOrderDetailsById(orderId)
+    getOrderDetailsById(orderId, restaurant.token)
       .then((res) => res.json())
       .then((data) => {
         setOrderDetails(data);

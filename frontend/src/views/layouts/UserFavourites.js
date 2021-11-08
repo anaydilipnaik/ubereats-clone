@@ -9,7 +9,7 @@ const UserFavourites = ({ user }) => {
   const [favourites, setFavourites] = useState(null);
 
   const getRestaurantsFunc = () => {
-    getUserFavourites(user.id)
+    getUserFavourites(user._id, user.token)
       .then((res) => res.json())
       .then((data) => setFavourites(data));
   };
