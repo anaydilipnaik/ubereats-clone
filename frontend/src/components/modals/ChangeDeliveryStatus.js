@@ -54,6 +54,7 @@ const ChangeDeliveryStatus = ({
               <option value={statusModalDeliveryType === "DL" ? "DL" : "PU"}>
                 {statusModalDeliveryType === "DL" ? "Delivered" : "Picked Up"}
               </option>
+              <option value="CA">Cancel the Order</option>
             </select>
             <div style={{ textAlign: "right" }}>
               <button

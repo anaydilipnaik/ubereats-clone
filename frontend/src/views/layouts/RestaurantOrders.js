@@ -13,7 +13,7 @@ import {
 const RestaurantOrders = ({
   restaurant,
   getOrdersByRestaurantIdFunc,
-  getFilteredOrdersByRestaurantId,
+  getFilteredOrdersByRestaurantIdFunc,
 }) => {
   const [orders, setOrders] = useState(null);
   const [orderDetails, setOrderDetails] = useState(null);
@@ -56,7 +56,7 @@ const RestaurantOrders = ({
     data.restaurantId = restaurant._id;
     data.orderStatus = e.target.value;
     if (e.target.value === "all") getOrdersFunc();
-    else getFilteredOrdersByRestaurantId(data, restaurant.token, setOrders);
+    else getFilteredOrdersByRestaurantIdFunc(data, restaurant.token, setOrders);
   };
 
   useEffect(() => {
@@ -118,6 +118,8 @@ const RestaurantOrders = ({
                         ? "On the Way"
                         : item.orderStatus === "DL"
                         ? "Delivered"
+                        : item.orderStatus === "CA"
+                        ? "Cancelled"
                         : null
                       : item.deliveryType === "PU"
                       ? item.orderStatus === "OR"
@@ -128,6 +130,8 @@ const RestaurantOrders = ({
                         ? "Pick Up Received"
                         : item.orderStatus === "PU"
                         ? "Picked Up"
+                        : item.orderStatus === "CA"
+                        ? "Cancelled"
                         : null
                       : null}
                     <button
