@@ -69,12 +69,11 @@ export const registerUserFunc = (payload) => (dispatch) => {
 
 export const loginRestaurantFunc = (payload) => (dispatch) => {
   loginRestaurant(payload)
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.length > 0) {
+    .then((res) => {
+      if (res.data) {
         dispatch({
           type: LOGIN_RESTAURANT,
-          payload: data[0],
+          payload: res.data,
         });
         setTimeout(() => {
           window.location.href = "/restauranthome";
@@ -123,11 +122,10 @@ export const registerRestaurantFunc = (payload) => (dispatch) => {
 
 export const getUserCartCount = (payload) => (dispatch) => {
   getCartCount(payload)
-    .then((res) => res.json())
-    .then((data) => {
+    .then((res) => {
       dispatch({
         type: GET_CART_COUNT,
-        payload: data[0].cart_count,
+        payload: res.data.cart_count,
       });
     })
     .catch((err) => {

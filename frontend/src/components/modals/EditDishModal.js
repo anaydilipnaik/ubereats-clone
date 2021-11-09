@@ -1,9 +1,17 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
-import { addDish, updateDish } from "../../controllers/restaurants";
 import { connect } from "react-redux";
+import { addDishFunc, updateDishFunc } from "../../redux/actions/dishActions";
 
-const EditDishModal = ({ show, onHide, dish, dishCategories, restaurant }) => {
+const EditDishModal = ({
+  show,
+  onHide,
+  dish,
+  dishCategories,
+  restaurant,
+  addDishFunc,
+  updateDishFunc,
+}) => {
   const [dishName, setDishName] = useState(null);
   const [mainIngredients, setMainIngredients] = useState(null);
   const [description, setDescription] = useState(null);
@@ -15,29 +23,22 @@ const EditDishModal = ({ show, onHide, dish, dishCategories, restaurant }) => {
     e.preventDefault();
     const data = new FormData();
     data.append("name", dishName);
-    data.append("restaurant_id", restaurant._id);
-    data.append("main_ingredients", mainIngredients);
+    data.append("restaurantId", restaurant._id);
+    data.append("mainIngredients", mainIngredients);
     data.append("description", description);
-    data.append("dish_category_id", dishCategory);
+    data.append("dishCategoryId", dishCategory);
     data.append("price", price);
     data.append("myFile", dishImage);
-    addDish(data, restaurant.token)
-      .then((res) => {
-        console.log(res);
-        if (res.data === "Success") {
-          onHide();
-        }
-      })
-      .catch((err) => console.log(err));
+    addDishFunc(data, restaurant.token, onHide);
   };
 
   const onUpdateDish = (e) => {
     e.preventDefault();
     const data = new FormData();
     if (dishName) data.append("name", dishName);
-    if (mainIngredients) data.append("main_ingredients", mainIngredients);
+    if (mainIngredients) data.append("mainIngredients", mainIngredients);
     if (description) data.append("description", description);
-    if (dishCategory) data.append("dish_category_id", dishCategory);
+    if (dishCategory) data.append("dishCategoryId", dishCategory);
     if (price) data.append("price", price);
     if (dishImage) data.append("myFile", dishImage);
     if (
@@ -48,11 +49,7 @@ const EditDishModal = ({ show, onHide, dish, dishCategories, restaurant }) => {
       price ||
       dishImage
     )
-      updateDish(data, dish.id, restaurant.token).then((res) => {
-        if (res.data === "Success") {
-          onHide();
-        }
-      });
+      updateDishFunc(data, dish._id, restaurant.token, onHide);
   };
 
   return (
@@ -93,7 +90,7 @@ const EditDishModal = ({ show, onHide, dish, dishCategories, restaurant }) => {
               placeholder="Enter ingredients"
               onChange={(e) => setMainIngredients(e.target.value)}
               required
-              defaultValue={dish ? dish.main_ingredients : null}
+              defaultValue={dish ? dish.mainIngredients : null}
             />
           </div>
           <div class="form-group">
@@ -126,12 +123,14 @@ const EditDishModal = ({ show, onHide, dish, dishCategories, restaurant }) => {
                 <option>Select category</option>
                 {dishCategories &&
                   dishCategories.map((item) =>
-                    dish && dish.dish_category_id === item.id ? (
-                      <option selected value={item.id}>
-                        {item.category_name}
+                    dish && dish.dishCategoryId === item.categoryType ? (
+                      <option selected value={item.categoryType}>
+                        {item.categoryType}
                       </option>
                     ) : (
-                      <option value={item.id}>{item.category_name}</option>
+                      <option value={item.categoryType}>
+                        {item.categoryType}
+                      </option>
                     )
                   )}
               </select>
@@ -157,7 +156,7 @@ const EditDishModal = ({ show, onHide, dish, dishCategories, restaurant }) => {
               class="form-control-file"
               onChange={(e) => setDishImage(e.target.files[0])}
               style={{ marginTop: "15px", marginLeft: "15px" }}
-              required={dish ? false : true}
+              // required={dish ? false : true}
             />
           </div>
           <div style={{ textAlign: "right" }}>
@@ -189,4 +188,6 @@ const mapStateToProps = (state) => ({
   restaurant: state.login.restaurant,
 });
 
-export default connect(mapStateToProps)(EditDishModal);
+export default connect(mapStateToProps, { addDishFunc, updateDishFunc })(
+  EditDishModal
+);

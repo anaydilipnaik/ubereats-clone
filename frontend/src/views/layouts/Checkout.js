@@ -63,7 +63,7 @@ const Checkout = ({ user }) => {
           subtotal += item.dishPrice * item.qty;
         });
         setCartSubtotal(subtotal);
-        return getUserAddresses(user._id), user.token;
+        return getUserAddresses(user._id, user.token);
       })
       .then((res) => setUserAddresses(res.data));
   };

@@ -2,16 +2,24 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import { connect } from "react-redux";
-import {
-  getRestaurantDetailsById,
-  getDishesByRestaurantId,
-  getDishCategories,
-  updateRestaurant,
-} from "../../controllers/restaurants";
 import DishCard from "../../components/cards/DishCard";
 import EditDishModal from "../../components/modals/EditDishModal";
+import {
+  getRestaurantDetailsByIdFunc,
+  updateRestaurantFunc,
+} from "../../redux/actions/restaurantActions";
+import {
+  getDishesByRestaurantIdFunc,
+  getDishCategoriesFunc,
+} from "../../redux/actions/dishActions";
 
-const RestaurantHome = ({ restaurant }) => {
+const RestaurantHome = ({
+  restaurant,
+  getRestaurantDetailsByIdFunc,
+  getDishesByRestaurantIdFunc,
+  getDishCategoriesFunc,
+  updateRestaurantFunc,
+}) => {
   const [restaurantDetails, setRestaurantDetails] = useState(null);
   const [dishes, setDishes] = useState(null);
   const [editDishModal, setEditDishModal] = useState(false);
@@ -30,24 +38,15 @@ const RestaurantHome = ({ restaurant }) => {
   const [restaurantImage, setRestaurantImage] = useState(null);
 
   const getRestaurantDetailsFunc = () => {
-    getRestaurantDetailsById(restaurant._id, restaurant.token)
-      .then((res) => res.json())
-      .then((data) => {
-        setRestaurantDetails(data[0]);
-        if (data[0].is_delivery === 1) setIsDelivery(true);
-        if (data[0].is_pickup === 1) setIsPickup(true);
-        return getDishesByRestaurantId(restaurant._id, restaurant.token);
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        setDishes(data);
-        return getDishCategories();
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        setDishCategories(data);
-      })
-      .catch((err) => console.log(err));
+    getRestaurantDetailsByIdFunc(
+      restaurant._id,
+      restaurant.token,
+      setRestaurantDetails,
+      setIsDelivery,
+      setIsPickup
+    );
+    getDishesByRestaurantIdFunc(restaurant._id, restaurant.token, setDishes);
+    getDishCategoriesFunc(restaurant.token, setDishCategories);
   };
 
   const onSubmit = (e) => {
@@ -58,19 +57,21 @@ const RestaurantHome = ({ restaurant }) => {
     if (description) data.append("description", description);
     if (address) data.append("address", address);
     if (email) data.append("email", email);
-    if (phoneNo) data.append("phone_no", phoneNo);
+    if (phoneNo) data.append("phoneNo", phoneNo);
     if (timings) data.append("timings", timings);
-    if (isDelivery) data.append("is_delivery", 1);
-    else data.append("is_delivery", 0);
-    if (isPickUp) data.append("is_pickup", 1);
-    else data.append("is_pickup", 0);
+    if (isDelivery) data.append("isDelivery", 1);
+    else data.append("isDelivery", 0);
+    if (isPickUp) data.append("isPickup", 1);
+    else data.append("isPickup", 0);
     if (restaurantImage) data.append("myFile", restaurantImage);
-    updateRestaurant(data, restaurant._id, restaurant.token).then((res) => {
-      if (res.data === "Success") {
-        getRestaurantDetailsFunc();
-        alert("SUCCESS");
-      }
-    });
+    updateRestaurantFunc(
+      data,
+      restaurant._id,
+      restaurant.token,
+      setRestaurantDetails,
+      setIsDelivery,
+      setIsPickup
+    );
   };
 
   const onEditDishModalClose = () => {
@@ -100,10 +101,10 @@ const RestaurantHome = ({ restaurant }) => {
       {restaurantDetails ? (
         <>
           <div class="container">
-            {restaurantDetails.restaurant_image ? (
+            {restaurantDetails.restaurantImage ? (
               <img
                 style={{ width: "100%", height: "200px" }}
-                src={restaurantDetails.restaurant_image}
+                src={restaurantDetails.restaurantImage}
               />
             ) : null}
             <form onSubmit={onSubmit}>
@@ -213,7 +214,7 @@ const RestaurantHome = ({ restaurant }) => {
                     type="text"
                     class="form-control"
                     placeholder="Enter phone no."
-                    defaultValue={restaurantDetails.phone_no}
+                    defaultValue={restaurantDetails.phoneNo}
                     onChange={(e) => setPhoneNo(e.target.value)}
                     required
                   />
@@ -335,7 +336,7 @@ const RestaurantHome = ({ restaurant }) => {
         onHide={onEditDishModalClose}
         dish={dishDetails}
         dishCategories={dishCategories}
-        restaurantId={restaurant.id}
+        restaurantId={restaurant._id}
       />
       <Footer />
     </>
@@ -346,4 +347,9 @@ const mapStateToProps = (state) => ({
   restaurant: state.login.restaurant,
 });
 
-export default connect(mapStateToProps)(RestaurantHome);
+export default connect(mapStateToProps, {
+  getRestaurantDetailsByIdFunc,
+  getDishesByRestaurantIdFunc,
+  getDishCategoriesFunc,
+  updateRestaurantFunc,
+})(RestaurantHome);

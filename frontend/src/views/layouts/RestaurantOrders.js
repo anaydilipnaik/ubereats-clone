@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import { connect } from "react-redux";
-import {
-  getOrdersByRestaurantId,
-  getOrderDetailsById,
-} from "../../controllers/orders";
+import { getOrderDetailsById } from "../../controllers/orders";
 import OrderDetails from "../../components/modals/OrderDetails";
 import ChangeDeliveryStatus from "../../components/modals/ChangeDeliveryStatus";
+import { getOrdersByRestaurantIdFunc } from "../../redux/actions/orderActions";
 
-const RestaurantOrders = ({ restaurant }) => {
+const RestaurantOrders = ({ restaurant, getOrdersByRestaurantIdFunc }) => {
   const [orders, setOrders] = useState(null);
   const [orderDetails, setOrderDetails] = useState(null);
   const [viewReceiptModal, setViewReceiptModal] = useState(false);
@@ -18,18 +16,14 @@ const RestaurantOrders = ({ restaurant }) => {
   const [statusModalDeliveryType, setStatusModalDeliveryType] = useState(null);
 
   const getOrdersFunc = () => {
-    getOrdersByRestaurantId(restaurant._id, restaurant.token)
-      .then((res) => res.json())
-      .then((data) => setOrders(data));
+    getOrdersByRestaurantIdFunc(restaurant._id, restaurant.token, setOrders);
   };
 
   const onModalClick = (orderId) => {
-    getOrderDetailsById(orderId, restaurant.token)
-      .then((res) => res.json())
-      .then((data) => {
-        setOrderDetails(data);
-        setViewReceiptModal(true);
-      });
+    getOrderDetailsById(orderId, restaurant.token).then((res) => {
+      setOrderDetails(res.data);
+      setViewReceiptModal(true);
+    });
   };
 
   const onStatusModalClose = () => {
@@ -43,7 +37,7 @@ const RestaurantOrders = ({ restaurant }) => {
     getOrdersFunc();
   };
 
-  const onChangeStatus = (orderId, deliveryType) => {
+  const onChangeStatus = (orderId, deliveryType, orderStatus) => {
     setChangeStatusModal(true);
     setStatusModalOrderId(orderId);
     setStatusModalDeliveryType(deliveryType);
@@ -53,7 +47,7 @@ const RestaurantOrders = ({ restaurant }) => {
     e.preventDefault();
     let ordersTemp = [];
     orders.map((item) => {
-      if (item.order_status === e.target.value) ordersTemp.push(item);
+      if (item.orderStatus === e.target.value) ordersTemp.push(item);
     });
     if (e.target.value === "all") getOrdersFunc();
     else setOrders(ordersTemp);
@@ -93,12 +87,12 @@ const RestaurantOrders = ({ restaurant }) => {
                         fontSize: "24px",
                       }}
                     >
-                      {item.first_name + " " + item.last_name}{" "}
+                      {item.firstName + " " + item.lastName}{" "}
                     </b>
                     <a
                       href={
                         "/userprofile?userid=" +
-                        item.user_id +
+                        item.userId +
                         "&restaurant=true"
                       }
                       style={{ color: "black", fontSize: "24px" }}
@@ -109,24 +103,24 @@ const RestaurantOrders = ({ restaurant }) => {
                 </div>
                 <div class="col-12">
                   <p>
-                    {item.delivery_type === "DL"
-                      ? item.order_status === "OR"
+                    {item.deliveryType === "DL"
+                      ? item.orderStatus === "OR"
                         ? "Order Received"
-                        : item.order_status === "PR"
+                        : item.orderStatus === "PR"
                         ? "Preparing"
-                        : item.order_status === "OTW"
+                        : item.orderStatus === "OTW"
                         ? "On the Way"
-                        : item.order_status === "DL"
+                        : item.orderStatus === "DL"
                         ? "Delivered"
                         : null
-                      : item.delivery_type === "PU"
-                      ? item.order_status === "OR"
+                      : item.deliveryType === "PU"
+                      ? item.orderStatus === "OR"
                         ? "Order Received"
-                        : item.order_status === "PR"
+                        : item.orderStatus === "PR"
                         ? "Preparing"
-                        : item.order_status === "PUR"
+                        : item.orderStatus === "PUR"
                         ? "Pick Up Received"
-                        : item.order_status === "PU"
+                        : item.orderStatus === "PU"
                         ? "Picked Up"
                         : null
                       : null}
@@ -134,7 +128,7 @@ const RestaurantOrders = ({ restaurant }) => {
                       style={{ marginLeft: "15px" }}
                       class="btn btn-primary btn-sm"
                       onClick={() =>
-                        onChangeStatus(item.id, item.delivery_type)
+                        onChangeStatus(item._id, item.deliveryType)
                       }
                     >
                       Change Status
@@ -186,4 +180,6 @@ const mapStateToProps = (state) => ({
   restaurant: state.login.restaurant,
 });
 
-export default connect(mapStateToProps)(RestaurantOrders);
+export default connect(mapStateToProps, { getOrdersByRestaurantIdFunc })(
+  RestaurantOrders
+);

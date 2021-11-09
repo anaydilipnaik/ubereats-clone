@@ -21,10 +21,13 @@ app.use(
 const jwt = require("jsonwebtoken");
 const { secret } = require("../config");
 const { checkAuth } = require("../passport");
+const { checkAuthRestaurant } = require("../passport-restaurant");
 const { auth } = require("../passport");
 auth();
+const { authRestaurant } = require("../passport-restaurant");
+authRestaurant();
 
-router.get("/dishes/category", checkAuth, async (req, res, next) => {
+router.get("/dishes/category", checkAuthRestaurant, async (req, res, next) => {
   kafka.make_request("get_dish_types", null, function (err, results) {
     if (err) {
       res.writeHead(500, {
@@ -40,25 +43,29 @@ router.get("/dishes/category", checkAuth, async (req, res, next) => {
   });
 });
 
-router.get("/restaurant/details/:id", checkAuth, async (req, res, next) => {
-  kafka.make_request(
-    "get_restaurant_details_by_id",
-    req.params.id,
-    function (err, results) {
-      if (err) {
-        res.writeHead(500, {
-          "Content-Type": "text/plain",
-        });
-        res.end("Error Occured");
-      } else {
-        res.writeHead(200, {
-          "Content-Type": "application/json",
-        });
-        res.end(JSON.stringify(results));
+router.get(
+  "/restaurant/details/:id",
+  // checkAuth,
+  async (req, res, next) => {
+    kafka.make_request(
+      "get_restaurant_details_by_id",
+      req.params.id,
+      function (err, results) {
+        if (err) {
+          res.writeHead(500, {
+            "Content-Type": "text/plain",
+          });
+          res.end("Error Occured");
+        } else {
+          res.writeHead(200, {
+            "Content-Type": "application/json",
+          });
+          res.end(JSON.stringify(results));
+        }
       }
-    }
-  );
-});
+    );
+  }
+);
 
 router.get("/user/details/:id", checkAuth, async (req, res, next) => {
   kafka.make_request(
@@ -80,25 +87,29 @@ router.get("/user/details/:id", checkAuth, async (req, res, next) => {
   );
 });
 
-router.get("/dishes/get/:restaurantid", checkAuth, async (req, res, next) => {
-  kafka.make_request(
-    "get_dishes_by_restaurant_id",
-    req.params.restaurantid,
-    function (err, results) {
-      if (err) {
-        res.writeHead(500, {
-          "Content-Type": "text/plain",
-        });
-        res.end("Error Occured");
-      } else {
-        res.writeHead(200, {
-          "Content-Type": "application/json",
-        });
-        res.end(JSON.stringify(results));
+router.get(
+  "/dishes/get/:restaurantid",
+  // checkAuth,
+  async (req, res, next) => {
+    kafka.make_request(
+      "get_dishes_by_restaurant_id",
+      req.params.restaurantid,
+      function (err, results) {
+        if (err) {
+          res.writeHead(500, {
+            "Content-Type": "text/plain",
+          });
+          res.end("Error Occured");
+        } else {
+          res.writeHead(200, {
+            "Content-Type": "application/json",
+          });
+          res.end(JSON.stringify(results));
+        }
       }
-    }
-  );
-});
+    );
+  }
+);
 
 router.get("/addresses/get/:userid", checkAuth, async (req, res, next) => {
   kafka.make_request(
@@ -308,7 +319,7 @@ router.post("/addToFavourites", checkAuth, async (req, res, next) => {
   });
 });
 
-router.post("/addDish", checkAuth, async (req, res, next) => {
+router.post("/addDish", checkAuthRestaurant, async (req, res, next) => {
   try {
     uploadSingleFile(req, res, async (error) => {
       if (req.file) req.body.dishImage = req.file.location;
@@ -407,7 +418,7 @@ router.post("/loginRestaurant", async (req, res, next) => {
 
 router.put(
   "/updateOrderDeliveryStatus/:orderid",
-  checkAuth,
+  checkAuthRestaurant,
   async (req, res, next) => {
     req.body.orderId = req.params.orderid;
     kafka.make_request(
@@ -477,7 +488,7 @@ router.put("/updateUser/:userid", checkAuth, async (req, res, next) => {
 
 router.put(
   "/updateRestaurant/:restaurantid",
-  checkAuth,
+  checkAuthRestaurant,
   async (req, res, next) => {
     try {
       uploadSingleFile(req, res, async (error) => {
@@ -511,33 +522,37 @@ router.put(
   }
 );
 
-router.put("/updateDish/:dishid", checkAuth, async (req, res, next) => {
-  try {
-    uploadSingleFile(req, res, async (error) => {
-      if (req.file) req.body.dishImage = req.file.location;
-      req.body.dishId = req.params.dishid;
-      kafka.make_request("update_dish", req.body, function (err, results) {
-        if (err) {
-          res.writeHead(500, {
-            "Content-Type": "text/plain",
-          });
-          res.end("Error Occured");
-        } else {
-          res.writeHead(200, {
-            "Content-Type": "application/json",
-          });
-          res.end(JSON.stringify(results));
-        }
+router.put(
+  "/updateDish/:dishid",
+  checkAuthRestaurant,
+  async (req, res, next) => {
+    try {
+      uploadSingleFile(req, res, async (error) => {
+        if (req.file) req.body.dishImage = req.file.location;
+        req.body.dishId = req.params.dishid;
+        kafka.make_request("update_dish", req.body, function (err, results) {
+          if (err) {
+            res.writeHead(500, {
+              "Content-Type": "text/plain",
+            });
+            res.end("Error Occured");
+          } else {
+            res.writeHead(200, {
+              "Content-Type": "application/json",
+            });
+            res.end(JSON.stringify(results));
+          }
+        });
       });
-    });
-  } catch (e) {
-    console.log(e);
-    res.writeHead(500, {
-      "Content-Type": "text/plain",
-    });
-    res.end("Error");
+    } catch (e) {
+      console.log(e);
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Error");
+    }
   }
-});
+);
 
 // // not complete
 // router.post("/placeOrder", checkAuth, async (req, res, next) => {

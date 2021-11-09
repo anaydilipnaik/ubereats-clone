@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
-import { updateOrderDeliveryStatus } from "../../controllers/orders";
 import { connect } from "react-redux";
+import { updateOrderDeliveryStatusFunc } from "../../redux/actions/orderActions";
 
 const ChangeDeliveryStatus = ({
   show,
@@ -9,18 +9,15 @@ const ChangeDeliveryStatus = ({
   orderId,
   statusModalDeliveryType,
   restaurant,
+  updateOrderDeliveryStatusFunc,
 }) => {
   const [status, setStatus] = useState(null);
 
   const onSubmit = (e) => {
     e.preventDefault();
     let data = {};
-    data.order_status = status;
-    updateOrderDeliveryStatus(data, orderId, restaurant.token).then((res) => {
-      if (res.status === 200) {
-        onHide();
-      }
-    });
+    data.orderStatus = status;
+    updateOrderDeliveryStatusFunc(data, orderId, restaurant.token, onHide);
   };
 
   return (
@@ -78,4 +75,6 @@ const mapStateToProps = (state) => ({
   restaurant: state.login.restaurant,
 });
 
-export default connect(mapStateToProps)(ChangeDeliveryStatus);
+export default connect(mapStateToProps, { updateOrderDeliveryStatusFunc })(
+  ChangeDeliveryStatus
+);

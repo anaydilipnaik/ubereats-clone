@@ -6,6 +6,9 @@ import RegisterReducer from "./RegisterReducer";
 import CartReducer from "./CartReducer";
 import UserLocationReducer from "./UserLocationReducer";
 import UserDeliveryTypeReducer from "./UserDeliveryTypeReducer";
+import DishReducer from "./DishReducer";
+import RestaurantReducer from "./RestaurantReducer";
+import OrderReducer from "./OrderReducer";
 
 const persistConfig = {
   key: "root",
@@ -19,6 +22,9 @@ const rootReducer = combineReducers({
   cart: CartReducer,
   userLocation: UserLocationReducer,
   userDeliveryType: UserDeliveryTypeReducer,
+  dish: DishReducer,
+  restaurant: RestaurantReducer,
+  order: OrderReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);
