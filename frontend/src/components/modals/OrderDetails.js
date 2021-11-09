@@ -1,7 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal } from "react-bootstrap";
 
-const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
+const OrderDetails = ({
+  show,
+  onHide,
+  orderDetails,
+  orders,
+  restaurantFlag,
+}) => {
   return (
     <Modal
       show={show}
@@ -14,7 +20,7 @@ const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
         <Modal.Title id="contained-modal-title-vcenter">Receipt</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {orderDetails ? (
+        {orders && orderDetails ? (
           <>
             <p
               style={{
@@ -27,15 +33,11 @@ const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
                 <p>
                   Customer:{" "}
                   <b style={{ textDecoration: "underline" }}>
-                    {orderDetails[0].first_name +
-                      " " +
-                      orderDetails[0].last_name}
+                    {orders.firstName + " " + orders.lastName}
                   </b>
                 </p>
               ) : (
-                orderDetails[0].restaurant_name +
-                " " +
-                orderDetails[0].restaurant_location
+                orders.restaurantName + " " + orders.restaurantLocation
               )}
             </p>
             {orderDetails.map((item) => (
@@ -43,50 +45,45 @@ const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
                 <div class="row">
                   <div class="col-6">
                     <p>
-                      {item.dish_name} (x{item.qty})
+                      {item.dishName} (x{item.qty})
                     </p>
                   </div>
                   <div class="col-6">
-                    <p>${item.dish_price}</p>
+                    <p>${item.dishPrice}</p>
                   </div>
                 </div>
               </>
             ))}
             <p>
               <b>Order Status</b>:{" "}
-              {orderDetails[0].delivery_type === "DL"
-                ? orderDetails[0].order_status === "OR"
+              {orders.deliveryType === "DL"
+                ? orders.orderStatus === "OR"
                   ? "Order Received"
-                  : orderDetails[0].order_status === "PR"
+                  : orders.orderStatus === "PR"
                   ? "Preparing"
-                  : orderDetails[0].order_status === "OTW"
+                  : orders.orderStatus === "OTW"
                   ? "On the Way"
-                  : orderDetails[0].order_status === "DL"
+                  : orders.orderStatus === "DL"
                   ? "Delivered"
+                  : orders.orderStatus === "CA"
+                  ? "Canceled"
                   : null
-                : orderDetails[0].delivery_type === "PU"
-                ? orderDetails[0].order_status === "OR"
+                : orders.deliveryType === "PU"
+                ? orders.orderStatus === "OR"
                   ? "Order Received"
-                  : orderDetails[0].order_status === "PR"
+                  : orders.orderStatus === "PR"
                   ? "Preparing"
-                  : orderDetails[0].order_status === "PUR"
+                  : orders.orderStatus === "PUR"
                   ? "Pick Up Received"
-                  : orderDetails[0].order_status === "PU"
+                  : orders.orderStatus === "PU"
                   ? "Picked Up"
+                  : orders.orderStatus === "CA"
+                  ? "Canceled"
                   : null
                 : null}
             </p>
             <p>
-              <b>Address</b>:{" "}
-              {orderDetails[0].address_1 +
-                ", " +
-                orderDetails[0].address_2 +
-                ", " +
-                orderDetails[0].landmark +
-                ", " +
-                orderDetails[0].city +
-                " " +
-                orderDetails[0].state}
+              <b>Address</b>: {orders.address}
             </p>
             <div class="col-6" style={{ textAlign: "right" }}>
               <h5>
@@ -95,7 +92,7 @@ const OrderDetails = ({ show, onHide, orderDetails, restaurantFlag }) => {
                   class="h2 mb-0 ms-2"
                   style={{ textDecoration: "underline" }}
                 >
-                  ${orderDetails[0].total}
+                  ${orders.total}
                 </span>
               </h5>
             </div>

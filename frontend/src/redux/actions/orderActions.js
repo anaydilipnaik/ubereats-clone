@@ -5,11 +5,14 @@ import {
   ORDERS_BY_RESTAURANT_ID_ERROR,
   FILTERED_ORDERS_BY_RESTAURANT_ID,
   FILTERED_ORDERS_BY_RESTAURANT_ID_ERROR,
+  ORDER_DETAILS_BY_ID,
+  ORDER_DETAILS_BY_ID_ERROR,
 } from "../constants/ActionTypes";
 import {
   updateOrderDeliveryStatus,
   getOrdersByRestaurantId,
   getFilteredOrdersByRestaurantId,
+  getOrderDetailsById,
 } from "../../controllers/orders";
 
 export const updateOrderDeliveryStatusFunc =
@@ -65,6 +68,26 @@ export const getFilteredOrdersByRestaurantIdFunc =
         console.log(err);
         dispatch({
           type: FILTERED_ORDERS_BY_RESTAURANT_ID_ERROR,
+        });
+      });
+  };
+
+export const getOrderDetailsByIdFunc =
+  (orderId, token, setOrderDetails, setViewReceiptModal) => (dispatch) => {
+    getOrderDetailsById(orderId, token)
+      .then((res) => {
+        if (res.data) {
+          setOrderDetails(res.data);
+          setViewReceiptModal(true);
+          dispatch({
+            type: ORDER_DETAILS_BY_ID,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({
+          type: ORDER_DETAILS_BY_ID_ERROR,
         });
       });
   };

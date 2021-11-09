@@ -2,20 +2,22 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import { connect } from "react-redux";
-import { getOrderDetailsById } from "../../controllers/orders";
 import OrderDetails from "../../components/modals/OrderDetails";
 import ChangeDeliveryStatus from "../../components/modals/ChangeDeliveryStatus";
 import {
   getOrdersByRestaurantIdFunc,
   getFilteredOrdersByRestaurantIdFunc,
+  getOrderDetailsByIdFunc,
 } from "../../redux/actions/orderActions";
 
 const RestaurantOrders = ({
   restaurant,
   getOrdersByRestaurantIdFunc,
   getFilteredOrdersByRestaurantIdFunc,
+  getOrderDetailsByIdFunc,
 }) => {
   const [orders, setOrders] = useState(null);
+  const [ordersSelected, setOrdersSelected] = useState(null);
   const [orderDetails, setOrderDetails] = useState(null);
   const [viewReceiptModal, setViewReceiptModal] = useState(false);
   const [changeStatusModal, setChangeStatusModal] = useState(false);
@@ -27,9 +29,14 @@ const RestaurantOrders = ({
   };
 
   const onModalClick = (orderId) => {
-    getOrderDetailsById(orderId, restaurant.token).then((res) => {
-      setOrderDetails(res.data);
-      setViewReceiptModal(true);
+    getOrderDetailsByIdFunc(
+      orderId,
+      restaurant.token,
+      setOrderDetails,
+      setViewReceiptModal
+    );
+    orders.map((order) => {
+      if (order._id === orderId) setOrdersSelected(order);
     });
   };
 
@@ -150,7 +157,7 @@ const RestaurantOrders = ({
                     {item.order_count} items for ${item.total} on {item.created}
                     .{" "}
                     <a
-                      onClick={() => onModalClick(item.id)}
+                      onClick={() => onModalClick(item._id)}
                       style={{
                         fontWeight: "bold",
                         textDecoration: "underline",
@@ -174,6 +181,7 @@ const RestaurantOrders = ({
         show={viewReceiptModal}
         onHide={onModalClose}
         orderDetails={orderDetails}
+        orders={ordersSelected}
         restaurantFlag={true}
       />
       <ChangeDeliveryStatus
@@ -193,4 +201,5 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getOrdersByRestaurantIdFunc,
   getFilteredOrdersByRestaurantIdFunc,
+  getOrderDetailsByIdFunc,
 })(RestaurantOrders);
