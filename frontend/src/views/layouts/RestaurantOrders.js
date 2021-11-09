@@ -5,9 +5,16 @@ import { connect } from "react-redux";
 import { getOrderDetailsById } from "../../controllers/orders";
 import OrderDetails from "../../components/modals/OrderDetails";
 import ChangeDeliveryStatus from "../../components/modals/ChangeDeliveryStatus";
-import { getOrdersByRestaurantIdFunc } from "../../redux/actions/orderActions";
+import {
+  getOrdersByRestaurantIdFunc,
+  getFilteredOrdersByRestaurantIdFunc,
+} from "../../redux/actions/orderActions";
 
-const RestaurantOrders = ({ restaurant, getOrdersByRestaurantIdFunc }) => {
+const RestaurantOrders = ({
+  restaurant,
+  getOrdersByRestaurantIdFunc,
+  getFilteredOrdersByRestaurantId,
+}) => {
   const [orders, setOrders] = useState(null);
   const [orderDetails, setOrderDetails] = useState(null);
   const [viewReceiptModal, setViewReceiptModal] = useState(false);
@@ -37,7 +44,7 @@ const RestaurantOrders = ({ restaurant, getOrdersByRestaurantIdFunc }) => {
     getOrdersFunc();
   };
 
-  const onChangeStatus = (orderId, deliveryType, orderStatus) => {
+  const onChangeStatus = (orderId, deliveryType) => {
     setChangeStatusModal(true);
     setStatusModalOrderId(orderId);
     setStatusModalDeliveryType(deliveryType);
@@ -45,12 +52,11 @@ const RestaurantOrders = ({ restaurant, getOrdersByRestaurantIdFunc }) => {
 
   const onFilterClick = (e) => {
     e.preventDefault();
-    let ordersTemp = [];
-    orders.map((item) => {
-      if (item.orderStatus === e.target.value) ordersTemp.push(item);
-    });
+    let data = {};
+    data.restaurantId = restaurant._id;
+    data.orderStatus = e.target.value;
     if (e.target.value === "all") getOrdersFunc();
-    else setOrders(ordersTemp);
+    else getFilteredOrdersByRestaurantId(data, restaurant.token, setOrders);
   };
 
   useEffect(() => {
@@ -180,6 +186,7 @@ const mapStateToProps = (state) => ({
   restaurant: state.login.restaurant,
 });
 
-export default connect(mapStateToProps, { getOrdersByRestaurantIdFunc })(
-  RestaurantOrders
-);
+export default connect(mapStateToProps, {
+  getOrdersByRestaurantIdFunc,
+  getFilteredOrdersByRestaurantIdFunc,
+})(RestaurantOrders);

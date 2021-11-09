@@ -3,10 +3,13 @@ import {
   ORDER_DELIVERY_STATUS_ERROR,
   ORDERS_BY_RESTAURANT_ID,
   ORDERS_BY_RESTAURANT_ID_ERROR,
+  FILTERED_ORDERS_BY_RESTAURANT_ID,
+  FILTERED_ORDERS_BY_RESTAURANT_ID_ERROR,
 } from "../constants/ActionTypes";
 import {
   updateOrderDeliveryStatus,
   getOrdersByRestaurantId,
+  getFilteredOrdersByRestaurantId,
 } from "../../controllers/orders";
 
 export const updateOrderDeliveryStatusFunc =
@@ -43,6 +46,25 @@ export const getOrdersByRestaurantIdFunc =
         console.log(err);
         dispatch({
           type: ORDERS_BY_RESTAURANT_ID_ERROR,
+        });
+      });
+  };
+
+export const getFilteredOrdersByRestaurantIdFunc =
+  (payload, token, setOrders) => (dispatch) => {
+    getFilteredOrdersByRestaurantId(payload, token)
+      .then((res) => {
+        if (res.data) {
+          setOrders(res.data);
+          dispatch({
+            type: FILTERED_ORDERS_BY_RESTAURANT_ID,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({
+          type: FILTERED_ORDERS_BY_RESTAURANT_ID_ERROR,
         });
       });
   };

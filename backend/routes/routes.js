@@ -215,6 +215,30 @@ router.get(
   }
 );
 
+router.post(
+  "/filteredorders/get/restaurant",
+  checkAuth,
+  async (req, res, next) => {
+    kafka.make_request(
+      "get_filtered_orders_by_restaurant_id",
+      req.body,
+      function (err, results) {
+        if (err) {
+          res.writeHead(500, {
+            "Content-Type": "text/plain",
+          });
+          res.end("Error Occured");
+        } else {
+          res.writeHead(200, {
+            "Content-Type": "application/json",
+          });
+          res.end(JSON.stringify(results));
+        }
+      }
+    );
+  }
+);
+
 router.get("/orders/get/user/:userid", checkAuth, async (req, res, next) => {
   kafka.make_request(
     "get_orders_by_user_id",
