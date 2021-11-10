@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import { countryList } from "../../utils/countries";
-import { getUserDetails, updateUser } from "../../controllers/user";
 import { useLocation } from "react-router-dom";
 import { connect } from "react-redux";
+import {
+  getUserDetailsFunc,
+  updateUserFunc,
+} from "../../redux/actions/userActions";
 
-const UserProfile = ({ user }) => {
+const UserProfile = ({ user, getUserDetailsFunc, updateUserFunc }) => {
   const [userDetails, setUserDetails] = useState(null);
   const [firstName, setFirstName] = useState(null);
   const [middleName, setMiddleName] = useState(null);
@@ -51,16 +54,11 @@ const UserProfile = ({ user }) => {
       phoneNo ||
       displayPicture
     )
-      updateUser(data, user._id, user.token).then((res) => {
-        setUserDetails(res.data);
-        alert("SUCCESS");
-      });
+      updateUserFunc(data, user._id, user.token, setUserDetails);
   };
 
   const getUserDetailsFunction = () => {
-    getUserDetails(userId ? userId : user._id, user.token).then((res) => {
-      setUserDetails(res.data);
-    });
+    getUserDetailsFunc(userId ? userId : user._id, user.token, setUserDetails);
   };
 
   useEffect(() => {
@@ -363,4 +361,6 @@ const mapStateToProps = (state) => ({
   user: state.login.user,
 });
 
-export default connect(mapStateToProps)(UserProfile);
+export default connect(mapStateToProps, { getUserDetailsFunc, updateUserFunc })(
+  UserProfile
+);

@@ -2,29 +2,37 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import { connect } from "react-redux";
-import {
-  getOrdersByUserId,
-  getOrderDetailsById,
-} from "../../controllers/orders";
 import OrderDetails from "../../components/modals/OrderDetails";
+import {
+  getOrdersByUserIdFunc,
+  getOrderDetailsByIdFunc,
+  getFilteredOrdersByUserIdFunc,
+} from "../../redux/actions/orderActions";
 
-const UserOrders = ({ user }) => {
+const UserOrders = ({
+  user,
+  getOrdersByUserIdFunc,
+  getOrderDetailsByIdFunc,
+  getFilteredOrdersByUserIdFunc,
+}) => {
   const [orders, setOrders] = useState(null);
+  const [ordersSelected, setOrdersSelected] = useState(null);
   const [orderDetails, setOrderDetails] = useState(null);
   const [viewReceiptModal, setViewReceiptModal] = useState(false);
 
   const getOrdersFunc = () => {
-    getOrdersByUserId(user._id, user.token)
-      .then((res) => {
-        setOrders(res.data);
-      })
-      .catch((err) => console.log(err));
+    getOrdersByUserIdFunc(user._id, user.token, setOrders);
   };
 
   const onModalClick = (orderId) => {
-    getOrderDetailsById(orderId, user.token).then((res) => {
-      setOrderDetails(res.data);
-      setViewReceiptModal(true);
+    getOrderDetailsByIdFunc(
+      orderId,
+      user.token,
+      setOrderDetails,
+      setViewReceiptModal
+    );
+    orders.map((order) => {
+      if (order._id === orderId) setOrdersSelected(order);
     });
   };
 
@@ -34,12 +42,11 @@ const UserOrders = ({ user }) => {
 
   const onFilterClick = (e) => {
     e.preventDefault();
-    let ordersTemp = [];
-    orders.map((item) => {
-      if (item.order_status === e.target.value) ordersTemp.push(item);
-    });
+    let data = {};
+    data.userId = user._id;
+    data.orderStatus = e.target.value;
     if (e.target.value === "all") getOrdersFunc();
-    else setOrders(ordersTemp);
+    else getFilteredOrdersByUserIdFunc(data, user.token, setOrders);
   };
 
   useEffect(() => {
@@ -64,6 +71,7 @@ const UserOrders = ({ user }) => {
               <option value="RPU">Ready for Pickup</option>
               <option value="DL">Delivered</option>
               <option value="PU">Picked Up</option>
+              <option value="CA">Cancelled</option>
             </select>
           </div>
         </div>
@@ -97,6 +105,8 @@ const UserOrders = ({ user }) => {
                         ? "On the Way"
                         : item.orderStatus === "DL"
                         ? "Delivered"
+                        : item.orderStatus === "CA"
+                        ? "Cancelled"
                         : null
                       : item.deliveryType === "PU"
                       ? item.orderStatus === "OR"
@@ -107,6 +117,8 @@ const UserOrders = ({ user }) => {
                         ? "Pick Up Received"
                         : item.orderStatus === "PU"
                         ? "Picked Up"
+                        : item.orderStatus === "CA"
+                        ? "Cancelled"
                         : null
                       : null}
                   </p>
@@ -139,6 +151,7 @@ const UserOrders = ({ user }) => {
         show={viewReceiptModal}
         onHide={onModalClose}
         orderDetails={orderDetails}
+        orders={ordersSelected}
       />
     </>
   );
@@ -148,4 +161,8 @@ const mapStateToProps = (state) => ({
   user: state.login.user,
 });
 
-export default connect(mapStateToProps)(UserOrders);
+export default connect(mapStateToProps, {
+  getOrdersByUserIdFunc,
+  getOrderDetailsByIdFunc,
+  getFilteredOrdersByUserIdFunc,
+})(UserOrders);

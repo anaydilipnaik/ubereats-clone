@@ -20,12 +20,12 @@ app.use(
 
 const jwt = require("jsonwebtoken");
 const { secret } = require("../config");
+const { auth } = require("../passport");
+// const { authRestaurant } = require("../passport-restaurant");
 const { checkAuth } = require("../passport");
 const { checkAuthRestaurant } = require("../passport-restaurant");
-const { auth } = require("../passport");
 auth();
-const { authRestaurant } = require("../passport-restaurant");
-authRestaurant();
+// authRestaurant();
 
 router.get("/dishes/category", checkAuthRestaurant, async (req, res, next) => {
   kafka.make_request("get_dish_types", null, function (err, results) {
@@ -67,25 +67,29 @@ router.get(
   }
 );
 
-router.get("/user/details/:id", checkAuth, async (req, res, next) => {
-  kafka.make_request(
-    "get_user_details_by_id",
-    req.params.id,
-    function (err, results) {
-      if (err) {
-        res.writeHead(500, {
-          "Content-Type": "text/plain",
-        });
-        res.end("Error Occured");
-      } else {
-        res.writeHead(200, {
-          "Content-Type": "application/json",
-        });
-        res.end(JSON.stringify(results));
+router.get(
+  "/user/details/:id",
+  // checkAuth,
+  async (req, res, next) => {
+    kafka.make_request(
+      "get_user_details_by_id",
+      req.params.id,
+      function (err, results) {
+        if (err) {
+          res.writeHead(500, {
+            "Content-Type": "text/plain",
+          });
+          res.end("Error Occured");
+        } else {
+          res.writeHead(200, {
+            "Content-Type": "application/json",
+          });
+          res.end(JSON.stringify(results));
+        }
       }
-    }
-  );
-});
+    );
+  }
+);
 
 router.get(
   "/dishes/get/:restaurantid",
@@ -217,7 +221,7 @@ router.get(
 
 router.post(
   "/filteredorders/get/restaurant",
-  checkAuth,
+  checkAuthRestaurant,
   async (req, res, next) => {
     kafka.make_request(
       "get_filtered_orders_by_restaurant_id",
@@ -238,6 +242,26 @@ router.post(
     );
   }
 );
+
+router.post("/filteredorders/get/user", checkAuth, async (req, res, next) => {
+  kafka.make_request(
+    "get_filtered_orders_by_user_id",
+    req.body,
+    function (err, results) {
+      if (err) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.end("Error Occured");
+      } else {
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify(results));
+      }
+    }
+  );
+});
 
 router.get("/orders/get/user/:userid", checkAuth, async (req, res, next) => {
   kafka.make_request(

@@ -9,6 +9,7 @@ import UserDeliveryTypeReducer from "./UserDeliveryTypeReducer";
 import DishReducer from "./DishReducer";
 import RestaurantReducer from "./RestaurantReducer";
 import OrderReducer from "./OrderReducer";
+import UserReducer from "./UserReducer";
 
 const persistConfig = {
   key: "root",
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   dish: DishReducer,
   restaurant: RestaurantReducer,
   order: OrderReducer,
+  user: UserReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

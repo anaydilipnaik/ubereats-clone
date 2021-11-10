@@ -22,6 +22,7 @@ var UserFavourites = require("./services/userFavourites.js");
 var UserFavouriteAdd = require("./services/userFavouriteAdd.js");
 var OrdersRestaurant = require("./services/ordersRestaurant.js");
 var FilteredOrdersRestaurant = require("./services/filteredOrdersRestaurant.js");
+var FilteredOrdersUser = require("./services/FilteredOrdersUser.js");
 var OrdersUser = require("./services/ordersUser.js");
 var OrderContents = require("./services/orderContents.js");
 var OrderDeliveryStatusUpdate = require("./services/orderDeliveryStatusUpdate.js");
@@ -91,6 +92,7 @@ handleTopicRequest(
   "get_filtered_orders_by_restaurant_id",
   FilteredOrdersRestaurant
 );
+handleTopicRequest("get_filtered_orders_by_user_id", FilteredOrdersUser);
 handleTopicRequest("get_orders_by_user_id", OrdersUser);
 handleTopicRequest("get_order_details_by_id", OrderContents);
 handleTopicRequest("resgister_user", UserRegister);

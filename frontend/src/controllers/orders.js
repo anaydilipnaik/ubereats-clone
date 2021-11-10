@@ -34,6 +34,11 @@ export function getFilteredOrdersByRestaurantId(dataJson, token) {
   return axios.post(semiEndpoint + "/filteredorders/get/restaurant", dataJson);
 }
 
+export function getFilteredOrdersByUserId(dataJson, token) {
+  axios.defaults.headers.common["authorization"] = token;
+  return axios.post(semiEndpoint + "/filteredorders/get/user", dataJson);
+}
+
 export function getUserAddresses(userId, token) {
   axios.defaults.headers.common["authorization"] = token;
   return axios.get(semiEndpoint + "/addresses/get/" + userId);

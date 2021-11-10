@@ -3,8 +3,12 @@ import {
   ORDER_DELIVERY_STATUS_ERROR,
   ORDERS_BY_RESTAURANT_ID,
   ORDERS_BY_RESTAURANT_ID_ERROR,
+  ORDERS_BY_USER_ID,
+  ORDERS_BY_USER_ID_ERROR,
   FILTERED_ORDERS_BY_RESTAURANT_ID,
   FILTERED_ORDERS_BY_RESTAURANT_ID_ERROR,
+  FILTERED_ORDERS_BY_USER_ID,
+  FILTERED_ORDERS_BY_USER_ID_ERROR,
   ORDER_DETAILS_BY_ID,
   ORDER_DETAILS_BY_ID_ERROR,
 } from "../constants/ActionTypes";
@@ -13,6 +17,8 @@ import {
   getOrdersByRestaurantId,
   getFilteredOrdersByRestaurantId,
   getOrderDetailsById,
+  getOrdersByUserId,
+  getFilteredOrdersByUserId,
 } from "../../controllers/orders";
 
 export const updateOrderDeliveryStatusFunc =
@@ -88,6 +94,44 @@ export const getOrderDetailsByIdFunc =
         console.log(err);
         dispatch({
           type: ORDER_DETAILS_BY_ID_ERROR,
+        });
+      });
+  };
+
+export const getOrdersByUserIdFunc =
+  (userId, token, setOrders) => (dispatch) => {
+    getOrdersByUserId(userId, token)
+      .then((res) => {
+        if (res.data) {
+          setOrders(res.data);
+          dispatch({
+            type: ORDERS_BY_USER_ID,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({
+          type: ORDERS_BY_USER_ID_ERROR,
+        });
+      });
+  };
+
+export const getFilteredOrdersByUserIdFunc =
+  (payload, token, setOrders) => (dispatch) => {
+    getFilteredOrdersByUserId(payload, token)
+      .then((res) => {
+        if (res.data) {
+          setOrders(res.data);
+          dispatch({
+            type: FILTERED_ORDERS_BY_USER_ID,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({
+          type: FILTERED_ORDERS_BY_USER_ID_ERROR,
         });
       });
   };
