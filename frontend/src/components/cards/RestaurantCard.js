@@ -1,15 +1,17 @@
 import React from "react";
-import { addToFavourite } from "../../controllers/user";
+import { addToFavouriteFunc } from "../../redux/actions/userActions";
+import { connect } from "react-redux";
 
-const RestaurantCard = ({ user, restaurant }) => {
+const RestaurantCard = ({ user, restaurant, addToFavouriteFunc }) => {
   const addToFavouriteButtonClick = (event) => {
     event.preventDefault();
     let data = {};
-    data.user_id = user._id;
-    data.restaurant_id = restaurant._id;
-    addToFavourite(data, user.token).then((res) => {
-      if (res.status === 200) alert("Added to favourites");
-    });
+    data.userId = user._id;
+    data.restaurantId = restaurant._id;
+    data.restaurantName = restaurant.name;
+    data.restaurantLocation = restaurant.location;
+    data.restaurantImage = restaurant.restaurantImage;
+    addToFavouriteFunc(data, user.token);
   };
 
   return (
@@ -23,7 +25,7 @@ const RestaurantCard = ({ user, restaurant }) => {
           class="w-100"
           style={{ cursor: "pointer", height: "130px" }}
           onClick={() => {
-            window.location.href = "/restaurantpage?id=" + restaurant.id;
+            window.location.href = "/restaurantpage?id=" + restaurant._id;
           }}
         />
       </div>
@@ -73,4 +75,8 @@ const RestaurantCard = ({ user, restaurant }) => {
   );
 };
 
-export default RestaurantCard;
+const mapStateToProps = (state) => ({
+  user: state.login.user,
+});
+
+export default connect(mapStateToProps, { addToFavouriteFunc })(RestaurantCard);

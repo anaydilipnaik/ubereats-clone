@@ -57,7 +57,7 @@ const UserHome = ({
           {restaurants &&
             restaurants.map((restaurant) => (
               <div class="col-3 mb-4">
-                <RestaurantCard user={user} restaurant={restaurant} />
+                <RestaurantCard restaurant={restaurant} />
               </div>
             ))}
         </div>

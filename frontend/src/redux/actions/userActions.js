@@ -3,8 +3,14 @@ import {
   USER_DETAILS_ERROR,
   UPDATE_USER,
   UPDATE_USER_ERROR,
+  ADD_TO_FAVOURITE,
+  ADD_TO_FAVOURITE_ERROR,
 } from "../constants/ActionTypes";
-import { getUserDetails, updateUser } from "../../controllers/user";
+import {
+  getUserDetails,
+  updateUser,
+  addToFavourite,
+} from "../../controllers/user";
 
 export const getUserDetailsFunc =
   (userId, token, setUserDetails) => (dispatch) => {
@@ -44,3 +50,21 @@ export const updateUserFunc =
         });
       });
   };
+
+export const addToFavouriteFunc = (data, token) => (dispatch) => {
+  addToFavourite(data, token)
+    .then((res) => {
+      if (res.data) {
+        alert("Added to favourites");
+        dispatch({
+          type: ADD_TO_FAVOURITE,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: ADD_TO_FAVOURITE_ERROR,
+      });
+    });
+};

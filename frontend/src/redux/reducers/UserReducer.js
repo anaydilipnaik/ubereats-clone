@@ -3,6 +3,8 @@ import {
   USER_DETAILS_ERROR,
   UPDATE_USER,
   UPDATE_USER_ERROR,
+  ADD_TO_FAVOURITE,
+  ADD_TO_FAVOURITE_ERROR,
 } from "../constants/ActionTypes";
 
 const initialState = {
@@ -28,6 +30,16 @@ export default function (state = initialState, action) {
         success: true,
       };
     case UPDATE_USER_ERROR:
+      return {
+        error: true,
+        success: false,
+      };
+    case ADD_TO_FAVOURITE:
+      return {
+        error: false,
+        success: true,
+      };
+    case ADD_TO_FAVOURITE_ERROR:
       return {
         error: true,
         success: false,
