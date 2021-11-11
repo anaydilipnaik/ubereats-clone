@@ -11,6 +11,8 @@ import {
   ORDER_DETAILS_BY_ID_ERROR,
   ORDERS_BY_USER_ID,
   ORDERS_BY_USER_ID_ERROR,
+  PLACE_ORDER,
+  PLACE_ORDER_ERROR,
 } from "../constants/ActionTypes";
 
 const initialState = {
@@ -76,6 +78,16 @@ export default function (state = initialState, action) {
         success: true,
       };
     case ORDERS_BY_USER_ID_ERROR:
+      return {
+        error: true,
+        success: false,
+      };
+    case PLACE_ORDER:
+      return {
+        error: false,
+        success: true,
+      };
+    case PLACE_ORDER_ERROR:
       return {
         error: true,
         success: false,

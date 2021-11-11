@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { getOrderDetailsById, placeOrder } from "../../controllers/orders";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import AddUserAddress from "../../components/modals/AddUserAddress";
 import { getUserAddressesFunc } from "../../redux/actions/userActions";
+import { placeOrderFunc } from "../../redux/actions/orderActions";
 import { getUserCartCount } from "../../redux/actions";
 
-const Checkout = ({ user, getUserAddressesFunc, getUserCartCount }) => {
+const Checkout = ({
+  user,
+  getUserAddressesFunc,
+  placeOrderFunc,
+  getUserCartCount,
+}) => {
   const [cartItems, setCartItems] = useState(null);
   const [orderPlacedStatus, setOrderPlacedStatus] = useState(false);
   const [placedOrderDetails, setPlacedOrderDetails] = useState(null);
@@ -45,17 +50,15 @@ const Checkout = ({ user, getUserAddressesFunc, getUserCartCount }) => {
       contentsArr.push(contentsObj);
     });
     data.contents = contentsArr;
-    placeOrder(data, user.token).then((res) => {
-      setParentOrderDetails(res.data);
-      if (res.data._id) {
-        getOrderDetailsById(res.data._id, user.token).then((res) => {
-          setOrderPlacedStatus(true);
-          setPlacedOrderDetails(res.data);
-          sessionStorage.removeItem("userCart");
-          getUserCartCount(user._id, user.token);
-        });
-      }
-    });
+    placeOrderFunc(
+      data,
+      user.token,
+      setParentOrderDetails,
+      setPlacedOrderDetails,
+      setOrderPlacedStatus
+    );
+    sessionStorage.removeItem("userCart");
+    getUserCartCount(user._id, user.token);
   };
 
   const getCartItemsFunc = () => {
@@ -408,5 +411,6 @@ const mapStateToProps = (state) => ({
 });
 export default connect(mapStateToProps, {
   getUserAddressesFunc,
+  placeOrderFunc,
   getUserCartCount,
 })(Checkout);

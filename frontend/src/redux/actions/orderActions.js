@@ -11,6 +11,8 @@ import {
   FILTERED_ORDERS_BY_USER_ID_ERROR,
   ORDER_DETAILS_BY_ID,
   ORDER_DETAILS_BY_ID_ERROR,
+  PLACE_ORDER,
+  PLACE_ORDER_ERROR,
 } from "../constants/ActionTypes";
 import {
   updateOrderDeliveryStatus,
@@ -19,6 +21,7 @@ import {
   getOrderDetailsById,
   getOrdersByUserId,
   getFilteredOrdersByUserId,
+  placeOrder,
 } from "../../controllers/orders";
 
 export const updateOrderDeliveryStatusFunc =
@@ -78,26 +81,6 @@ export const getFilteredOrdersByRestaurantIdFunc =
       });
   };
 
-export const getOrderDetailsByIdFunc =
-  (orderId, token, setOrderDetails, setViewReceiptModal) => (dispatch) => {
-    getOrderDetailsById(orderId, token)
-      .then((res) => {
-        if (res.data) {
-          setOrderDetails(res.data);
-          setViewReceiptModal(true);
-          dispatch({
-            type: ORDER_DETAILS_BY_ID,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        dispatch({
-          type: ORDER_DETAILS_BY_ID_ERROR,
-        });
-      });
-  };
-
 export const getOrdersByUserIdFunc =
   (userId, token, setOrders, setPageCount, records) => (dispatch) => {
     getOrdersByUserId(userId, token)
@@ -133,6 +116,62 @@ export const getFilteredOrdersByUserIdFunc =
         console.log(err);
         dispatch({
           type: FILTERED_ORDERS_BY_USER_ID_ERROR,
+        });
+      });
+  };
+
+export const getOrderDetailsByIdFunc =
+  (orderId, token, setOrderDetails, setViewReceiptModal) => (dispatch) => {
+    getOrderDetailsById(orderId, token)
+      .then((res) => {
+        if (res.data) {
+          setOrderDetails(res.data);
+          setViewReceiptModal(true);
+          dispatch({
+            type: ORDER_DETAILS_BY_ID,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({
+          type: ORDER_DETAILS_BY_ID_ERROR,
+        });
+      });
+  };
+
+export const placeOrderFunc =
+  (
+    payload,
+    token,
+    setParentOrderDetails,
+    setPlacedOrderDetails,
+    setOrderPlacedStatus
+  ) =>
+  (dispatch) => {
+    placeOrder(payload, token)
+      .then((res) => {
+        if (res.data) {
+          setParentOrderDetails(res.data);
+          dispatch({
+            type: PLACE_ORDER,
+          });
+          return getOrderDetailsById(res.data._id, token);
+        }
+      })
+      .then((res) => {
+        if (res.data) {
+          setPlacedOrderDetails(res.data);
+          setOrderPlacedStatus(true);
+          dispatch({
+            type: ORDER_DETAILS_BY_ID,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({
+          type: PLACE_ORDER_ERROR,
         });
       });
   };
