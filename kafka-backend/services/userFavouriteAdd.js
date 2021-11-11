@@ -4,8 +4,8 @@ function handle_request(msg, callback) {
   let newFavourite = new UserFavourites({
     userId: msg.userId,
     restaurantId: msg.restaurantId,
-    restaurantName: msg.restaurantName,
-    restaurantLocation: msg.restaurantLocation,
+    name: msg.restaurantName,
+    location: msg.restaurantLocation,
     restaurantImage: msg.restaurantImage,
   });
   newFavourite.save((error, doc) => {

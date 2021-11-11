@@ -5,6 +5,8 @@ import {
   UPDATE_USER_ERROR,
   ADD_TO_FAVOURITE,
   ADD_TO_FAVOURITE_ERROR,
+  GET_USER_FAVOURITES,
+  GET_USER_FAVOURITES_ERROR,
 } from "../constants/ActionTypes";
 
 const initialState = {
@@ -40,6 +42,16 @@ export default function (state = initialState, action) {
         success: true,
       };
     case ADD_TO_FAVOURITE_ERROR:
+      return {
+        error: true,
+        success: false,
+      };
+    case GET_USER_FAVOURITES:
+      return {
+        error: false,
+        success: true,
+      };
+    case GET_USER_FAVOURITES_ERROR:
       return {
         error: true,
         success: false,

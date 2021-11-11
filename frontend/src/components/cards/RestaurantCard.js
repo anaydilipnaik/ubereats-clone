@@ -2,7 +2,12 @@ import React from "react";
 import { addToFavouriteFunc } from "../../redux/actions/userActions";
 import { connect } from "react-redux";
 
-const RestaurantCard = ({ user, restaurant, addToFavouriteFunc }) => {
+const RestaurantCard = ({
+  user,
+  restaurant,
+  restaurantId,
+  addToFavouriteFunc,
+}) => {
   const addToFavouriteButtonClick = (event) => {
     event.preventDefault();
     let data = {};
@@ -25,7 +30,7 @@ const RestaurantCard = ({ user, restaurant, addToFavouriteFunc }) => {
           class="w-100"
           style={{ cursor: "pointer", height: "130px" }}
           onClick={() => {
-            window.location.href = "/restaurantpage?id=" + restaurant._id;
+            window.location.href = "/restaurantpage?id=" + restaurantId;
           }}
         />
       </div>
@@ -35,7 +40,7 @@ const RestaurantCard = ({ user, restaurant, addToFavouriteFunc }) => {
       >
         <div class="row">
           <a
-            href={"/restaurantpage?id=" + restaurant._id}
+            href={"/restaurantpage?id=" + restaurantId}
             class="text-reset col-10"
           >
             <h5

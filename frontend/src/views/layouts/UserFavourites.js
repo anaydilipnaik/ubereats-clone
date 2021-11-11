@@ -3,15 +3,13 @@ import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import RestaurantCard from "../../components/cards/RestaurantCard";
 import { connect } from "react-redux";
-import { getUserFavourites } from "../../controllers/user";
+import { getUserFavouritesFunc } from "../../redux/actions/userActions";
 
-const UserFavourites = ({ user }) => {
+const UserFavourites = ({ user, getUserFavouritesFunc }) => {
   const [favourites, setFavourites] = useState(null);
 
   const getRestaurantsFunc = () => {
-    getUserFavourites(user._id, user.token).then((res) =>
-      setFavourites(res.data)
-    );
+    getUserFavouritesFunc(user._id, user.token, setFavourites);
   };
 
   useEffect(() => {
@@ -35,7 +33,11 @@ const UserFavourites = ({ user }) => {
           {favourites &&
             favourites.map((restaurant) => (
               <div class="col-3 mb-4">
-                <RestaurantCard user={user} restaurant={restaurant} />
+                <RestaurantCard
+                  user={user}
+                  restaurant={restaurant}
+                  restaurantId={restaurant.restaurantId}
+                />
               </div>
             ))}
         </div>
@@ -49,4 +51,6 @@ const mapStateToProps = (state) => ({
   user: state.login.user,
 });
 
-export default connect(mapStateToProps)(UserFavourites);
+export default connect(mapStateToProps, { getUserFavouritesFunc })(
+  UserFavourites
+);

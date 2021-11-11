@@ -57,7 +57,10 @@ const UserHome = ({
           {restaurants &&
             restaurants.map((restaurant) => (
               <div class="col-3 mb-4">
-                <RestaurantCard restaurant={restaurant} />
+                <RestaurantCard
+                  restaurant={restaurant}
+                  restaurantId={restaurant._id}
+                />
               </div>
             ))}
         </div>

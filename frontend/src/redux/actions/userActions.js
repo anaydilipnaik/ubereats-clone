@@ -5,11 +5,14 @@ import {
   UPDATE_USER_ERROR,
   ADD_TO_FAVOURITE,
   ADD_TO_FAVOURITE_ERROR,
+  GET_USER_FAVOURITES,
+  GET_USER_FAVOURITES_ERROR,
 } from "../constants/ActionTypes";
 import {
   getUserDetails,
   updateUser,
   addToFavourite,
+  getUserFavourites,
 } from "../../controllers/user";
 
 export const getUserDetailsFunc =
@@ -68,3 +71,22 @@ export const addToFavouriteFunc = (data, token) => (dispatch) => {
       });
     });
 };
+
+export const getUserFavouritesFunc =
+  (userId, token, setFavourites) => (dispatch) => {
+    getUserFavourites(userId, token)
+      .then((res) => {
+        if (res.data) {
+          setFavourites(res.data);
+          dispatch({
+            type: GET_USER_FAVOURITES,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({
+          type: GET_USER_FAVOURITES_ERROR,
+        });
+      });
+  };

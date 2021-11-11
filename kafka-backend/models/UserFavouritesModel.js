@@ -5,8 +5,8 @@ var userFavouritesSchema = new Schema(
   {
     userId: { type: String, required: true },
     restaurantId: { type: String, required: true },
-    restaurantName: { type: String, required: true },
-    restaurantLocation: { type: String, required: true },
+    name: { type: String, required: true },
+    location: { type: String, required: true },
     restaurantImage: { type: String, required: true },
     active: { type: String, default: "1" },
   },
