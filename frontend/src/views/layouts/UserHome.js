@@ -3,9 +3,14 @@ import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import RestaurantCard from "../../components/cards/RestaurantCard";
 import { connect } from "react-redux";
-import { getAllRestaurants } from "../../controllers/restaurants";
+import { getAllRestaurantsFunc } from "../../redux/actions/restaurantActions";
 
-const UserHome = ({ user, userLocation, userDeliveryType }) => {
+const UserHome = ({
+  user,
+  userLocation,
+  userDeliveryType,
+  getAllRestaurantsFunc,
+}) => {
   const [restaurants, setRestaurants] = useState(null);
   const [searchKeyword, setSearchKeyword] = useState(null);
 
@@ -19,9 +24,7 @@ const UserHome = ({ user, userLocation, userDeliveryType }) => {
   };
 
   const getRestaurantsFunc = (data) => {
-    getAllRestaurants(data, user.token)
-      .then((res) => res.json())
-      .then((data) => setRestaurants(data));
+    getAllRestaurantsFunc(data, user.token, setRestaurants);
   };
 
   useEffect(() => {
@@ -70,4 +73,4 @@ const mapStateToProps = (state) => ({
   userDeliveryType: state.userDeliveryType.userDeliveryType,
 });
 
-export default connect(mapStateToProps)(UserHome);
+export default connect(mapStateToProps, { getAllRestaurantsFunc })(UserHome);

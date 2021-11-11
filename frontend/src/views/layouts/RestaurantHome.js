@@ -43,7 +43,8 @@ const RestaurantHome = ({
       restaurant.token,
       setRestaurantDetails,
       setIsDelivery,
-      setIsPickup
+      setIsPickup,
+      true
     );
     getDishesByRestaurantIdFunc(restaurant._id, restaurant.token, setDishes);
     getDishCategoriesFunc(restaurant.token, setDishCategories);

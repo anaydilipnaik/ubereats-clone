@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import DishCard from "../../components/cards/DishCard";
-import {
-  getRestaurantDetailsById,
-  getDishesByRestaurantId,
-} from "../../controllers/restaurants";
+import { getRestaurantDetailsByIdFunc } from "../../redux/actions/restaurantActions";
+import { getDishesByRestaurantIdFunc } from "../../redux/actions/dishActions";
 import { useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 
-const RestaurantPage = ({ user }) => {
+const RestaurantPage = ({
+  user,
+  getRestaurantDetailsByIdFunc,
+  getDishesByRestaurantIdFunc,
+}) => {
   const [restaurantDetails, setRestaurantDetails] = useState(null);
   const [dishes, setDishes] = useState(null);
 
@@ -17,15 +19,12 @@ const RestaurantPage = ({ user }) => {
   const restaurantId = new URLSearchParams(search).get("id");
 
   useEffect(() => {
-    getRestaurantDetailsById(restaurantId, user.token)
-      .then((res) => res.json())
-      .then((data) => {
-        setRestaurantDetails(data[0]);
-        return getDishesByRestaurantId(restaurantId, user.token);
-      })
-      .then((res) => res.json())
-      .then((data) => setDishes(data))
-      .catch((err) => console.log(err));
+    getRestaurantDetailsByIdFunc(
+      restaurantId,
+      user.token,
+      setRestaurantDetails
+    );
+    getDishesByRestaurantIdFunc(restaurantId, user.token, setDishes);
   }, []);
 
   return (
@@ -36,7 +35,7 @@ const RestaurantPage = ({ user }) => {
           <div class="col-12" style={{ position: "relative" }}>
             <img
               style={{ width: "100%", height: "240px" }}
-              src={restaurantDetails.restaurant_image}
+              src={restaurantDetails.restaurantImage}
             />
             <div
               style={{
@@ -99,4 +98,7 @@ const mapStateToProps = (state) => ({
   user: state.login.user,
 });
 
-export default connect(mapStateToProps)(RestaurantPage);
+export default connect(mapStateToProps, {
+  getRestaurantDetailsByIdFunc,
+  getDishesByRestaurantIdFunc,
+})(RestaurantPage);

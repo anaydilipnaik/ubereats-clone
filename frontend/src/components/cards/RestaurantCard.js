@@ -19,7 +19,7 @@ const RestaurantCard = ({ user, restaurant }) => {
         data-mdb-ripple-color="light"
       >
         <img
-          src={restaurant.restaurant_image}
+          src={restaurant.restaurantImage}
           class="w-100"
           style={{ cursor: "pointer", height: "130px" }}
           onClick={() => {
@@ -33,7 +33,7 @@ const RestaurantCard = ({ user, restaurant }) => {
       >
         <div class="row">
           <a
-            href={"/restaurantpage?id=" + restaurant.id}
+            href={"/restaurantpage?id=" + restaurant._id}
             class="text-reset col-10"
           >
             <h5
