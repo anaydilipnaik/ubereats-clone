@@ -5,11 +5,13 @@ import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import AddUserAddress from "../../components/modals/AddUserAddress";
 import { getUserAddressesFunc } from "../../redux/actions/userActions";
+import { getUserCartCount } from "../../redux/actions";
 
-const Checkout = ({ user, getUserAddressesFunc }) => {
+const Checkout = ({ user, getUserAddressesFunc, getUserCartCount }) => {
   const [cartItems, setCartItems] = useState(null);
   const [orderPlacedStatus, setOrderPlacedStatus] = useState(false);
   const [placedOrderDetails, setPlacedOrderDetails] = useState(null);
+  const [parentOrderDetails, setParentOrderDetails] = useState(null);
   const [cartSubtotal, setCartSubtotal] = useState(0);
   const [userAddresses, setUserAddresses] = useState(null);
   const [userAddressId, setUserAddressId] = useState(null);
@@ -43,19 +45,17 @@ const Checkout = ({ user, getUserAddressesFunc }) => {
       contentsArr.push(contentsObj);
     });
     data.contents = contentsArr;
-    console.log(data);
-    // placeOrder(data, user.token)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (data[0][0].orderId) {
-    //       getOrderDetailsById(data[0][0].orderId, user.token)
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //           setOrderPlacedStatus(true);
-    //           setPlacedOrderDetails(data);
-    //         });
-    //     }
-    //   });
+    placeOrder(data, user.token).then((res) => {
+      setParentOrderDetails(res.data);
+      if (res.data._id) {
+        getOrderDetailsById(res.data._id, user.token).then((res) => {
+          setOrderPlacedStatus(true);
+          setPlacedOrderDetails(res.data);
+          sessionStorage.removeItem("userCart");
+          getUserCartCount(user._id, user.token);
+        });
+      }
+    });
   };
 
   const getCartItemsFunc = () => {
@@ -108,8 +108,8 @@ const Checkout = ({ user, getUserAddressesFunc }) => {
                         fontWeight: "bold",
                       }}
                     >
-                      {placedOrderDetails[0].restaurantName} (
-                      {placedOrderDetails[0].restaurantLocation})
+                      {parentOrderDetails.restaurantName} (
+                      {parentOrderDetails.restaurantLocation})
                     </p>
                     {placedOrderDetails.map((item) => (
                       <>
@@ -120,7 +120,7 @@ const Checkout = ({ user, getUserAddressesFunc }) => {
                             </p>
                           </div>
                           <div class="col-6">
-                            <p>{item.dishPrice} ea</p>
+                            <p>${item.dishPrice} ea</p>
                           </div>
                         </div>
                       </>
@@ -129,34 +129,38 @@ const Checkout = ({ user, getUserAddressesFunc }) => {
                   <div class="card-footer border-0 px-4 py-5">
                     <p>
                       <b>Order Status</b>:{" "}
-                      {placedOrderDetails[0].deliveryType === "DL"
-                        ? placedOrderDetails[0].orderStatus === "OR"
+                      {parentOrderDetails.deliveryType === "DL"
+                        ? parentOrderDetails.orderStatus === "OR"
                           ? "Order Received"
-                          : placedOrderDetails[0].orderStatus === "PR"
+                          : parentOrderDetails.orderStatus === "PR"
                           ? "Preparing"
-                          : placedOrderDetails[0].orderStatus === "OTW"
+                          : parentOrderDetails.orderStatus === "OTW"
                           ? "On the Way"
-                          : placedOrderDetails[0].orderStatus === "DL"
+                          : parentOrderDetails.orderStatus === "DL"
                           ? "Delivered"
-                          : placedOrderDetails[0].orderStatus === "CA"
+                          : parentOrderDetails.orderStatus === "CA"
                           ? "Cancelled"
                           : null
-                        : placedOrderDetails[0].deliveryType === "PU"
-                        ? placedOrderDetails[0].orderStatus === "OR"
+                        : parentOrderDetails.deliveryType === "PU"
+                        ? parentOrderDetails.orderStatus === "OR"
                           ? "Order Received"
-                          : placedOrderDetails[0].orderStatus === "PR"
+                          : parentOrderDetails.orderStatus === "PR"
                           ? "Preparing"
-                          : placedOrderDetails[0].orderStatus === "PUR"
+                          : parentOrderDetails.orderStatus === "PUR"
                           ? "Pick Up Received"
-                          : placedOrderDetails[0].orderStatus === "PU"
+                          : parentOrderDetails.orderStatus === "PU"
                           ? "Picked Up"
-                          : placedOrderDetails[0].orderStatus === "CA"
+                          : parentOrderDetails.orderStatus === "CA"
                           ? "Cancelled"
                           : null
                         : null}
                     </p>
                     <p>
-                      <b>Address</b>: {placedOrderDetails[0].address}
+                      <b>Address</b>: {parentOrderDetails.address}
+                    </p>
+                    <p>
+                      <b>Special Instructions</b>:{" "}
+                      {parentOrderDetails.specialInstruction}
                     </p>
                     <div class="row" style={{ marginTop: "75px" }}>
                       <div class="col-6">
@@ -174,7 +178,7 @@ const Checkout = ({ user, getUserAddressesFunc }) => {
                             class="h2 mb-0 ms-2"
                             style={{ textDecoration: "underline" }}
                           >
-                            ${placedOrderDetails[0].total}
+                            ${parentOrderDetails.total}
                           </span>
                         </h5>
                       </div>
@@ -402,4 +406,7 @@ const Checkout = ({ user, getUserAddressesFunc }) => {
 const mapStateToProps = (state) => ({
   user: state.login.user,
 });
-export default connect(mapStateToProps, { getUserAddressesFunc })(Checkout);
+export default connect(mapStateToProps, {
+  getUserAddressesFunc,
+  getUserCartCount,
+})(Checkout);

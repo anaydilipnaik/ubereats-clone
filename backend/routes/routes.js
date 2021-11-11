@@ -529,6 +529,41 @@ router.put(
   }
 );
 
+router.post("/placeOrder", checkAuth, async (req, res, next) => {
+  kafka.make_request("place_order", req.body, function (err, results) {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Error Occured");
+    } else {
+      let orderDetails = results;
+      req.body.contents.map((item, index) => {
+        item.orderId = results._id;
+        kafka.make_request(
+          "place_order_contents",
+          item,
+          function (err, results) {
+            if (err) {
+              res.writeHead(500, {
+                "Content-Type": "text/plain",
+              });
+              res.end("Error Occured");
+            } else {
+              if (index === req.body.contents.length - 1) {
+                res.writeHead(200, {
+                  "Content-Type": "application/json",
+                });
+                res.end(JSON.stringify(orderDetails));
+              }
+            }
+          }
+        );
+      });
+    }
+  });
+});
+
 // partially complete
 router.post(
   "/restaurants/all",
@@ -553,24 +588,5 @@ router.post(
     );
   }
 );
-
-// // not complete
-// router.post("/placeOrder", checkAuth, async (req, res, next) => {
-//   try {
-//     let orderContentsArr = req.body.contents;
-//     delete req.body.contents;
-//     let results = await apiModel.placeOrder(req.body, orderContentsArr);
-//     res.writeHead(200, {
-//       "Content-Type": "text/plain",
-//     });
-//     res.end(JSON.stringify(results));
-//   } catch (e) {
-//     console.log(e);
-//     res.writeHead(500, {
-//       "Content-Type": "text/plain",
-//     });
-//     res.end("Error");
-//   }
-// });
 
 module.exports = router;

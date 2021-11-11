@@ -24,6 +24,8 @@ var FilteredOrdersUser = require("./services/FilteredOrdersUser.js");
 var OrdersUser = require("./services/ordersUser.js");
 var OrderContents = require("./services/orderContents.js");
 var OrderDeliveryStatusUpdate = require("./services/orderDeliveryStatusUpdate.js");
+var OrderPlace = require("./services/orderPlace.js");
+var OrderPlaceContents = require("./services/orderPlaceContents.js");
 
 const { mongoDB } = require("./config");
 const mongoose = require("mongoose");
@@ -103,3 +105,5 @@ handleTopicRequest("update_restaurant", RestaurantUpdate);
 handleTopicRequest("update_order_delivery_status", OrderDeliveryStatusUpdate);
 handleTopicRequest("update_dish", DishUpdate);
 handleTopicRequest("get_all_restaurants", RestaurantsAll);
+handleTopicRequest("place_order", OrderPlace);
+handleTopicRequest("place_order_contents", OrderPlaceContents);

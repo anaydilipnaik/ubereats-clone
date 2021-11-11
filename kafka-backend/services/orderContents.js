@@ -1,7 +1,7 @@
 const OrderContents = require("../models/OrderContentsModel");
 
 function handle_request(msg, callback) {
-  OrderContents.find({ id: msg }, (error, doc) => {
+  OrderContents.find({ orderId: msg }, (error, doc) => {
     if (error) {
       callback(error, "Error");
     } else {
