@@ -8,6 +8,7 @@ import {
   getOrderDetailsByIdFunc,
   getFilteredOrdersByUserIdFunc,
 } from "../../redux/actions/orderActions";
+import { badgeClasses, Pagination } from "@mui/material";
 
 const UserOrders = ({
   user,
@@ -19,9 +20,10 @@ const UserOrders = ({
   const [ordersSelected, setOrdersSelected] = useState(null);
   const [orderDetails, setOrderDetails] = useState(null);
   const [viewReceiptModal, setViewReceiptModal] = useState(false);
+  const [pageCount, setPageCount] = useState(null);
 
   const getOrdersFunc = () => {
-    getOrdersByUserIdFunc(user._id, user.token, setOrders);
+    getOrdersByUserIdFunc(user._id, user.token, setOrders, setPageCount);
   };
 
   const onModalClick = (orderId) => {
@@ -96,7 +98,7 @@ const UserOrders = ({
                 </div>
                 <div class="col-12">
                   <p>
-                    {item.delivery_type === "DL"
+                    {item.deliveryType === "DL"
                       ? item.orderStatus === "OR"
                         ? "Order Received"
                         : item.orderStatus === "PR"
@@ -127,7 +129,7 @@ const UserOrders = ({
                   <p>
                     {item.orderCount} items for ${item.total} on {item.created}.{" "}
                     <a
-                      onClick={() => onModalClick(item.id)}
+                      onClick={() => onModalClick(item._id)}
                       style={{
                         fontWeight: "bold",
                         textDecoration: "underline",
@@ -145,6 +147,7 @@ const UserOrders = ({
         ) : (
           <p style={{ fontSize: "24px" }}>Sorry, no orders found</p>
         )}
+        <Pagination count={pageCount} color="primary" />
       </div>
       <Footer />
       <OrderDetails
