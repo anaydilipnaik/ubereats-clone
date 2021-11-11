@@ -466,7 +466,7 @@ router.post("/loginRestaurant", async (req, res, next) => {
 
 router.put(
   "/updateOrderDeliveryStatus/:orderid",
-  checkAuthRestaurant,
+  // checkAuthRestaurant,
   async (req, res, next) => {
     req.body.orderId = req.params.orderid;
     kafka.make_request(

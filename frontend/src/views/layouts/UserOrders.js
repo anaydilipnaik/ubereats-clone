@@ -8,6 +8,7 @@ import {
   getOrderDetailsByIdFunc,
   getFilteredOrdersByUserIdFunc,
 } from "../../redux/actions/orderActions";
+import CancelOrderConfirmation from "../../components/modals/CancelOrderConfirmation";
 import { Pagination } from "@mui/material";
 
 const UserOrders = ({
@@ -21,6 +22,8 @@ const UserOrders = ({
   const [orderDetails, setOrderDetails] = useState(null);
   const [viewReceiptModal, setViewReceiptModal] = useState(false);
   const [pageCount, setPageCount] = useState(null);
+  const [changeStatusModal, setChangeStatusModal] = useState(false);
+  const [statusModalOrderId, setStatusModalOrderId] = useState(null);
 
   const getOrdersFunc = (totalRecords) => {
     getOrdersByUserIdFunc(
@@ -60,6 +63,18 @@ const UserOrders = ({
   const setRecordsFunc = (e) => {
     e.preventDefault();
     getOrdersFunc(e.target.value);
+  };
+
+  const onCancelOrderClick = (e, orderId) => {
+    e.preventDefault();
+    setChangeStatusModal(true);
+    setStatusModalOrderId(orderId);
+  };
+
+  const onStatusModalClose = () => {
+    setChangeStatusModal(false);
+    setStatusModalOrderId(null);
+    getOrdersFunc();
   };
 
   useEffect(() => {
@@ -134,6 +149,12 @@ const UserOrders = ({
                         ? "Cancelled"
                         : null
                       : null}
+                    &nbsp;&nbsp;
+                    {item.orderStatus === "OR" ? (
+                      <button onClick={(e) => onCancelOrderClick(e, item._id)}>
+                        Cancel Order
+                      </button>
+                    ) : null}
                   </p>
                 </div>
                 <div class="col-12">
@@ -174,6 +195,11 @@ const UserOrders = ({
         onHide={onModalClose}
         orderDetails={orderDetails}
         orders={ordersSelected}
+      />
+      <CancelOrderConfirmation
+        show={changeStatusModal}
+        onHide={onStatusModalClose}
+        orderId={statusModalOrderId}
       />
     </>
   );
