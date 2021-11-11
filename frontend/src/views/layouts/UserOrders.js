@@ -8,7 +8,7 @@ import {
   getOrderDetailsByIdFunc,
   getFilteredOrdersByUserIdFunc,
 } from "../../redux/actions/orderActions";
-import { badgeClasses, Pagination } from "@mui/material";
+import { Pagination } from "@mui/material";
 
 const UserOrders = ({
   user,
@@ -22,8 +22,14 @@ const UserOrders = ({
   const [viewReceiptModal, setViewReceiptModal] = useState(false);
   const [pageCount, setPageCount] = useState(null);
 
-  const getOrdersFunc = () => {
-    getOrdersByUserIdFunc(user._id, user.token, setOrders, setPageCount);
+  const getOrdersFunc = (totalRecords) => {
+    getOrdersByUserIdFunc(
+      user._id,
+      user.token,
+      setOrders,
+      setPageCount,
+      totalRecords
+    );
   };
 
   const onModalClick = (orderId) => {
@@ -51,8 +57,13 @@ const UserOrders = ({
     else getFilteredOrdersByUserIdFunc(data, user.token, setOrders);
   };
 
+  const setRecordsFunc = (e) => {
+    e.preventDefault();
+    getOrdersFunc(e.target.value);
+  };
+
   useEffect(() => {
-    getOrdersFunc();
+    getOrdersFunc(5);
   }, []);
 
   return (
@@ -147,6 +158,14 @@ const UserOrders = ({
         ) : (
           <p style={{ fontSize: "24px" }}>Sorry, no orders found</p>
         )}
+        <label>Select the no. of records</label>
+        <select onChange={setRecordsFunc}>
+          <option value={2}>2</option>
+          <option selected value={5}>
+            5
+          </option>
+          <option value={10}>10</option>
+        </select>
         <Pagination count={pageCount} color="primary" />
       </div>
       <Footer />

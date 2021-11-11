@@ -99,12 +99,12 @@ export const getOrderDetailsByIdFunc =
   };
 
 export const getOrdersByUserIdFunc =
-  (userId, token, setOrders, setPageCount) => (dispatch) => {
+  (userId, token, setOrders, setPageCount, records) => (dispatch) => {
     getOrdersByUserId(userId, token)
       .then((res) => {
         if (res.data) {
           setOrders(res.data);
-          setPageCount(Math.ceil(res.data.length / 5));
+          setPageCount(Math.ceil(res.data.length / parseInt(records)));
           dispatch({
             type: ORDERS_BY_USER_ID,
           });
