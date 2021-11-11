@@ -85,6 +85,10 @@ const OrderDetails = ({
             <p>
               <b>Address</b>: {orders.address}
             </p>
+            <p>
+              <b>Special Instructions</b>:{" "}
+              {orders.specialInstruction ? orders.specialInstruction : "-"}
+            </p>
             <div class="col-6" style={{ textAlign: "right" }}>
               <h5>
                 Total paid:{" "}

@@ -163,7 +163,9 @@ const Checkout = ({
                     </p>
                     <p>
                       <b>Special Instructions</b>:{" "}
-                      {parentOrderDetails.specialInstruction}
+                      {parentOrderDetails.specialInstruction
+                        ? parentOrderDetails.specialInstruction
+                        : "-"}
                     </p>
                     <div class="row" style={{ marginTop: "75px" }}>
                       <div class="col-6">

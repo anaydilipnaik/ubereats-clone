@@ -225,7 +225,7 @@ class Header extends Component {
                 onClick={() => {
                   window.location.href =
                     this.props.user && this.props.user._id
-                      ? "/userorders"
+                      ? "/userorders?page=1"
                       : "userlogin";
                 }}
                 style={{ margin: "15px" }}
