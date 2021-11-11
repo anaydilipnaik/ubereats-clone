@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { getCartItems, updateCart } from "../../controllers/cart";
 import { connect } from "react-redux";
-import {
-  getOrderDetailsById,
-  placeOrder,
-  getUserAddresses,
-} from "../../controllers/orders";
+import { getOrderDetailsById, placeOrder } from "../../controllers/orders";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import AddUserAddress from "../../components/modals/AddUserAddress";
+import { getUserAddressesFunc } from "../../redux/actions/userActions";
 
-const Checkout = ({ user }) => {
+const Checkout = ({ user, getUserAddressesFunc }) => {
   const [cartItems, setCartItems] = useState(null);
   const [orderPlacedStatus, setOrderPlacedStatus] = useState(false);
   const [placedOrderDetails, setPlacedOrderDetails] = useState(null);
@@ -18,17 +14,23 @@ const Checkout = ({ user }) => {
   const [userAddresses, setUserAddresses] = useState(null);
   const [userAddressId, setUserAddressId] = useState(null);
   const [addAddressModal, setAddAddressModal] = useState(false);
+  const [specialInstruction, setSpecialInstruction] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     let data = {};
     data.userId = user._id;
+    data.firstName = user.firstName;
+    data.lastName = user.lastName;
+    data.restaurantName = cartItems[0].restaurantName;
+    data.restaurantLocation = cartItems[0].restaurantLocation;
     data.restaurantId = cartItems[0].restaurantId;
     data.orderStatus = "OR";
     data.deliveryType = "DL";
-    data.userAddressId = parseInt(userAddressId);
+    data.address = userAddressId;
     data.taxes = 0;
     data.total = cartSubtotal;
+    if (specialInstruction) data.specialInstruction = specialInstruction;
     let contentsArr = [];
     cartItems.map((item) => {
       let contentsObj = {};
@@ -36,46 +38,44 @@ const Checkout = ({ user }) => {
       contentsObj.restaurantId = item.restaurantId;
       contentsObj.dishId = item.dishId;
       contentsObj.dishPrice = item.dishPrice;
+      contentsObj.dishName = item.dishName;
       contentsObj.qty = item.qty;
       contentsArr.push(contentsObj);
     });
     data.contents = contentsArr;
-    placeOrder(data, user.token)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data[0][0].orderId) {
-          getOrderDetailsById(data[0][0].orderId, user.token)
-            .then((res) => res.json())
-            .then((data) => {
-              setOrderPlacedStatus(true);
-              setPlacedOrderDetails(data);
-            });
-        }
-      });
+    console.log(data);
+    // placeOrder(data, user.token)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     if (data[0][0].orderId) {
+    //       getOrderDetailsById(data[0][0].orderId, user.token)
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //           setOrderPlacedStatus(true);
+    //           setPlacedOrderDetails(data);
+    //         });
+    //     }
+    //   });
   };
 
   const getCartItemsFunc = () => {
-    getCartItems(user._id, user.token)
-      .then((res) => {
-        let subtotal = 0;
-        setCartItems(res.data);
-        res.data.map((item) => {
-          subtotal += item.dishPrice * item.qty;
-        });
-        setCartSubtotal(subtotal);
-        return getUserAddresses(user._id, user.token);
-      })
-      .then((res) => setUserAddresses(res.data));
+    if (sessionStorage.getItem("userCart")) {
+      setCartItems(JSON.parse(sessionStorage.getItem("userCart")));
+      let subtotal = 0;
+      JSON.parse(sessionStorage.getItem("userCart")).map((item) => {
+        subtotal += item.dishPrice * item.qty;
+      });
+      setCartSubtotal(subtotal);
+    }
+    getUserAddressesFunc(user._id, user.token, setUserAddresses);
   };
 
-  const onQtyChange = (value, id) => {
-    let data = {};
-    data.qty = value;
-    updateCart(id, data, user.token)
-      .then((res) => {
-        if (res.status === 200) getCartItemsFunc();
-      })
-      .catch((err) => console.log(err));
+  const onQtyChange = (value, index) => {
+    let arrTemp = JSON.parse(sessionStorage.getItem("userCart"));
+    arrTemp[index].qty = value;
+    sessionStorage.setItem("userCart", JSON.stringify(arrTemp));
+    setCartItems(arrTemp);
+    getCartItemsFunc();
   };
 
   const onAddAddressModalClose = () => {
@@ -138,6 +138,8 @@ const Checkout = ({ user }) => {
                           ? "On the Way"
                           : placedOrderDetails[0].orderStatus === "DL"
                           ? "Delivered"
+                          : placedOrderDetails[0].orderStatus === "CA"
+                          ? "Cancelled"
                           : null
                         : placedOrderDetails[0].deliveryType === "PU"
                         ? placedOrderDetails[0].orderStatus === "OR"
@@ -148,20 +150,13 @@ const Checkout = ({ user }) => {
                           ? "Pick Up Received"
                           : placedOrderDetails[0].orderStatus === "PU"
                           ? "Picked Up"
+                          : placedOrderDetails[0].orderStatus === "CA"
+                          ? "Cancelled"
                           : null
                         : null}
                     </p>
                     <p>
-                      <b>Address</b>:{" "}
-                      {placedOrderDetails[0].address1 +
-                        ", " +
-                        placedOrderDetails[0].address2 +
-                        ", " +
-                        placedOrderDetails[0].landmark +
-                        ", " +
-                        placedOrderDetails[0].city +
-                        " " +
-                        placedOrderDetails[0].state}
+                      <b>Address</b>: {placedOrderDetails[0].address}
                     </p>
                     <div class="row" style={{ marginTop: "75px" }}>
                       <div class="col-6">
@@ -211,12 +206,12 @@ const Checkout = ({ user }) => {
                           </div>
                           <hr class="my-4" />
                           {cartItems && cartItems.length > 0 ? (
-                            cartItems.map((item) => (
+                            cartItems.map((item, index) => (
                               <>
                                 <div class="row mb-4 d-flex justify-content-between align-items-center">
                                   <div class="col-md-2 col-lg-2 col-xl-2">
                                     <img
-                                      src={item.dish_image}
+                                      src={item.dishImage}
                                       class="img-fluid rounded-3"
                                       alt={item.dishName}
                                     />
@@ -224,7 +219,7 @@ const Checkout = ({ user }) => {
                                   <div class="col-md-3 col-lg-3 col-xl-3">
                                     <h6 class="text-muted">{item.dishName}</h6>
                                     <h6 class="text-black mb-0">
-                                      {item.dish_description.substr(0, 80) +
+                                      {item.dishDescription.substr(0, 80) +
                                         "..."}
                                     </h6>
                                   </div>
@@ -232,7 +227,7 @@ const Checkout = ({ user }) => {
                                     <button
                                       class="btn"
                                       onClick={() => {
-                                        onQtyChange(item.qty - 1, item.id);
+                                        onQtyChange(item.qty - 1, index);
                                       }}
                                     >
                                       <i class="bi bi-dash-lg"></i>
@@ -243,14 +238,14 @@ const Checkout = ({ user }) => {
                                     <button
                                       class="btn"
                                       onClick={() => {
-                                        onQtyChange(item.qty + 1, item.id);
+                                        onQtyChange(item.qty + 1, index);
                                       }}
                                     >
                                       <i class="bi bi-plus-lg"></i>
                                     </button>
                                   </div>
                                   <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                    <h6 class="mb-0">${item.dish_price} ea</h6>
+                                    <h6 class="mb-0">${item.dishPrice} ea</h6>
                                   </div>
                                   <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                     <a href="#!" class="text-muted">
@@ -287,33 +282,31 @@ const Checkout = ({ user }) => {
                                   >
                                     <option>Select Address</option>
                                     {userAddresses &&
-                                      userAddresses.map((addr) =>
-                                        userAddressId === addr.id ? (
-                                          <option value={addr.id} selected>
-                                            {addr.address1 +
-                                              ", " +
-                                              addr.address2 +
-                                              ", " +
-                                              addr.landmark +
-                                              ", " +
-                                              addr.city +
-                                              " " +
-                                              addr.state}
-                                          </option>
-                                        ) : (
-                                          <option value={addr.id}>
-                                            {addr.address1 +
-                                              ", " +
-                                              addr.address2 +
-                                              ", " +
-                                              addr.landmark +
-                                              ", " +
-                                              addr.city +
-                                              " " +
-                                              addr.state}
-                                          </option>
-                                        )
-                                      )}
+                                      userAddresses.map((addr) => (
+                                        <option
+                                          value={
+                                            addr.address1 +
+                                            ", " +
+                                            addr.address2 +
+                                            ", " +
+                                            addr.landmark +
+                                            ", " +
+                                            addr.city +
+                                            " " +
+                                            addr.state
+                                          }
+                                        >
+                                          {addr.address1 +
+                                            ", " +
+                                            addr.address2 +
+                                            ", " +
+                                            addr.landmark +
+                                            ", " +
+                                            addr.city +
+                                            " " +
+                                            addr.state}
+                                        </option>
+                                      ))}
                                   </select>
                                 </div>
                                 <div class="col-6">
@@ -325,6 +318,13 @@ const Checkout = ({ user }) => {
                                   </button>
                                 </div>
                               </div>
+                              <label>Add special instructions</label>
+                              <input
+                                type="text"
+                                onChange={(e) =>
+                                  setSpecialInstruction(e.target.value)
+                                }
+                              />
                             </>
                           ) : null}
                           <h6 class="mb-0">
@@ -402,4 +402,4 @@ const Checkout = ({ user }) => {
 const mapStateToProps = (state) => ({
   user: state.login.user,
 });
-export default connect(mapStateToProps)(Checkout);
+export default connect(mapStateToProps, { getUserAddressesFunc })(Checkout);

@@ -10,7 +10,6 @@ import {
   setUserLocation,
 } from "../../redux/actions";
 import { Popover, PopoverHeader, PopoverBody } from "reactstrap";
-import { getCartItems } from "../../controllers/cart";
 
 class Header extends Component {
   constructor() {
@@ -29,16 +28,18 @@ class Header extends Component {
   }
 
   toggle = () => {
-    getCartItems(this.props.user._id, this.props.user.token).then((res) =>
-      this.setState({ cartItems: res.data })
-    );
+    if (sessionStorage.getItem("userCart"))
+      this.setState({
+        cartItems: JSON.parse(sessionStorage.getItem("userCart")),
+      });
     this.setState({ popoverOpen: !this.state.popoverOpen });
   };
 
   componentDidMount() {
     if (!this.props.restaurantFlag) {
-      if (this.props.user && this.props.user._id)
+      if (this.props.user && this.props.user._id) {
         this.props.getUserCartCount(this.props.user._id, this.props.user.token);
+      }
       if (this.props.userDeliveryType)
         this.setState({
           delivery: this.props.userDeliveryType === "DL" ? "active" : "",

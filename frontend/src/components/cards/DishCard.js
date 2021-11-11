@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { addToCart, getCartItems } from "../../controllers/cart";
 import { getUserCartCount } from "../../redux/actions";
 import { connect } from "react-redux";
 import AddToCartConfirmation from "../modals/AddToCartConfirmation";
@@ -15,33 +14,32 @@ class DishCard extends Component {
 
   handleAddToCart = (e) => {
     e.preventDefault();
-    getCartItems(this.props.user._id, this.props.user.token)
-      .then((res) => res.json())
-      .then((data) => {
-        let flag = false;
-        data.map((item) => {
-          if (item.restaurant_id !== this.props.dish.restaurant_id) flag = true;
-        });
-        if (!flag) {
-          let data = {};
-          data.restaurant_id = this.props.dish.restaurant_id;
-          data.dish_id = this.props.dish.id;
-          data.user_id = this.props.user.id;
-          data.cart_status = "AC";
-          data.delivery_type = "DL";
-          data.dish_price = this.props.dish.price;
-          data.qty = 1;
-          addToCart(data, this.props.user.token)
-            .then((res) => {
-              if (res.status === 200) {
-                this.setState({ cartFlag: false });
-                return this.props.getUserCartCount(this.props.user.id);
-              }
-            })
-            .catch((err) => console.log(err));
-        } else
-          alert("You already have items from another restaurant in the cart");
-      });
+    let arr = [],
+      data = {};
+    if (sessionStorage.getItem("userCart"))
+      arr = JSON.parse(sessionStorage.getItem("userCart"));
+    let flag = false;
+    arr.map((item) => {
+      if (item.restaurantId !== this.props.dish.restaurantId) flag = true;
+    });
+    if (!flag) {
+      data.userId = this.props.user._id;
+      data.restaurantId = this.props.dish.restaurantId;
+      data.cartStatus = "AC";
+      data.deliveryType = "DL";
+      data.dishPrice = this.props.dish.price;
+      data.qty = 1;
+      data.dishId = this.props.dish._id;
+      data.dishName = this.props.dish.name;
+      data.dishImage = this.props.dish.dishImage;
+      data.dishDescription = this.props.dish.description;
+      data.restaurantName = this.props.restaurantName;
+      data.restaurantLocation = this.props.restaurantLocation;
+      arr.push(data);
+      sessionStorage.setItem("userCart", JSON.stringify(arr));
+      this.setState({ cartFlag: false });
+      this.props.getUserCartCount();
+    } else alert("You already have items from another restaurant in the cart");
   };
 
   onCartModalClose = () => {

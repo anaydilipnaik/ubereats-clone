@@ -12,7 +12,6 @@ var userCartItemsSchema = new Schema(
     dishId: { type: String, required: true },
     dishName: { type: String, required: true },
     dishImage: { type: String, required: true },
-    dishPrice: { type: String, required: true },
     dishDescription: { type: String, required: true },
     restaurantName: { type: String, required: true },
     active: { type: String, default: "1" },

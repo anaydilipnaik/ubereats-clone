@@ -135,46 +135,6 @@ router.get("/addresses/get/:userid", checkAuth, async (req, res, next) => {
   );
 });
 
-router.get("/cart/count/:userid", checkAuth, async (req, res, next) => {
-  kafka.make_request(
-    "get_cart_count",
-    req.params.userid,
-    function (err, results) {
-      if (err) {
-        res.writeHead(500, {
-          "Content-Type": "text/plain",
-        });
-        res.end("Error Occured");
-      } else {
-        res.writeHead(200, {
-          "Content-Type": "application/json",
-        });
-        res.end({ cart_count: results.length });
-      }
-    }
-  );
-});
-
-router.get("/cart/get/:userid", checkAuth, async (req, res, next) => {
-  kafka.make_request(
-    "get_cart_items_by_user_id",
-    req.params.userid,
-    function (err, results) {
-      if (err) {
-        res.writeHead(500, {
-          "Content-Type": "text/plain",
-        });
-        res.end("Error Occured");
-      } else {
-        res.writeHead(200, {
-          "Content-Type": "application/json",
-        });
-        res.end(JSON.stringify(results));
-      }
-    }
-  );
-});
-
 router.get("/favourites/:userid", checkAuth, async (req, res, next) => {
   kafka.make_request(
     "get_favourites_by_user_id",
@@ -394,22 +354,6 @@ router.post("/addDish", checkAuthRestaurant, async (req, res, next) => {
   }
 });
 
-router.post("/addToCart", checkAuth, async (req, res, next) => {
-  kafka.make_request("add_to_cart", req.body, function (err, results) {
-    if (err) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end("Error Occured");
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "application/json",
-      });
-      res.end(JSON.stringify(results));
-    }
-  });
-});
-
 router.post("/loginUser", async (req, res, next) => {
   kafka.make_request("login_user", req.body, function (err, results) {
     if (err) {
@@ -488,23 +432,6 @@ router.put(
     );
   }
 );
-
-router.put("/updateCart/:cartid", checkAuth, async (req, res, next) => {
-  req.body.cartid = req.params.cartid;
-  kafka.make_request("update_cart", req.body, function (err, results) {
-    if (err) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end("Error Occured");
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "application/json",
-      });
-      res.end(JSON.stringify(results));
-    }
-  });
-});
 
 router.put("/updateUser/:userid", checkAuth, async (req, res, next) => {
   try {

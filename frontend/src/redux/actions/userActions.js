@@ -7,6 +7,8 @@ import {
   ADD_TO_FAVOURITE_ERROR,
   GET_USER_FAVOURITES,
   GET_USER_FAVOURITES_ERROR,
+  USER_ADDRESSES,
+  USER_ADDRESSES_ERROR,
 } from "../constants/ActionTypes";
 import {
   getUserDetails,
@@ -14,6 +16,7 @@ import {
   addToFavourite,
   getUserFavourites,
 } from "../../controllers/user";
+import { getUserAddresses } from "../../controllers/orders";
 
 export const getUserDetailsFunc =
   (userId, token, setUserDetails) => (dispatch) => {
@@ -30,6 +33,25 @@ export const getUserDetailsFunc =
         console.log(err);
         dispatch({
           type: USER_DETAILS_ERROR,
+        });
+      });
+  };
+
+export const getUserAddressesFunc =
+  (userId, token, setUserAddresses) => (dispatch) => {
+    getUserAddresses(userId, token)
+      .then((res) => {
+        if (res.data) {
+          setUserAddresses(res.data);
+          dispatch({
+            type: USER_ADDRESSES,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch({
+          type: USER_ADDRESSES_ERROR,
         });
       });
   };

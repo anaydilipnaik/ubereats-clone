@@ -82,7 +82,11 @@ const RestaurantPage = ({
               {dishes &&
                 dishes.map((dish) => (
                   <div class="col-4">
-                    <DishCard dish={dish} />
+                    <DishCard
+                      dish={dish}
+                      restaurantName={restaurantDetails.name}
+                      restaurantLocation={restaurantDetails.location}
+                    />
                   </div>
                 ))}
             </div>

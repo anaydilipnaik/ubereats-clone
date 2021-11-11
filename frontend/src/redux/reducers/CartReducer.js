@@ -1,4 +1,4 @@
-import { GET_CART_COUNT, CART_COUNT_ERROR } from "../constants/ActionTypes";
+import { GET_CART_COUNT } from "../constants/ActionTypes";
 
 const initialState = {
   count: 0,
@@ -11,10 +11,6 @@ export default function (state = initialState, action) {
       return {
         count: action.payload,
         error: false,
-      };
-    case CART_COUNT_ERROR:
-      return {
-        error: true,
       };
     default:
       return state;
