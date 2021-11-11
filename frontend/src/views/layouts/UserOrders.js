@@ -24,6 +24,9 @@ const UserOrders = ({
   const [pageCount, setPageCount] = useState(null);
   const [changeStatusModal, setChangeStatusModal] = useState(false);
   const [statusModalOrderId, setStatusModalOrderId] = useState(null);
+  const [records, setRecords] = useState(5);
+  const [page, setPage] = useState(1);
+  const [leftPointer, setLeftPointer] = useState(0);
 
   const getOrdersFunc = (totalRecords) => {
     getOrdersByUserIdFunc(
@@ -62,6 +65,7 @@ const UserOrders = ({
 
   const setRecordsFunc = (e) => {
     e.preventDefault();
+    setRecords(parseInt(e.target.value));
     getOrdersFunc(e.target.value);
   };
 
@@ -77,8 +81,14 @@ const UserOrders = ({
     getOrdersFunc();
   };
 
+  const handleChange = (event, value) => {
+    event.preventDefault();
+    setPage(value);
+    setLeftPointer(records * (value - 1));
+  };
+
   useEffect(() => {
-    getOrdersFunc(5);
+    getOrdersFunc(records);
   }, []);
 
   return (
@@ -104,78 +114,83 @@ const UserOrders = ({
           </div>
         </div>
         {orders && orders.length > 0 ? (
-          orders.map((item) => (
-            <>
-              <div class="row">
-                <div class="col-12">
-                  <p>
-                    <b
-                      style={{
-                        color: "black",
-                        fontSize: "24px",
-                      }}
-                    >
-                      {item.restaurantName +
-                        " (" +
-                        item.restaurantLocation +
-                        ")"}
-                    </b>
-                  </p>
+          orders.map((item, index) =>
+            index >= leftPointer && index < records * page - 1 ? (
+              <>
+                <div class="row">
+                  <div class="col-12">
+                    <p>
+                      <b
+                        style={{
+                          color: "black",
+                          fontSize: "24px",
+                        }}
+                      >
+                        {item.restaurantName +
+                          " (" +
+                          item.restaurantLocation +
+                          ")"}
+                      </b>
+                    </p>
+                  </div>
+                  <div class="col-12">
+                    <p>
+                      {item.deliveryType === "DL"
+                        ? item.orderStatus === "OR"
+                          ? "Order Received"
+                          : item.orderStatus === "PR"
+                          ? "Preparing"
+                          : item.orderStatus === "OTW"
+                          ? "On the Way"
+                          : item.orderStatus === "DL"
+                          ? "Delivered"
+                          : item.orderStatus === "CA"
+                          ? "Cancelled"
+                          : null
+                        : item.deliveryType === "PU"
+                        ? item.orderStatus === "OR"
+                          ? "Order Received"
+                          : item.orderStatus === "PR"
+                          ? "Preparing"
+                          : item.orderStatus === "PUR"
+                          ? "Pick Up Received"
+                          : item.orderStatus === "PU"
+                          ? "Picked Up"
+                          : item.orderStatus === "CA"
+                          ? "Cancelled"
+                          : null
+                        : null}
+                      &nbsp;&nbsp;
+                      {item.orderStatus === "OR" ? (
+                        <button
+                          onClick={(e) => onCancelOrderClick(e, item._id)}
+                        >
+                          Cancel Order
+                        </button>
+                      ) : null}
+                    </p>
+                  </div>
+                  <div class="col-12">
+                    <p>
+                      {item.orderCount} items for ${item.total} on{" "}
+                      {item.created}.{" "}
+                      <a
+                        onClick={() => onModalClick(item._id)}
+                        style={{
+                          fontWeight: "bold",
+                          textDecoration: "underline",
+                          cursor: "pointer",
+                        }}
+                      >
+                        View Receipt
+                      </a>
+                    </p>
+                  </div>
                 </div>
-                <div class="col-12">
-                  <p>
-                    {item.deliveryType === "DL"
-                      ? item.orderStatus === "OR"
-                        ? "Order Received"
-                        : item.orderStatus === "PR"
-                        ? "Preparing"
-                        : item.orderStatus === "OTW"
-                        ? "On the Way"
-                        : item.orderStatus === "DL"
-                        ? "Delivered"
-                        : item.orderStatus === "CA"
-                        ? "Cancelled"
-                        : null
-                      : item.deliveryType === "PU"
-                      ? item.orderStatus === "OR"
-                        ? "Order Received"
-                        : item.orderStatus === "PR"
-                        ? "Preparing"
-                        : item.orderStatus === "PUR"
-                        ? "Pick Up Received"
-                        : item.orderStatus === "PU"
-                        ? "Picked Up"
-                        : item.orderStatus === "CA"
-                        ? "Cancelled"
-                        : null
-                      : null}
-                    &nbsp;&nbsp;
-                    {item.orderStatus === "OR" ? (
-                      <button onClick={(e) => onCancelOrderClick(e, item._id)}>
-                        Cancel Order
-                      </button>
-                    ) : null}
-                  </p>
-                </div>
-                <div class="col-12">
-                  <p>
-                    {item.orderCount} items for ${item.total} on {item.created}.{" "}
-                    <a
-                      onClick={() => onModalClick(item._id)}
-                      style={{
-                        fontWeight: "bold",
-                        textDecoration: "underline",
-                        cursor: "pointer",
-                      }}
-                    >
-                      View Receipt
-                    </a>
-                  </p>
-                </div>
-              </div>
-              <hr />
-            </>
-          ))
+                <hr />
+              </>
+            ) : null
+          )
         ) : (
           <p style={{ fontSize: "24px" }}>Sorry, no orders found</p>
         )}
@@ -187,7 +202,12 @@ const UserOrders = ({
           </option>
           <option value={10}>10</option>
         </select>
-        <Pagination count={pageCount} color="primary" />
+        <Pagination
+          count={pageCount}
+          page={page}
+          color="primary"
+          onChange={handleChange}
+        />
       </div>
       <Footer />
       <OrderDetails
