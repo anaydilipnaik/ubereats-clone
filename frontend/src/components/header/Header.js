@@ -83,6 +83,23 @@ class Header extends Component {
     this.props.logoutRestaurantFunc();
   };
 
+  removeCartItem = (e, index) => {
+    e.preventDefault();
+    let arr = JSON.parse(sessionStorage.getItem("userCart"));
+    arr.splice(index, 1);
+    sessionStorage.setItem("userCart", JSON.stringify(arr));
+    this.setState({ cartItems: arr });
+    this.props.getUserCartCount(this.props.user._id, this.props.user.token);
+  };
+
+  onQtyChange = (value, index) => {
+    let arrTemp = JSON.parse(sessionStorage.getItem("userCart"));
+    arrTemp[index].qty = value;
+    sessionStorage.setItem("userCart", JSON.stringify(arrTemp));
+    this.setState({ cartItems: arrTemp });
+    this.props.getUserCartCount(this.props.user._id, this.props.user.token);
+  };
+
   render() {
     return (
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -181,14 +198,41 @@ class Header extends Component {
                 <PopoverHeader>My Cart</PopoverHeader>
                 <PopoverBody>
                   {this.state.cartItems &&
-                    this.state.cartItems.map((item) => (
+                    this.state.cartItems.map((item, index) => (
                       <>
                         <div class="row">
-                          <div class="col-8">
+                          <div class="col-6">
                             <h6>{item.dishName}</h6>
                           </div>
-                          <div class="col-4">
+                          <div class="col-2">
+                            <button
+                              class="btn"
+                              onClick={() => {
+                                this.onQtyChange(item.qty - 1, index);
+                              }}
+                            >
+                              <i class="bi bi-dash"></i>
+                            </button>
+                            <p>{item.qty}</p>
+                            <button
+                              class="btn"
+                              onClick={() => {
+                                this.onQtyChange(item.qty + 1, index);
+                              }}
+                            >
+                              <i class="bi bi-plus"></i>
+                            </button>
+                          </div>
+                          <div class="col-2">
                             <h6 class="text-muted">${item.dishPrice}</h6>
+                          </div>
+                          <div class="col-2">
+                            <button
+                              class="text-muted"
+                              onClick={(e) => this.removeCartItem(e, index)}
+                            >
+                              remove
+                            </button>
                           </div>
                         </div>
                       </>

@@ -86,6 +86,15 @@ const Checkout = ({
     getCartItemsFunc();
   };
 
+  const removeCartItem = (e, index) => {
+    e.preventDefault();
+    let arr = JSON.parse(sessionStorage.getItem("userCart"));
+    arr.splice(index, 1);
+    sessionStorage.setItem("userCart", JSON.stringify(arr));
+    getCartItemsFunc();
+    getUserCartCount(user._id, user.token);
+  };
+
   useEffect(() => {
     getCartItemsFunc();
   }, []);
@@ -122,7 +131,7 @@ const Checkout = ({
                               {item.dishName} (x{item.qty})
                             </p>
                           </div>
-                          <div class="col-6">
+                          <div class="col-4">
                             <p>${item.dishPrice} ea</p>
                           </div>
                         </div>
@@ -255,6 +264,14 @@ const Checkout = ({
                                   </div>
                                   <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                                     <h6 class="mb-0">${item.dishPrice} ea</h6>
+                                  </div>
+                                  <div class="col-2">
+                                    <button
+                                      class="text-muted"
+                                      onClick={(e) => removeCartItem(e, index)}
+                                    >
+                                      remove
+                                    </button>
                                   </div>
                                   <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                     <a href="#!" class="text-muted">
