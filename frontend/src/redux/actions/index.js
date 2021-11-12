@@ -24,9 +24,7 @@ export const loginUserFunc = (payload) => (dispatch) => {
           type: LOGIN_USER,
           payload: res.data,
         });
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 3000);
+        window.location.href = "/";
       }
     })
     .catch((err) => {
@@ -52,9 +50,7 @@ export const registerUserFunc = (payload) => (dispatch) => {
         dispatch({
           type: REGISTER_USER,
         });
-        setTimeout(() => {
-          window.location.href = "/userlogin";
-        }, 3000);
+        window.location.href = "/userlogin";
       }
     })
     .catch((err) => {
@@ -73,9 +69,7 @@ export const loginRestaurantFunc = (payload) => (dispatch) => {
           type: LOGIN_RESTAURANT,
           payload: res.data,
         });
-        setTimeout(() => {
-          window.location.href = "/restauranthome";
-        }, 3000);
+        window.location.href = "/restauranthome";
       } else
         dispatch({
           type: LOGIN_RESTAURANT_ERROR,
@@ -105,9 +99,7 @@ export const registerRestaurantFunc = (payload) => (dispatch) => {
         dispatch({
           type: REGISTER_RESTAURANT,
         });
-        setTimeout(() => {
-          window.location.href = "/restaurantlogin";
-        }, 3000);
+        window.location.href = "/restaurantlogin";
       }
     })
     .catch((err) => {

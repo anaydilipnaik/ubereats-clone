@@ -39,7 +39,9 @@ class DishCard extends Component {
       sessionStorage.setItem("userCart", JSON.stringify(arr));
       this.setState({ cartFlag: false });
       this.props.getUserCartCount();
-    } else alert("You already have items from another restaurant in the cart");
+    } else {
+      this.setState({ cartFlag: true });
+    }
   };
 
   onCartModalClose = () => {
@@ -89,7 +91,7 @@ class DishCard extends Component {
                   ) : (
                     <button
                       class="btn btn-primary btn-sm"
-                      onClick={() => this.setState({ cartFlag: true })}
+                      onClick={this.handleAddToCart}
                       style={{ marginLeft: "25px" }}
                     >
                       Add to Cart
@@ -110,6 +112,10 @@ class DishCard extends Component {
           show={this.state.cartFlag}
           onHide={this.onCartModalClose}
           handleAddToCart={this.handleAddToCart}
+          oldRestaurant={
+            JSON.parse(sessionStorage.getItem("userCart"))[0].restaurantName
+          }
+          newRestaurant={this.props.restaurantName}
         />
       </div>
     );

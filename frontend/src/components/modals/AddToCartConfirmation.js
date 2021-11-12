@@ -1,7 +1,19 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 
-const EditDishModal = ({ show, onHide, handleAddToCart }) => {
+const EditDishModal = ({
+  show,
+  onHide,
+  handleAddToCart,
+  oldRestaurant,
+  newRestaurant,
+}) => {
+  const onSubmit = (e) => {
+    e.preventDefault();
+    sessionStorage.removeItem("userCart");
+    handleAddToCart(e);
+  };
+
   return (
     <Modal
       show={show}
@@ -12,24 +24,17 @@ const EditDishModal = ({ show, onHide, handleAddToCart }) => {
     >
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
-          Are you sure?
+          Create new order?
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <form onSubmit={handleAddToCart}>
-          <div class="row">
-            <div class="col-6">
-              <button class="btn btn-primary" type="button" onClick={onHide}>
-                No
-              </button>
-            </div>
-            <div class="col-6">
-              <button class="btn btn-primary" type="submit">
-                Yes
-              </button>
-            </div>
-          </div>
-        </form>
+        <label>
+          Create new order? Your order contains items from {oldRestaurant}.
+          Create a new order to add items from {newRestaurant}?
+        </label>
+        <button class="btn btn-primary col-12" type="button" onClick={onSubmit}>
+          New Order
+        </button>
       </Modal.Body>
     </Modal>
   );
