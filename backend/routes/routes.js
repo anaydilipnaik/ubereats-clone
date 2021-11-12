@@ -21,11 +21,8 @@ app.use(
 const jwt = require("jsonwebtoken");
 const { secret } = require("../config");
 const { auth } = require("../passport");
-// const { authRestaurant } = require("../passport-restaurant");
-const { checkAuth } = require("../passport");
-const { checkAuthRestaurant } = require("../passport-restaurant");
+const { checkAuth, checkAuthRestaurant } = require("../passport");
 auth();
-// authRestaurant();
 
 router.get("/dishes/category", checkAuthRestaurant, async (req, res, next) => {
   kafka.make_request("get_dish_types", null, function (err, results) {
