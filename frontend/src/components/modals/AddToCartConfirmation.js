@@ -32,7 +32,12 @@ const EditDishModal = ({
           Create new order? Your order contains items from {oldRestaurant}.
           Create a new order to add items from {newRestaurant}?
         </label>
-        <button class="btn btn-primary col-12" type="button" onClick={onSubmit}>
+        <button
+          class="btn btn-primary col-12"
+          type="button"
+          onClick={onSubmit}
+          style={{ marginTop: "15px" }}
+        >
           New Order
         </button>
       </Modal.Body>

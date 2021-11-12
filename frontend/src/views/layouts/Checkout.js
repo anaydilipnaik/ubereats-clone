@@ -266,12 +266,17 @@ const Checkout = ({
                                     <h6 class="mb-0">${item.dishPrice} ea</h6>
                                   </div>
                                   <div class="col-2">
-                                    <button
-                                      class="text-muted"
-                                      onClick={(e) => removeCartItem(e, index)}
+                                    <span
+                                      onClick={(e) =>
+                                        this.removeCartItem(e, index)
+                                      }
+                                      style={{
+                                        cursor: "pointer",
+                                        color: "red",
+                                      }}
                                     >
-                                      remove
-                                    </button>
+                                      x
+                                    </span>
                                   </div>
                                   <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                     <a href="#!" class="text-muted">
@@ -344,12 +349,15 @@ const Checkout = ({
                                   </button>
                                 </div>
                               </div>
-                              <label>Add special instructions</label>
+                              <label>
+                                Add special instructions:&nbsp;&nbsp;
+                              </label>
                               <input
                                 type="text"
                                 onChange={(e) =>
                                   setSpecialInstruction(e.target.value)
                                 }
+                                style={{ marginBottom: "25px" }}
                               />
                             </>
                           ) : null}

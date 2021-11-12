@@ -200,39 +200,47 @@ class Header extends Component {
                   {this.state.cartItems &&
                     this.state.cartItems.map((item, index) => (
                       <>
-                        <div class="row">
-                          <div class="col-6">
-                            <h6>{item.dishName}</h6>
-                          </div>
-                          <div class="col-2">
-                            <button
-                              class="btn"
-                              onClick={() => {
-                                this.onQtyChange(item.qty - 1, index);
-                              }}
-                            >
-                              <i class="bi bi-dash"></i>
-                            </button>
-                            <p>{item.qty}</p>
-                            <button
-                              class="btn"
-                              onClick={() => {
-                                this.onQtyChange(item.qty + 1, index);
-                              }}
-                            >
-                              <i class="bi bi-plus"></i>
-                            </button>
-                          </div>
-                          <div class="col-2">
-                            <h6 class="text-muted">${item.dishPrice}</h6>
-                          </div>
-                          <div class="col-2">
-                            <button
-                              class="text-muted"
-                              onClick={(e) => this.removeCartItem(e, index)}
-                            >
-                              remove
-                            </button>
+                        <div class="container" style={{ width: "250px" }}>
+                          <div class="row">
+                            <div class="col-5" style={{ padding: 0 }}>
+                              <h6>{item.dishName}</h6>
+                            </div>
+                            <div class="col-1" style={{ padding: 0 }}>
+                              <span
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  this.onQtyChange(item.qty - 1, index);
+                                }}
+                              >
+                                <i class="bi bi-dash"></i>
+                              </span>
+                            </div>
+                            <div class="col-1" style={{ padding: 0 }}>
+                              <p style={{ margin: 0, padding: 0 }}>
+                                {item.qty}
+                              </p>
+                            </div>
+                            <div class="col-1" style={{ padding: 0 }}>
+                              <span
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  this.onQtyChange(item.qty + 1, index);
+                                }}
+                              >
+                                <i class="bi bi-plus"></i>
+                              </span>
+                            </div>
+                            <div class="col-3" style={{ padding: 0 }}>
+                              <h6 class="text-muted">${item.dishPrice}</h6>
+                            </div>
+                            <div class="col-1" style={{ padding: 0 }}>
+                              <span
+                                onClick={(e) => this.removeCartItem(e, index)}
+                                style={{ cursor: "pointer", color: "red" }}
+                              >
+                                x
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </>
