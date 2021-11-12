@@ -6,8 +6,8 @@ const path = require("path");
 
 const s3 = new aws.S3({
   apiVersion: "2006-03-01",
-  AWS_ACCESS_KEY_ID: "AKIAYDHNIKLGYPJULV7A",
-  AWS_SECRET_ACCESS_KEY: "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",
+  accessKeyId: "AKIAYDHNIKLGS3TCVLIJ",
+  secretAccessKey: "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",
 });
 
 const uploadSingleFile = multer({

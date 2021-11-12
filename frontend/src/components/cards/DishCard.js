@@ -103,20 +103,22 @@ class DishCard extends Component {
             <div class="col-5">
               <img
                 style={{ width: "100%", height: "158px" }}
-                src={this.props.dish.dish_image}
+                src={this.props.dish.dishImage}
               />
             </div>
           </div>
         </div>
-        <AddToCartConfirmation
-          show={this.state.cartFlag}
-          onHide={this.onCartModalClose}
-          handleAddToCart={this.handleAddToCart}
-          oldRestaurant={
-            JSON.parse(sessionStorage.getItem("userCart"))[0].restaurantName
-          }
-          newRestaurant={this.props.restaurantName}
-        />
+        {this.state.cartFlag ? (
+          <AddToCartConfirmation
+            show={this.state.cartFlag}
+            onHide={this.onCartModalClose}
+            handleAddToCart={this.handleAddToCart}
+            oldRestaurant={
+              JSON.parse(sessionStorage.getItem("userCart"))[0].restaurantName
+            }
+            newRestaurant={this.props.restaurantName}
+          />
+        ) : null}
       </div>
     );
   }
