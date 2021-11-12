@@ -181,7 +181,7 @@ const UserOrders = ({
                   <div class="col-12">
                     <p>
                       {item.orderCount} items for ${item.total} on{" "}
-                      {item.created}.{" "}
+                      {item.createdAt}.{" "}
                       <a
                         onClick={() => onModalClick(item._id)}
                         style={{

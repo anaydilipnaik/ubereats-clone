@@ -10,6 +10,8 @@ var ordersSchema = new Schema(
     lastName: { type: String, required: true },
     restaurantName: { type: String, required: true },
     restaurantLocation: { type: String, required: true },
+    orderCount: { type: String, required: true },
+    createdAt: { type: String, required: true },
     specialInstruction: { type: String },
     orderStatus: { type: String, required: true },
     deliveryType: { type: String, required: true },

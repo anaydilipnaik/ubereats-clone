@@ -8,6 +8,8 @@ function handle_request(msg, callback) {
     firstName: msg.firstName,
     lastName: msg.lastName,
     restaurantName: msg.restaurantName,
+    orderCount: msg.orderCount,
+    createdAt: msg.createdAt,
     restaurantLocation: msg.restaurantLocation,
     specialInstruction: msg.specialInstruction,
     orderStatus: msg.orderStatus,

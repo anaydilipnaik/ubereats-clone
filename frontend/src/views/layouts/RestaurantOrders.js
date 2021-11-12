@@ -89,7 +89,7 @@ const RestaurantOrders = ({
           </div>
         </div>
         {orders && orders.length > 0 ? (
-          orders.map((item) => (
+          orders.reverse().map((item) => (
             <>
               <div class="row">
                 <div class="col-12">
@@ -154,8 +154,8 @@ const RestaurantOrders = ({
                 </div>
                 <div class="col-12">
                   <p>
-                    {item.order_count} items for ${item.total} on {item.created}
-                    .{" "}
+                    {item.orderCount} items for ${item.total} on{" "}
+                    {item.createdAt}.{" "}
                     <a
                       onClick={() => onModalClick(item._id)}
                       style={{

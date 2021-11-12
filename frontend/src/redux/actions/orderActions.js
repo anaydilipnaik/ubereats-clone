@@ -48,7 +48,7 @@ export const getOrdersByRestaurantIdFunc =
     getOrdersByRestaurantId(restaurantId, token)
       .then((res) => {
         if (res.data) {
-          setOrders(res.data);
+          setOrders(res.data.reverse());
           dispatch({
             type: ORDERS_BY_RESTAURANT_ID,
           });
@@ -67,7 +67,7 @@ export const getFilteredOrdersByRestaurantIdFunc =
     getFilteredOrdersByRestaurantId(payload, token)
       .then((res) => {
         if (res.data) {
-          setOrders(res.data);
+          setOrders(res.data.reverse());
           dispatch({
             type: FILTERED_ORDERS_BY_RESTAURANT_ID,
           });
@@ -86,7 +86,7 @@ export const getOrdersByUserIdFunc =
     getOrdersByUserId(userId, token)
       .then((res) => {
         if (res.data) {
-          setOrders(res.data);
+          setOrders(res.data.reverse());
           setPageCount(Math.ceil(res.data.length / parseInt(records)));
           dispatch({
             type: ORDERS_BY_USER_ID,
@@ -106,7 +106,7 @@ export const getFilteredOrdersByUserIdFunc =
     getFilteredOrdersByUserId(payload, token)
       .then((res) => {
         if (res.data) {
-          setOrders(res.data);
+          setOrders(res.data.reverse());
           setPageCount(Math.ceil(res.data.length / parseInt(records)));
           dispatch({
             type: FILTERED_ORDERS_BY_USER_ID,
