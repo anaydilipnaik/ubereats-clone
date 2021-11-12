@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
-import { addAddress } from "../../controllers/orders";
+import { addAddressFunc } from "../../redux/actions/userActions";
 import { connect } from "react-redux";
 
-const AddUserAddress = ({ show, onHide, user }) => {
+const AddUserAddress = ({ show, onHide, user, addAddressFunc }) => {
   const [address1, setAddress1] = useState(null);
   const [address2, setAddress2] = useState(null);
   const [landmark, setLandmark] = useState(null);
@@ -19,13 +19,7 @@ const AddUserAddress = ({ show, onHide, user }) => {
     data.landmark = landmark;
     data.city = city;
     data.state = state;
-    addAddress(data, user.token)
-      .then((res) => {
-        if (res.status === 200) {
-          onHide();
-        }
-      })
-      .catch((err) => console.log(err));
+    addAddressFunc(data, user.token, onHide);
   };
 
   return (
@@ -120,4 +114,4 @@ const mapStateToProps = (state) => ({
   user: state.login.user,
 });
 
-export default connect(mapStateToProps)(AddUserAddress);
+export default connect(mapStateToProps, { addAddressFunc })(AddUserAddress);

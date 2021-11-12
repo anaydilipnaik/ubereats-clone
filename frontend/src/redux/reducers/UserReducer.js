@@ -9,6 +9,8 @@ import {
   GET_USER_FAVOURITES_ERROR,
   USER_ADDRESSES,
   USER_ADDRESSES_ERROR,
+  ADD_ADDRESS,
+  ADD_ADDRESS_ERROR,
 } from "../constants/ActionTypes";
 
 const initialState = {
@@ -64,6 +66,16 @@ export default function (state = initialState, action) {
         success: true,
       };
     case USER_ADDRESSES_ERROR:
+      return {
+        error: true,
+        success: false,
+      };
+    case ADD_ADDRESS:
+      return {
+        error: false,
+        success: true,
+      };
+    case ADD_ADDRESS_ERROR:
       return {
         error: true,
         success: false,
