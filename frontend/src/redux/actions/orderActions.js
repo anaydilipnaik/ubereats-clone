@@ -102,11 +102,12 @@ export const getOrdersByUserIdFunc =
   };
 
 export const getFilteredOrdersByUserIdFunc =
-  (payload, token, setOrders) => (dispatch) => {
+  (payload, token, setOrders, setPageCount, records) => (dispatch) => {
     getFilteredOrdersByUserId(payload, token)
       .then((res) => {
         if (res.data) {
           setOrders(res.data);
+          setPageCount(Math.ceil(res.data.length / parseInt(records)));
           dispatch({
             type: FILTERED_ORDERS_BY_USER_ID,
           });

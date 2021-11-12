@@ -39,6 +39,7 @@ const UserOrders = ({
   };
 
   const onModalClick = (orderId) => {
+    console.log(orderId);
     getOrderDetailsByIdFunc(
       orderId,
       user.token,
@@ -60,7 +61,14 @@ const UserOrders = ({
     data.userId = user._id;
     data.orderStatus = e.target.value;
     if (e.target.value === "all") getOrdersFunc();
-    else getFilteredOrdersByUserIdFunc(data, user.token, setOrders);
+    else
+      getFilteredOrdersByUserIdFunc(
+        data,
+        user.token,
+        setOrders,
+        setPageCount,
+        records
+      );
   };
 
   const setRecordsFunc = (e) => {
