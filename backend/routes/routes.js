@@ -154,7 +154,7 @@ router.get("/favourites/:userid", checkAuth, async (req, res, next) => {
 
 router.get(
   "/orders/get/restaurant/:restaurantid",
-  checkAuth,
+  checkAuthRestaurant,
   async (req, res, next) => {
     kafka.make_request(
       "get_orders_by_restaurant_id",
@@ -240,25 +240,29 @@ router.get("/orders/get/user/:userid", checkAuth, async (req, res, next) => {
   );
 });
 
-router.get("/order/details/:id", checkAuth, async (req, res, next) => {
-  kafka.make_request(
-    "get_order_details_by_id",
-    req.params.id,
-    function (err, results) {
-      if (err) {
-        res.writeHead(500, {
-          "Content-Type": "text/plain",
-        });
-        res.end("Error Occured");
-      } else {
-        res.writeHead(200, {
-          "Content-Type": "application/json",
-        });
-        res.end(JSON.stringify(results));
+router.get(
+  "/order/details/:id",
+  // checkAuth,
+  async (req, res, next) => {
+    kafka.make_request(
+      "get_order_details_by_id",
+      req.params.id,
+      function (err, results) {
+        if (err) {
+          res.writeHead(500, {
+            "Content-Type": "text/plain",
+          });
+          res.end("Error Occured");
+        } else {
+          res.writeHead(200, {
+            "Content-Type": "application/json",
+          });
+          res.end(JSON.stringify(results));
+        }
       }
-    }
-  );
-});
+    );
+  }
+);
 
 router.post("/registerUser", async (req, res, next) => {
   kafka.make_request("register_user", req.body, function (err, results) {
