@@ -16,23 +16,38 @@ const UserHome = ({
 
   const onSearchClick = (event) => {
     event.preventDefault();
-    const data = {};
-    if (searchKeyword && searchKeyword !== "") {
-      data.searchKeyword = searchKeyword;
-      getRestaurantsFunc(data);
-    }
+    let filters = {};
+    if (searchKeyword && searchKeyword != "")
+      filters.searchKeyword = searchKeyword;
+    filterRestaurantsFunc(filters);
   };
 
   const getRestaurantsFunc = (data) => {
     getAllRestaurantsFunc(data, user.token, setRestaurants);
   };
 
+  const filterRestaurantsFunc = (filters) => {
+    let restaurantsArr = [];
+    restaurants &&
+      restaurants.map((rest) => {
+        if (rest.name.toLowerCase().includes(filters.searchKeyword)) {
+          restaurantsArr.push(rest);
+        }
+      });
+    if (restaurantsArr.length > 0) setRestaurants(restaurantsArr);
+  };
+
   useEffect(() => {
-    let data = {};
-    if (userLocation) data.userLocation = userLocation;
-    if (userDeliveryType) data.userDeliveryType = userDeliveryType;
-    getRestaurantsFunc(data);
+    let filters = {};
+    if (userLocation) filters.userLocation = userLocation;
+    if (userDeliveryType) filters.userDeliveryType = userDeliveryType;
+    if (filters.userLocation || filters.userDeliveryType)
+      filterRestaurantsFunc(filters);
   }, [userLocation, userDeliveryType]);
+
+  useEffect(() => {
+    getRestaurantsFunc({});
+  }, []);
 
   return (
     <>

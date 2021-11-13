@@ -93,7 +93,7 @@ handleTopicRequest(
 handleTopicRequest("get_filtered_orders_by_user_id", FilteredOrdersUser);
 handleTopicRequest("get_orders_by_user_id", OrdersUser);
 handleTopicRequest("get_order_details_by_id", OrderContents);
-handleTopicRequest("resgister_user", UserRegister);
+handleTopicRequest("register_user", UserRegister);
 handleTopicRequest("register_restaurant", RestaurantRegister);
 handleTopicRequest("add_user_address", UserLocationAdd);
 handleTopicRequest("add_to_favourites", UserFavouriteAdd);

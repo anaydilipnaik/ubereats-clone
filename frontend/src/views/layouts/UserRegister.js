@@ -28,9 +28,9 @@ class UserRegister extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     let data = {};
-    data.first_name = this.state.firstName;
-    if (this.state.middleName) data.middle_name = this.state.middleName;
-    data.last_name = this.state.lastName;
+    data.firstName = this.state.firstName;
+    if (this.state.middleName) data.middleName = this.state.middleName;
+    data.lastName = this.state.lastName;
     data.email = this.state.email;
     data.password = this.state.password;
     data.city = this.state.location;
