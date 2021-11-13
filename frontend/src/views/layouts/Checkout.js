@@ -269,9 +269,7 @@ const Checkout = ({
                                   </div>
                                   <div class="col-2">
                                     <span
-                                      onClick={(e) =>
-                                        this.removeCartItem(e, index)
-                                      }
+                                      onClick={(e) => removeCartItem(e, index)}
                                       style={{
                                         cursor: "pointer",
                                         color: "red",
