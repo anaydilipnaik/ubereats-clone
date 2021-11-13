@@ -58,7 +58,7 @@ const UserProfile = ({ user, getUserDetailsFunc, updateUserFunc }) => {
   };
 
   const getUserDetailsFunction = () => {
-    getUserDetailsFunc(userId ? userId : user._id, user.token, setUserDetails);
+    getUserDetailsFunc(userId ? userId : user._id, null, setUserDetails);
   };
 
   useEffect(() => {
