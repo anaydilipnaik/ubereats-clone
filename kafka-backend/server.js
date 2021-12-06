@@ -1,6 +1,5 @@
 var connection = new require("./kafka/Connection");
 //topics files
-//var signin = require('./services/signin.js');
 var DishTypes = require("./services/dishTypes.js");
 var Dishes = require("./services/dishes.js");
 var DishAdd = require("./services/dishAdd.js");
@@ -20,7 +19,7 @@ var UserFavourites = require("./services/userFavourites.js");
 var UserFavouriteAdd = require("./services/userFavouriteAdd.js");
 var OrdersRestaurant = require("./services/ordersRestaurant.js");
 var FilteredOrdersRestaurant = require("./services/filteredOrdersRestaurant.js");
-var FilteredOrdersUser = require("./services/FilteredOrdersUser.js");
+var FilteredOrdersUser = require("./services/filteredOrdersUser.js");
 var OrdersUser = require("./services/ordersUser.js");
 var OrderContents = require("./services/orderContents.js");
 var OrderDeliveryStatusUpdate = require("./services/orderDeliveryStatusUpdate.js");

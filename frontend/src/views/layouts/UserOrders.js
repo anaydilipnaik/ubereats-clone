@@ -123,7 +123,7 @@ const UserOrders = ({
         </div>
         {orders && orders.length > 0 ? (
           orders.map((item, index) =>
-            index >= leftPointer && index < records * page - 1 ? (
+            index >= leftPointer && index <= records * page - 1 ? (
               <>
                 <div class="row">
                   <div class="col-12">
