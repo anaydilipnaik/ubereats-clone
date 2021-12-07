@@ -142,6 +142,43 @@ module.exports = gql`
     total: String
     contents: [OrderContentsInput]
   }
+  input UpdateUserInput {
+    id: ID!
+    firstName: String
+    middleName: String
+    lastName: String
+    email: String
+    phoneNo: String
+    displayPicture: String
+    dob: String
+    city: String
+    state: String
+    country: String
+    nickname: String
+  }
+  input UpdateRestaurantInput {
+    id: ID!
+    name: String
+    location: String
+    description: String
+    restaurantImage: String
+    address: String
+    email: String
+    phoneNo: String
+    timings: String
+    isDelivery: String
+    isPickup: String
+  }
+  input UpdateDishInput {
+    id: ID!
+    restaurantId: String
+    name: String
+    mainIngredients: String
+    price: String
+    description: String
+    dishImage: String
+    dishCategoryId: String
+  }
   type Query {
     getDishTypes: [DishType]
     getRestaurantDetailsById(restaurantId: ID!): Restaurant
@@ -169,10 +206,8 @@ module.exports = gql`
     ): [Order]
     getFilteredOrdersByUserId(userId: String!, orderStatus: String!): [Order]
     updateOrderDeliveryStatus(orderId: String!, orderStatus: String!): Order!
-
-    # TODO
-    #   updateUser
-    #   updateRestaurant
-    #   updateDish
+    updateUser(userInput: UpdateUserInput): User!
+    updateRestaurant(restaurantInput: UpdateRestaurantInput): Restaurant!
+    updateDish(dishInput: UpdateDishInput): Dish!
   }
 `;

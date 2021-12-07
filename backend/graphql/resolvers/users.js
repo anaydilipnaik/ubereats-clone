@@ -97,5 +97,29 @@ module.exports = {
         throw new Error("Login Failed");
       }
     },
+    async updateUser(_, { userInput }) {
+      const user = await User.findOneAndUpdate(
+        { _id: userInput.id },
+        {
+          firstName: userInput.firstName,
+          middleName: userInput.middleName,
+          lastName: userInput.lastName,
+          email: userInput.email,
+          phoneNo: userInput.phoneNo,
+          displayPicture: userInput.displayPicture,
+          dob: userInput.dob,
+          city: userInput.city,
+          state: userInput.state,
+          country: userInput.country,
+          nickname: userInput.nickname,
+        },
+        { new: true }
+      );
+      if (user) {
+        return user;
+      } else {
+        throw new Error("Error");
+      }
+    },
   },
 };

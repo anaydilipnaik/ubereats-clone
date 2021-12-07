@@ -42,5 +42,25 @@ module.exports = {
         throw new Error("Error");
       }
     },
+    async updateDish(_, { dishInput }) {
+      const dish = await Dish.findOneAndUpdate(
+        { _id: dishInput.id },
+        {
+          restaurantId: dishInput.restaurantId,
+          name: dishInput.name,
+          mainIngredients: dishInput.mainIngredients,
+          price: dishInput.price,
+          description: dishInput.description,
+          dishImage: dishInput.dishImage,
+          dishCategoryId: dishInput.dishCategoryId,
+        },
+        { new: true }
+      );
+      if (dish) {
+        return dish;
+      } else {
+        throw new Error("Error");
+      }
+    },
   },
 };
