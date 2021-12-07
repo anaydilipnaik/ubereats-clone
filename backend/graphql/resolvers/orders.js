@@ -1,5 +1,3 @@
-const { AuthenticationError, UserInputError } = require("apollo-server");
-
 const Order = require("../../models/OrdersModel");
 
 module.exports = {
@@ -90,7 +88,7 @@ module.exports = {
       }
     },
     async updateOrderDeliveryStatus(_, { orderId, orderStatus }) {
-      const order = Order.findOneAndUpdate(
+      const order = await Order.findOneAndUpdate(
         { _id: orderId },
         { orderStatus: orderStatus },
         { new: true }

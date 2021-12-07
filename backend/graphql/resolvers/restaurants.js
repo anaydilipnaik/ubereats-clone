@@ -1,5 +1,3 @@
-const { AuthenticationError, UserInputError } = require("apollo-server");
-
 const Restaurant = require("../../models/RestaurantsModel");
 
 module.exports = {

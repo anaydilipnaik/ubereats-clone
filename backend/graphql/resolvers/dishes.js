@@ -1,5 +1,3 @@
-const { AuthenticationError, UserInputError } = require("apollo-server");
-
 const DishTypes = require("../../models/DishTypesModel");
 const Dish = require("../../models/DishesModel");
 
