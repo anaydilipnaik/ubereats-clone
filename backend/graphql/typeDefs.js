@@ -82,6 +82,66 @@ module.exports = gql`
     dishPrice: String
     qty: String
   }
+  input RegisterUserInput {
+    firstName: String
+    middleName: String
+    lastName: String
+    email: String
+    city: String
+    password: String
+  }
+  input RegisterRestaurantInput {
+    name: String
+    location: String
+    email: String
+    password: String
+  }
+  input AddressInput {
+    userId: String
+    address1: String
+    address2: String
+    landmark: String
+    city: String
+    state: String
+  }
+  input FavouritesInput {
+    userId: String
+    restaurantId: String
+    name: String
+    location: String
+    restaurantImage: String
+  }
+  input DishInput {
+    restaurantId: String
+    name: String
+    mainIngredients: String
+    price: String
+    description: String
+    dishImage: String
+    dishCategoryId: String
+  }
+  input OrderContentsInput {
+    dishName: String
+    dishPrice: String
+    qty: String
+  }
+  input OrderInput {
+    userId: String
+    address: String
+    restaurantId: String
+    firstName: String
+    lastName: String
+    restaurantName: String
+    restaurantLocation: String
+    orderCount: String
+    createdAt: String
+    specialInstruction: String
+    orderStatus: String
+    deliveryType: String
+    taxes: String
+    total: String
+    contents: [OrderContentsInput]
+  }
   type Query {
     getDishTypes: [DishType]
     getRestaurantDetailsById(restaurantId: ID!): Restaurant
@@ -94,20 +154,22 @@ module.exports = gql`
     getOrdersByUserId(userId: String): [Order]
     getOrderDetailsById(orderId: ID!): Order
   }
-  # type Mutation {
-  #   registerUser:
-  #   registerRestaurant:
-  #   addUserAddress:
-  #   addToFavourites:
-  #   addDish:
-  #   loginUser:
-  #   loginRestaurant:
-  #   updateOrderDeliveryStatus:
-  #   updateUser:
-  #   updateRestaurant:
-  #   updateDish:
-  #   getFilteredOrdersByRestaurantId:
-  #   getFilteredOrdersByUserId:
-  #   placeOrder:
-  # }
+  type Mutation {
+    registerUser(registerInput: RegisterUserInput): User!
+    registerRestaurant(registerInput: RegisterRestaurantInput): Restaurant!
+    addUserAddress(addressInput: AddressInput): Address!
+    addToFavourites(favouritesInput: FavouritesInput): Favourites!
+    addDish(dishInput: DishInput): Dish!
+    placeOrder(orderInput: OrderInput): Order!
+
+    # TODO
+    #   loginUser
+    #   loginRestaurant
+    #   getFilteredOrdersByRestaurantId
+    #   getFilteredOrdersByUserId
+    #   updateOrderDeliveryStatus
+    #   updateUser
+    #   updateRestaurant
+    #   updateDish
+  }
 `;

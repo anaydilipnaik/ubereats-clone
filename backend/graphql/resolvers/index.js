@@ -10,9 +10,10 @@ module.exports = {
     ...userResolvers.Query,
     ...orderResolvers.Query,
   },
-  // Mutation: {
-  // ...usersResolvers.Mutation,
-  // ...postsResolvers.Mutation,
-  // ...commentsResolvers.Mutation
-  // },
+  Mutation: {
+    ...userResolvers.Mutation,
+    ...restaurantResolvers.Mutation,
+    ...dishResolvers.Mutation,
+    ...orderResolvers.Mutation,
+  },
 };

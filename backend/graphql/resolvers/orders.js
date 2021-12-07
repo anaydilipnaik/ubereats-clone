@@ -41,4 +41,31 @@ module.exports = {
       }
     },
   },
+  Mutation: {
+    async placeOrder(_, { orderInput }) {
+      let newOrder = new Order({
+        userId: orderInput.userId,
+        address: orderInput.address,
+        restaurantId: orderInput.restaurantId,
+        firstName: orderInput.firstName,
+        lastName: orderInput.lastName,
+        restaurantName: orderInput.restaurantName,
+        orderCount: orderInput.orderCount,
+        createdAt: orderInput.createdAt,
+        restaurantLocation: orderInput.restaurantLocation,
+        specialInstruction: orderInput.specialInstruction,
+        orderStatus: orderInput.orderStatus,
+        deliveryType: orderInput.deliveryType,
+        taxes: orderInput.taxes,
+        total: orderInput.total,
+        contents: orderInput.contents,
+      });
+      const order = await newOrder.save();
+      if (order) {
+        return order;
+      } else {
+        throw new Error("Error");
+      }
+    },
+  },
 };

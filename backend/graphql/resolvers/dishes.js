@@ -26,4 +26,23 @@ module.exports = {
       }
     },
   },
+  Mutation: {
+    async addDish(_, { dishInput }) {
+      let newDish = new Dish({
+        restaurantId: dishInput.restaurantId,
+        name: dishInput.name,
+        mainIngredients: dishInput.mainIngredients,
+        price: dishInput.price,
+        description: dishInput.description,
+        dishImage: dishInput.dishImage,
+        dishCategoryId: dishInput.dishCategoryId,
+      });
+      const dish = await newDish.save();
+      if (dish) {
+        return dish;
+      } else {
+        throw new Error("Error");
+      }
+    },
+  },
 };

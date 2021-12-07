@@ -29,4 +29,20 @@ module.exports = {
       }
     },
   },
+  Mutation: {
+    async registerRestaurant(_, { registerInput }) {
+      let newRestaurant = new Restaurant({
+        name: registerInput.name,
+        location: registerInput.location,
+        email: registerInput.email,
+        password: registerInput.password,
+      });
+      const restaurant = await newRestaurant.save();
+      if (restaurant) {
+        return restaurant;
+      } else {
+        throw new Error("Error");
+      }
+    },
+  },
 };
