@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -34,6 +34,8 @@
     "passport-jwt": "^4.0.0",
     "should": "^13.2.3",
     "supertest": "^6.1.6",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "apollo-server": "^2.5.0",
+    "graphql": "^14.3.1"
   }
 }
