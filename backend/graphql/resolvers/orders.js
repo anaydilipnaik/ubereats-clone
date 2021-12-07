@@ -67,5 +67,39 @@ module.exports = {
         throw new Error("Error");
       }
     },
+    async getFilteredOrdersByRestaurantId(_, { restaurantId, orderStatus }) {
+      const order = await Order.find({
+        restaurantId: restaurantId,
+        orderStatus: orderStatus,
+      });
+      if (order) {
+        return order;
+      } else {
+        throw new Error("Error");
+      }
+    },
+    async getFilteredOrdersByUserId(_, { userId, orderStatus }) {
+      const order = await Order.find({
+        userId: userId,
+        orderStatus: orderStatus,
+      });
+      if (order) {
+        return order;
+      } else {
+        throw new Error("Error");
+      }
+    },
+    async updateOrderDeliveryStatus(_, { orderId, orderStatus }) {
+      const order = Order.findOneAndUpdate(
+        { _id: orderId },
+        { orderStatus: orderStatus },
+        { new: true }
+      );
+      if (order) {
+        return order;
+      } else {
+        throw new Error("Error");
+      }
+    },
   },
 };

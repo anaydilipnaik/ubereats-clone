@@ -44,5 +44,16 @@ module.exports = {
         throw new Error("Error");
       }
     },
+    async loginRestaurant(_, { email, password }) {
+      const restaurant = await Restaurant.findOne({
+        email: email,
+        password: password,
+      });
+      if (restaurant) {
+        return restaurant;
+      } else {
+        throw new Error("Login Failed");
+      }
+    },
   },
 };

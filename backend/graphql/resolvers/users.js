@@ -91,5 +91,13 @@ module.exports = {
         throw new Error("Error");
       }
     },
+    async loginUser(_, { email, password }) {
+      const user = await User.findOne({ email: email, password: password });
+      if (user) {
+        return user;
+      } else {
+        throw new Error("Login Failed");
+      }
+    },
   },
 };

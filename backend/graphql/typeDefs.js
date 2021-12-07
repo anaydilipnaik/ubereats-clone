@@ -161,13 +161,16 @@ module.exports = gql`
     addToFavourites(favouritesInput: FavouritesInput): Favourites!
     addDish(dishInput: DishInput): Dish!
     placeOrder(orderInput: OrderInput): Order!
+    loginUser(email: String!, password: String!): User!
+    loginRestaurant(email: String!, password: String!): Restaurant!
+    getFilteredOrdersByRestaurantId(
+      restaurantId: String!
+      orderStatus: String!
+    ): [Order]
+    getFilteredOrdersByUserId(userId: String!, orderStatus: String!): [Order]
+    updateOrderDeliveryStatus(orderId: String!, orderStatus: String!): Order!
 
     # TODO
-    #   loginUser
-    #   loginRestaurant
-    #   getFilteredOrdersByRestaurantId
-    #   getFilteredOrdersByUserId
-    #   updateOrderDeliveryStatus
     #   updateUser
     #   updateRestaurant
     #   updateDish
