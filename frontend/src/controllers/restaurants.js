@@ -1,9 +1,9 @@
 import { semiEndpoint } from "../utils/ApiEndpoint";
 import axios from "axios";
 
-export function getAllRestaurants(dataJson, token) {
+export function getAllRestaurants(token) {
   axios.defaults.headers.common["authorization"] = token;
-  return axios.post(semiEndpoint + "/restaurants/all", dataJson);
+  return axios.get(semiEndpoint + "/restaurants/all");
 }
 
 export function getRestaurantDetailsById(restaurantId, token) {

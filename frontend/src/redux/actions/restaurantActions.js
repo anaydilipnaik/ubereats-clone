@@ -41,24 +41,23 @@ export const getRestaurantDetailsByIdFunc =
       });
   };
 
-export const getAllRestaurantsFunc =
-  (payload, token, setRestaurants) => (dispatch) => {
-    getAllRestaurants(payload, token)
-      .then((res) => {
-        if (res.data) {
-          setRestaurants(res.data);
-          dispatch({
-            type: ALL_RESTAURANTS,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+export const getAllRestaurantsFunc = (token, setRestaurants) => (dispatch) => {
+  getAllRestaurants(token)
+    .then((res) => {
+      if (res.data) {
+        setRestaurants(res.data);
         dispatch({
-          type: ALL_RESTAURANTS_ERROR,
+          type: ALL_RESTAURANTS,
         });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: ALL_RESTAURANTS_ERROR,
       });
-  };
+    });
+};
 
 export const updateRestaurantFunc =
   (

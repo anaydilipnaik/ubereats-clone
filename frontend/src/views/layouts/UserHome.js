@@ -22,8 +22,8 @@ const UserHome = ({
     filterRestaurantsFunc(filters);
   };
 
-  const getRestaurantsFunc = (data) => {
-    getAllRestaurantsFunc(data, user.token, setRestaurants);
+  const getRestaurantsFunc = () => {
+    getAllRestaurantsFunc(user.token, setRestaurants);
   };
 
   const filterRestaurantsFunc = (filters) => {
@@ -46,7 +46,7 @@ const UserHome = ({
   }, [userLocation, userDeliveryType]);
 
   useEffect(() => {
-    getRestaurantsFunc({});
+    getRestaurantsFunc();
   }, []);
 
   return (

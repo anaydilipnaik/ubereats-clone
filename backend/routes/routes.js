@@ -264,6 +264,22 @@ router.get(
   }
 );
 
+router.get("/restaurants/all", checkAuth, async (req, res, next) => {
+  kafka.make_request("get_all_restaurants", req.body, function (err, results) {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Error Occured");
+    } else {
+      res.writeHead(200, {
+        "Content-Type": "application/json",
+      });
+      res.end(JSON.stringify(results));
+    }
+  });
+});
+
 router.post("/registerUser", async (req, res, next) => {
   kafka.make_request("register_user", req.body, function (err, results) {
     if (err) {
@@ -561,22 +577,6 @@ router.post("/placeOrder", checkAuth, async (req, res, next) => {
           }
         );
       });
-    }
-  });
-});
-
-router.post("/restaurants/all", checkAuth, async (req, res, next) => {
-  kafka.make_request("get_all_restaurants", req.body, function (err, results) {
-    if (err) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end("Error Occured");
-    } else {
-      res.writeHead(200, {
-        "Content-Type": "application/json",
-      });
-      res.end(JSON.stringify(results));
     }
   });
 });
